@@ -1,0 +1,29 @@
+{
+  "id": "LOANAPP22082500001",
+  "status": "APPROVED",
+  "offer": {
+    "rate": 16.0,
+    "amount": 500000.000000,
+    "period": 20,
+    "averageMonthlyPayment": 29963.837491,
+    "firstPaymentDate": "2022-09-27",
+    "lastPaymentDate": "2024-05-27",
+    "singleInsurancePayment": 189333.333334,
+    "insurancePremium": 21000.000000
+  },
+  "conditionsRestrictions": {
+    "maxAmount": 1000000,
+    "maxPeriod": 60
+  },
+  "_links": {
+    "self": {
+      "href": "http://localhost/api/loan-applications/LOANAPP22082500001"
+    },
+    "chose-conditions": {
+      "href": "http://localhost/api/loan-applications/LOANAPP22082500001/conditions"
+    },
+    "sign-documents": {
+      "href": "http://localhost/api/loan-applications/LOANAPP22082500001/documents/signature"
+    }
+  }
+}

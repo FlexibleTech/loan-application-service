@@ -1,0 +1,17 @@
+{
+  "id": "LOANAPP22082500001",
+  "status": "NEW",
+  "offer": null,
+  "conditionsRestrictions": null,
+  "_links": {
+    "self": {
+      "href": "http://localhost/api/loan-applications/LOANAPP22082500001"
+    },
+    "chose-conditions": {
+      "href": "http://localhost/api/loan-applications/LOANAPP22082500001/conditions"
+    },
+    "sign-documents": {
+      "href": "http://localhost/api/loan-applications/LOANAPP22082500001/documents/signature"
+    }
+  }
+}

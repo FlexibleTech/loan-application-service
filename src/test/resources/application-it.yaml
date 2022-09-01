@@ -1,0 +1,94 @@
+spring:
+  cache:
+    cache-names: pre-approved-offers-cache
+    caffeine:
+      spec: expireAfterAccess=1h
+  jpa:
+    hibernate.ddl-auto: validate
+    show-sql: true
+    properties:
+      format_sql: true
+      hibernate:
+        default_schema: public
+  datasource:
+    url: jdbc:tc:postgresql:12.4:///integration-tests-db
+    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db.migration
+    default-schema: public
+    schemas: public
+  application:
+    name: loan-application-service
+  cloud:
+    stream:
+      function:
+        definition: riskResponseListener;issuanceResponseListener;
+      rabbit:
+        binder:
+          nodes: localhost:5672
+      kafka:
+        binder:
+          brokers: localhost:9092
+          autoCreateTopics: false
+      bindings:
+        riskResponseListener-in-0:
+          binder: rabbit
+          destination: risk.response
+        issuanceResponseListener-in-0:
+          binder: rabbit
+          destination: issuance.response
+        issuanceDestination:
+          binder: rabbit
+          destination: issuance.request
+        riskDestination:
+          binder: rabbit
+          destination: risk.request
+        eventDestination:
+          binder: kafka
+          destination: loan.application.events
+minio:
+  access-key: accessKey
+  secret-key: secretKey
+  bucket: bucket
+  url: http://localhost:8089
+
+service:
+  print:
+    url: http://localhost:8085
+  preapprovedoffer:
+    url: http://localhost:8087
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 100
+        permittedNumberOfCallsInHalfOpenState: 10
+        waitDurationInOpenState: 6000
+        failureRateThreshold: 60
+        eventConsumerBufferSize: 10
+        registerHealthIndicator: true
+    instances:
+      pre-approved-offers-service:
+        baseConfig: default
+      print-service:
+        baseConfig: default
+      document-storage:
+        baseConfig: default
+
+camunda:
+  bpm:
+    admin-user:
+      password: admin
+      id: admin
+      first-name: admin
+      last-name: admin
+    id-generator: strong
+    database:
+      schema-update: true
+      schema-name: public
+      table-prefix: public.
+      type: postgres
+    default-number-of-retries: 1
