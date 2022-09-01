@@ -13,6 +13,8 @@ import io.github.flexibletech.offering.application.dto.ClientDto;
 import io.github.flexibletech.offering.application.dto.ConditionsDto;
 import io.github.flexibletech.offering.application.dto.LoanApplicationDto;
 import io.github.flexibletech.offering.application.dto.StartNewLoanApplicationRequest;
+import io.github.flexibletech.offering.application.dto.events.LoanApplicationCanceled;
+import io.github.flexibletech.offering.application.dto.events.LoanApplicationCompleted;
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationCreated;
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationDeclined;
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationOfferCalculated;
@@ -61,7 +63,9 @@ public class LoanApplicationService {
     }
 
     @Transactional
-    @StartProcess(processKey = ProcessConstants.LOAN_APPLICATION_PROCESS, businessKeyName = ProcessConstants.LOAN_APPLICATION_ID, businessKeyValue = "getId()")
+    @StartProcess(processKey = ProcessConstants.LOAN_APPLICATION_PROCESS,
+            businessKeyName = ProcessConstants.LOAN_APPLICATION_ID,
+            businessKeyValue = "getId()")
     public LoanApplicationDto startNewLoanApplication(StartNewLoanApplicationRequest request) {
         log.info("Starting loan application...");
         var client = fromClientDto(request.getClient());
@@ -73,7 +77,7 @@ public class LoanApplicationService {
         var savedLoanApplication = loanApplicationRepository.save(loanApplication);
 
         var loanApplicationCreatedEvent = domainObjectMapper.map(savedLoanApplication, LoanApplicationCreated.class);
-        //eventPublisher.publish(loanApplicationCreatedEvent);
+        eventPublisher.publish(loanApplicationCreatedEvent);
 
         log.info("Loan application {} has been started", savedLoanApplication.getId());
 
@@ -180,7 +184,7 @@ public class LoanApplicationService {
 
         var loanApplicationOfferCalculated = domainObjectMapper.map(loanApplication, LoanApplicationOfferCalculated.class);
 
-        //eventPublisher.publish(loanApplicationOfferCalculated);
+        eventPublisher.publish(loanApplicationOfferCalculated);
         loanApplicationRepository.save(loanApplication);
 
         log.info("Offer has been calculated for loan application {}", loanApplicationId);
@@ -246,7 +250,7 @@ public class LoanApplicationService {
         loanApplication.complete(issuanceId);
 
         loanApplicationRepository.save(loanApplication);
-        //  eventPublisher.publish(new LoanApplicationCompleted(loanApplicationId, issuanceId));
+        eventPublisher.publish(new LoanApplicationCompleted(loanApplicationId, issuanceId));
 
         log.info("Loan application {} has been completed", loanApplicationId);
     }
@@ -260,7 +264,7 @@ public class LoanApplicationService {
         loanApplication.cancel();
 
         loanApplicationRepository.save(loanApplication);
-        // eventPublisher.publish(new LoanApplicationCanceled(loanApplicationId));
+        eventPublisher.publish(new LoanApplicationCanceled(loanApplicationId));
 
         log.info("Loan application {} has been canceled", loanApplicationId);
 
