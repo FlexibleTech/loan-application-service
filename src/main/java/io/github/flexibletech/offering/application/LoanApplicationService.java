@@ -219,15 +219,15 @@ public class LoanApplicationService {
 
     @Transactional
     @UserTask(definitionKey = ProcessConstants.SING_DOCUMENTS_TASK)
-    public void signDocumentsForLoanApplication(@ProcessKeyValue String loanApplicationId) {
-        log.info("Signing documents of loan application {}...", loanApplicationId);
+    public void signDocumentPackageForLoanApplication(@ProcessKeyValue String loanApplicationId) {
+        log.info("Signing document package of loan application {}...", loanApplicationId);
         var loanApplication = loanApplicationOfId(loanApplicationId);
 
-        loanApplication.markDocumentsAsSigned();
+        loanApplication.signDocumentPackage();
 
         loanApplicationRepository.save(loanApplication);
 
-        log.info("Documents of loan application {} have been signed", loanApplicationId);
+        log.info("Document package of loan application {} has been signed", loanApplicationId);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)

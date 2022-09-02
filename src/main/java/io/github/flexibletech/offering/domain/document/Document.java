@@ -20,7 +20,7 @@ public class Document implements ValueObject {
     @Transient
     public static final String FORMAT = ".pdf";
 
-    public Document markAsSigned() {
+    public Document sign() {
         return new Document(this.id, this.type, true);
     }
 

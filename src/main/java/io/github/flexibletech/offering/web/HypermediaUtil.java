@@ -11,7 +11,7 @@ public class HypermediaUtil {
     void addLinks(LoanApplicationDto loanApplication) {
         addSelfLink(loanApplication);
         addChoseConditionsLink(loanApplication);
-        addSignDocumentsLink(loanApplication);
+        addSignDocumentPackageLink(loanApplication);
     }
 
     private void addSelfLink(LoanApplicationDto loanApplication) {
@@ -30,12 +30,12 @@ public class HypermediaUtil {
                         .withRel("chose-conditions"));
     }
 
-    private void addSignDocumentsLink(LoanApplicationDto loanApplication) {
+    private void addSignDocumentPackageLink(LoanApplicationDto loanApplication) {
         loanApplication.add(
                 WebMvcLinkBuilder.linkTo(
                                 WebMvcLinkBuilder.methodOn(LoanApplicationController.class)
                                         .signDocumentsForLoanApplication(loanApplication.getId()))
-                        .withRel("sign-documents"));
+                        .withRel("sign-document-package"));
     }
 
 }

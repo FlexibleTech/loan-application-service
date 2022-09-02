@@ -100,7 +100,7 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
 
         //Sign documents
         mockMvc.perform(MockMvcRequestBuilders.post(
-                                "/api/loan-applications/{id}/documents/signature", loanApplicationDto.getId())
+                                "/api/loan-applications/{id}/documents/sign", loanApplicationDto.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn()
                 .getResponse()

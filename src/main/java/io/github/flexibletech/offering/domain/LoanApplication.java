@@ -152,10 +152,10 @@ public class LoanApplication extends AggregateRoot {
         return String.format("%s_%s_%s", epoch, this.id, documentType.name()) + Document.FORMAT;
     }
 
-    public void markDocumentsAsSigned() {
+    public void signDocumentPackage() {
         var signedDocumentPackage = this.documentPackage
                 .stream()
-                .map(Document::markAsSigned)
+                .map(Document::sign)
                 .collect(Collectors.toSet());
         this.documentPackage.clear();
         this.documentPackage.addAll(signedDocumentPackage);

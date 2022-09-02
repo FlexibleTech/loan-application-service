@@ -93,10 +93,10 @@ public class LoanApplicationControllerApiTest {
     @Test
     public void signDocumentsForLoanApplication() throws Exception {
         Mockito.doNothing().when(loanApplicationService)
-                .signDocumentsForLoanApplication(Mockito.eq(TestValues.LOAN_APPLICATION_ID));
+                .signDocumentPackageForLoanApplication(Mockito.eq(TestValues.LOAN_APPLICATION_ID));
 
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post(
-                                "/api/loan-applications/{id}/documents/signature", TestValues.LOAN_APPLICATION_ID)
+                                "/api/loan-applications/{id}/documents/sign", TestValues.LOAN_APPLICATION_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andReturn()

@@ -26,8 +26,8 @@
     "chose-conditions": {
       "href": "http://localhost/api/loan-applications/LOANAPP22082500001/conditions"
     },
-    "sign-documents": {
-      "href": "http://localhost/api/loan-applications/LOANAPP22082500001/documents/signature"
+    "sign-document-package": {
+      "href": "http://localhost/api/loan-applications/LOANAPP22082500001/documents/sign"
     }
   }
 }

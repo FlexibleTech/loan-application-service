@@ -370,10 +370,10 @@ public class LoanApplicationTest {
     }
 
     @Test
-    public void shouldMarkDocumentsAsSigned() {
+    public void shouldSignDocumentPackage() {
         var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithDocumentPackage();
 
-        loanApplication.markDocumentsAsSigned();
+        loanApplication.signDocumentPackage();
 
         Assertions.assertTrue(loanApplication.isDocumentPackageSigned());
         Assertions.assertEquals(loanApplication.getStatus(), LoanApplication.Status.PENDING_ISSUANCE);

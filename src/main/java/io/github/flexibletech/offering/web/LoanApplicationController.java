@@ -40,9 +40,9 @@ public class LoanApplicationController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/documents/signature")
+    @PostMapping("/{id}/documents/sign")
     public ResponseEntity<Void> signDocumentsForLoanApplication(@PathVariable("id") String loanApplicationId) {
-        loanApplicationService.signDocumentsForLoanApplication(loanApplicationId);
+        loanApplicationService.signDocumentPackageForLoanApplication(loanApplicationId);
         return ResponseEntity.noContent().build();
     }
 
