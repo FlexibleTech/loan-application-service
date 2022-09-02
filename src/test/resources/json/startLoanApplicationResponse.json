@@ -3,6 +3,7 @@
   "status": "NEW",
   "offer": null,
   "conditionsRestrictions": null,
+  "documentPackage": null,
   "_links": {
     "self": {
       "href": "http://localhost/api/loan-applications/LOANAPP22082500001"

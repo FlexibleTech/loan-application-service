@@ -16,13 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.stream.binder.test.InputDestination;
-import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
-import org.springframework.context.annotation.Import;
 import org.springframework.messaging.support.MessageBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-@Import(TestChannelBinderConfiguration.class)
 public class RiskResponseListenerIT extends AbstractIntegrationTest {
     @Autowired
     private InputDestination inputDestination;

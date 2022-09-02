@@ -114,6 +114,8 @@ public class TestLoanApplicationFactory {
         ReflectionTestUtils.setField(loanApplication, "status", LoanApplication.Status.APPROVED);
         ReflectionTestUtils.setField(loanApplication, "offer", newOffer());
         ReflectionTestUtils.setField(loanApplication, "id", TestValues.LOAN_APPLICATION_ID);
+        ReflectionTestUtils.setField(loanApplication, "documentPackage",
+                new HashSet<>(Arrays.asList(TestValues.FORM_DOCUMENT_ID, TestValues.CONDITIONS_DOCUMENT_ID)));
 
         return loanApplication;
     }

@@ -13,6 +13,8 @@ import io.github.flexibletech.offering.application.dto.events.LoanApplicationCom
 import io.github.flexibletech.offering.domain.LoanApplication;
 import io.github.flexibletech.offering.domain.client.Client;
 
+import java.util.Set;
+
 @SuppressWarnings("ConstantConditions")
 public class TestApplicationObjectsFactory {
     private TestApplicationObjectsFactory() {
@@ -63,6 +65,7 @@ public class TestApplicationObjectsFactory {
                 TestValues.LOAN_APPLICATION_ID,
                 LoanApplication.Status.NEW.name(),
                 null,
+                null,
                 null);
     }
 
@@ -71,7 +74,8 @@ public class TestApplicationObjectsFactory {
                 TestValues.LOAN_APPLICATION_ID,
                 LoanApplication.Status.APPROVED.name(),
                 newOfferDto(),
-                newConditionsRestrictionsDto());
+                newConditionsRestrictionsDto(),
+                Set.of(TestValues.FORM_DOCUMENT_ID, TestValues.CONDITIONS_DOCUMENT_ID));
     }
 
     private static ConditionsRestrictionsDto newConditionsRestrictionsDto() {

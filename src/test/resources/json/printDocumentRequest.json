@@ -2,95 +2,96 @@
   "template": "form",
   "variables": {
     "loanApplication": {
-      "createdAt":null,
-      "updatedAt":null,
-      "id":"LOANAPP22082500001",
-      "client":{
-        "id":"20056671",
-        "personNameDetails":{
-          "name":"Тест",
-          "middleName":"Тестович",
-          "surName":"Тестов"
+      "createdAt": null,
+      "updatedAt": null,
+      "id": "LOANAPP22082500001",
+      "client": {
+        "id": "20056671",
+        "personNameDetails": {
+          "name": "Тест",
+          "middleName": "Тестович",
+          "surName": "Тестов"
         },
-        "passport":{
-          "series":"4401",
-          "number":"190134",
-          "issueDate":"2000-09-02",
-          "department":"ОВД КИТАЙ-ГОРОД 1 РУВД ЦАО Г. МОСКВЫ",
-          "departmentCode":"772-001"
+        "passport": {
+          "series": "4401",
+          "number": "190134",
+          "issueDate": "2000-09-02",
+          "department": "ОВД КИТАЙ-ГОРОД 1 РУВД ЦАО Г. МОСКВЫ",
+          "departmentCode": "772-001"
         },
-        "maritalStatus":"MARRIED",
-        "workPlace":{
-          "title":"ООО \"В Контакте\"",
-          "inn":"7842349892",
-          "fullAddress":"191024, ГОРОД САНКТ-ПЕТЕРБУРГ, УЛИЦА ХЕРСОНСКАЯ, ДОМ 12-14, ЛИТЕР А, ПОМЕЩЕНИЕ 1Н"
+        "maritalStatus": "MARRIED",
+        "workPlace": {
+          "title": "ООО \"В Контакте\"",
+          "inn": "7842349892",
+          "fullAddress": "191024, ГОРОД САНКТ-ПЕТЕРБУРГ, УЛИЦА ХЕРСОНСКАЯ, ДОМ 12-14, ЛИТЕР А, ПОМЕЩЕНИЕ 1Н"
         },
-        "fullRegistrationAddress":"125009, город Москва, Тверская ул. 10 с1",
-        "phoneNumber":"79851325677",
-        "email":"test@mail.ru",
-        "income":{
-          "value":100000.000000
+        "fullRegistrationAddress": "125009, город Москва, Тверская ул. 10 с1",
+        "phoneNumber": "79851325677",
+        "email": "test@mail.ru",
+        "income": {
+          "value": 100000.000000
         },
-        "spouseIncome":{
-          "value":70000.000000
+        "spouseIncome": {
+          "value": 70000.000000
         },
-        "category":"STANDARD",
-        "birthDate":"1986-01-22"
+        "category": "STANDARD",
+        "birthDate": "1986-01-22"
       },
-      "status":"APPROVED",
-      "conditions":{
-        "amount":{
-          "value":500000.000000
+      "status": "APPROVED",
+      "conditions": {
+        "amount": {
+          "value": 500000.000000
         },
-        "period":20,
-        "insurance":true
+        "period": 20,
+        "insurance": true
       },
-      "incomeConfirmationType":"TWO_NDFL",
-      "loanProgram":"COMMON",
-      "completedAt":null,
-      "riskDecision":{
-        "id":"RSK202200911",
-        "status":"APPROVED",
-        "payroll":{
-          "salary":{
-            "value":90000.000000
+      "incomeConfirmationType": "TWO_NDFL",
+      "loanProgram": "COMMON",
+      "completedAt": null,
+      "riskDecision": {
+        "id": "RSK202200911",
+        "status": "APPROVED",
+        "payroll": {
+          "salary": {
+            "value": 90000.000000
           },
-          "lastSalaryDate":"2022-08-24"
+          "lastSalaryDate": "2022-08-25"
         },
-        "conditionsRestrictions":{
-          "maxAmount":{
-            "value":1000000.000000
+        "conditionsRestrictions": {
+          "maxAmount": {
+            "value": 1000000.000000
           },
-          "maxPeriod":60
+          "maxPeriod": 60
         }
       },
-      "offer":{
-        "rate":16.0,
-        "amount":{
-          "value":500000.000000
+      "offer": {
+        "rate": 16.0,
+        "amount": {
+          "value": 500000.000000
         },
-        "period":20,
-        "averageMonthlyPayment":{
-          "value":29963.837491
+        "period": 20,
+        "averageMonthlyPayment": {
+          "value": 29963.837491
         },
-        "firstPaymentDate":"2022-10-01",
-        "lastPaymentDate":"2024-06-01",
-        "singleInsurancePayment":{
-          "value":189333.333334
+        "firstPaymentDate": "2022-10-02",
+        "lastPaymentDate": "2024-06-02",
+        "singleInsurancePayment": {
+          "value": 189333.333334
         },
-        "insurancePremium":{
-          "value":21000.000000
+        "insurancePremium": {
+          "value": 21000.000000
         }
       },
-      "documentPackage":[
-
+      "documentPackage": [
+        "e5dde60e-7225-49f8-a9eb-a31e2acd239f",
+        "8b748bc8-8011-4392-b478-d95bb83a0ffe"
       ],
-      "issuanceId":null,
-      "conditionsRestrictions":{
-        "maxAmount":{
-          "value":1000000.000000
+      "issuanceId": null,
+      "conditionsRestrictions": {
+        "maxAmount": {
+          "value": 1000000.000000
         },
-        "maxPeriod":60
+        "maxPeriod": 60
       }
     }
   },

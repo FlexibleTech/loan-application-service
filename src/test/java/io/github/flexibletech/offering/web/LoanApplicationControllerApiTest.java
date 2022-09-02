@@ -69,8 +69,7 @@ public class LoanApplicationControllerApiTest {
                 expectedResponse, actualResponse,
                 new CustomComparator(JSONCompareMode.LENIENT,
                         new Customization("offer.firstPaymentDate", (o, t1) -> true),
-                        new Customization("offer.lastPaymentDate", (o, t1) -> true),
-                        new Customization("riskDecision.lastSalaryDate", (o, t1) -> true)));
+                        new Customization("offer.lastPaymentDate", (o, t1) -> true)));
     }
 
     @Test

@@ -1,21 +1,18 @@
 package io.github.flexibletech.offering.infrastructure.messaging;
 
+import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory;
 import io.github.flexibletech.offering.domain.risk.RiskService;
-import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.infrastructure.messaging.risk.request.RiskRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
-import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.io.IOException;
 
-@Import(TestChannelBinderConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class RiskServiceIT extends AbstractIntegrationTest {
     @Autowired

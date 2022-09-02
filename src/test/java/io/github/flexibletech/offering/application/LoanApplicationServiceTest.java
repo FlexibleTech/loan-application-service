@@ -6,7 +6,6 @@ import io.github.flexibletech.offering.application.dto.events.LoanApplicationCan
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationCompleted;
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationCreated;
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationOfferCalculated;
-import io.github.flexibletech.offering.domain.Amount;
 import io.github.flexibletech.offering.domain.LoanApplication;
 import io.github.flexibletech.offering.domain.LoanApplicationRepository;
 import io.github.flexibletech.offering.domain.document.Document;
@@ -32,8 +31,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("ConstantConditions")
@@ -66,9 +65,6 @@ public class LoanApplicationServiceTest {
     private ModelMapper newModelMapper() {
         var mapper = new ModelMapper();
         mapper.getConfiguration().setAmbiguityIgnored(true);
-
-        var typeMap = mapper.createTypeMap(BigDecimal.class, Amount.class);
-        typeMap.addMapping(src -> src, Amount::setValue);
 
         return mapper;
     }
@@ -261,6 +257,9 @@ public class LoanApplicationServiceTest {
         Assertions.assertNotNull(conditionsRestrictions);
         Assertions.assertEquals(conditionsRestrictions.getMaxAmount(), TestValues.CONDITIONS_RESTRICTIONS_MAX_AMOUNT.getValue());
         Assertions.assertEquals(conditionsRestrictions.getMaxPeriod(), TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
+
+        Assertions.assertEquals(loanApplicationDto.getDocumentPackage(),
+                Set.of(TestValues.FORM_DOCUMENT_ID, TestValues.CONDITIONS_DOCUMENT_ID));
     }
 
 }

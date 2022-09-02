@@ -187,6 +187,11 @@ public class LoanApplication extends AggregateRoot {
         return this.status == Status.DECLINED;
     }
 
+    @JsonIgnore
+    public boolean isCompleted() {
+        return this.status == Status.COMPLETED;
+    }
+
     public String clientId() {
         return this.client.getId();
     }

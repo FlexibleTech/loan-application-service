@@ -15,6 +15,10 @@
     "maxAmount": 1000000,
     "maxPeriod": 60
   },
+  "documentPackage": [
+    "e5dde60e-7225-49f8-a9eb-a31e2acd239f",
+    "8b748bc8-8011-4392-b478-d95bb83a0ffe"
+  ],
   "_links": {
     "self": {
       "href": "http://localhost/api/loan-applications/LOANAPP22082500001"
