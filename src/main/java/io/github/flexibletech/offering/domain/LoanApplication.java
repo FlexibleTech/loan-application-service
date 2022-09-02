@@ -33,6 +33,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -239,6 +240,59 @@ public class LoanApplication extends AggregateRoot {
         NONE,
         PAYROLL,
         TWO_NDFL
+    }
+
+    public static Builder newBuilder() {
+        return new LoanApplication().new Builder();
+    }
+
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public class Builder {
+
+        public Builder withId(String id) {
+            LoanApplication.this.id = id;
+            return this;
+        }
+
+        public Builder withClient(Client client) {
+            LoanApplication.this.client = client;
+            return this;
+        }
+
+        public Builder withStatus(Status status) {
+            LoanApplication.this.status = status;
+            return this;
+        }
+
+        public Builder withConditions(Conditions conditions) {
+            LoanApplication.this.conditions = conditions;
+            return this;
+        }
+
+        public Builder withLoanProgram(LoanProgram loanProgram) {
+            LoanApplication.this.loanProgram = loanProgram;
+            return this;
+        }
+
+        public Builder withRiskDecision(RiskDecision riskDecision) {
+            LoanApplication.this.riskDecision = riskDecision;
+            return this;
+        }
+
+        public Builder withOffer(Offer offer) {
+            LoanApplication.this.offer = offer;
+            return this;
+        }
+
+        public Builder withDocumentPackage(Document... documents) {
+            LoanApplication.this.documentPackage = new HashSet<>(Arrays.asList(documents));
+            return this;
+        }
+
+        public LoanApplication build() {
+            return LoanApplication.this;
+        }
+
     }
 
     @Override

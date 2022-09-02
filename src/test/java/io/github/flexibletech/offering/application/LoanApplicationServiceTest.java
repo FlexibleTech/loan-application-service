@@ -1,6 +1,7 @@
 package io.github.flexibletech.offering.application;
 
 import io.github.flexibletech.offering.TestValues;
+import io.github.flexibletech.offering.application.dto.LoanApplicationDto;
 import io.github.flexibletech.offering.application.dto.events.IntegrationEvent;
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationCanceled;
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationCompleted;
@@ -29,10 +30,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.AbstractConverter;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("ConstantConditions")
@@ -65,6 +69,19 @@ public class LoanApplicationServiceTest {
     private ModelMapper newModelMapper() {
         var mapper = new ModelMapper();
         mapper.getConfiguration().setAmbiguityIgnored(true);
+
+        Converter<Set<Document>, Set<String>> converter = new AbstractConverter<>() {
+            @Override
+            protected Set<String> convert(Set<Document> source) {
+                return source.stream()
+                        .map(Document::getId)
+                        .collect(Collectors.toSet());
+            }
+        };
+
+        mapper.typeMap(LoanApplication.class, LoanApplicationDto.class)
+                .addMappings(m -> m.using(converter).map(LoanApplication::getDocumentPackage,
+                        LoanApplicationDto::setDocumentPackage));
 
         return mapper;
     }

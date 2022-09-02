@@ -6,88 +6,97 @@ import io.github.flexibletech.offering.domain.LoanApplication;
 import io.github.flexibletech.offering.domain.Offer;
 import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.document.Document;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public class TestLoanApplicationFactory {
     private TestLoanApplicationFactory() {
     }
 
     public static LoanApplication newLoanApplicationWithoutId() {
-        return LoanApplication.newLoanApplication(
-                TestClientFactory.newStandardMarriedClient(),
-                null,
-                TestLoanApplicationFactory.newConditionsWithoutInsurance());
+        return LoanApplication.newBuilder()
+                .withLoanProgram(LoanApplication.LoanProgram.COMMON)
+                .withClient(TestClientFactory.newStandardMarriedClient())
+                .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
+                .build();
     }
 
     public static LoanApplication newLoanApplication() {
-        var loanApplication = LoanApplication.newLoanApplication(
-                TestClientFactory.newStandardMarriedClient(),
-                null,
-                TestLoanApplicationFactory.newConditionsWithoutInsurance());
-
-        ReflectionTestUtils.setField(loanApplication, "id", TestValues.LOAN_APPLICATION_ID);
-        return loanApplication;
+        return LoanApplication.newBuilder()
+                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withLoanProgram(LoanApplication.LoanProgram.COMMON)
+                .withClient(TestClientFactory.newStandardMarriedClient())
+                .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
+                .build();
     }
 
     public static LoanApplication newLoanApplicationWithRiskDecision(Client client) {
-        var loanApplication = LoanApplication.newLoanApplication(
-                client,
-                null,
-                TestLoanApplicationFactory.newConditionsWithoutInsurance());
-
-        ReflectionTestUtils.setField(loanApplication, "riskDecision", TestRiskDecisionFactory.newApprovedRiskDecision());
-        ReflectionTestUtils.setField(loanApplication, "id", TestValues.LOAN_APPLICATION_ID);
-
-        return loanApplication;
+        return LoanApplication.newBuilder()
+                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecision())
+                .withLoanProgram(LoanApplication.LoanProgram.COMMON)
+                .withClient(client)
+                .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
+                .build();
     }
 
     public static LoanApplication newInsuredLoanApplicationWithRiskDecision() {
-        var loanApplication = LoanApplication.newLoanApplication(
-                TestClientFactory.newStandardMarriedClient(),
-                null,
-                TestLoanApplicationFactory.newConditionsWithInsurance());
-
-        ReflectionTestUtils.setField(loanApplication, "riskDecision", TestRiskDecisionFactory.newApprovedRiskDecision());
-        ReflectionTestUtils.setField(loanApplication, "id", TestValues.LOAN_APPLICATION_ID);
-
-        return loanApplication;
+        return LoanApplication.newBuilder()
+                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecision())
+                .withLoanProgram(LoanApplication.LoanProgram.COMMON)
+                .withClient(TestClientFactory.newStandardMarriedClient())
+                .withConditions(TestLoanApplicationFactory.newConditionsWithInsurance())
+                .build();
     }
 
     public static LoanApplication newLoanApplicationWithRiskDecisionAndNotActualPayroll() {
-        var loanApplication = LoanApplication.newLoanApplication(
-                TestClientFactory.newEmployeeUnmarriedClient(),
-                null,
-                TestLoanApplicationFactory.newConditionsWithoutInsurance());
-
-        ReflectionTestUtils.setField(loanApplication, "riskDecision",
-                TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll());
-        ReflectionTestUtils.setField(loanApplication, "id", TestValues.LOAN_APPLICATION_ID);
-
-        return loanApplication;
+        return LoanApplication.newBuilder()
+                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
+                .withLoanProgram(LoanApplication.LoanProgram.COMMON)
+                .withClient(TestClientFactory.newEmployeeUnmarriedClient())
+                .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
+                .build();
     }
 
     public static LoanApplication newLoanApplicationWithDocumentPackage() {
-        var loanApplication = LoanApplication.newLoanApplication(
-                TestClientFactory.newStandardMarriedClient(),
-                null,
-                TestLoanApplicationFactory.newConditionsWithoutInsurance());
-
-        ReflectionTestUtils.setField(loanApplication, "riskDecision",
-                TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll());
-        ReflectionTestUtils.setField(loanApplication, "id", TestValues.LOAN_APPLICATION_ID);
-
-        Set<Document> documentPackage = new HashSet<>(
-                Arrays.asList(
+        return LoanApplication.newBuilder()
+                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
+                .withLoanProgram(LoanApplication.LoanProgram.COMMON)
+                .withClient(TestClientFactory.newStandardMarriedClient())
+                .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
+                .withDocumentPackage(
                         new Document(TestValues.FORM_DOCUMENT_ID, Document.Type.FORM, false),
                         new Document(TestValues.CONDITIONS_DOCUMENT_ID, Document.Type.CONDITIONS, false),
-                        new Document(TestValues.INSURANCE_DOCUMENT_ID, Document.Type.INSURANCE, false)));
-        ReflectionTestUtils.setField(loanApplication, "documentPackage", documentPackage);
+                        new Document(TestValues.INSURANCE_DOCUMENT_ID, Document.Type.INSURANCE, false))
+                .build();
+    }
 
-        return loanApplication;
+    public static LoanApplication newLoanApplicationWithOffer() {
+        return LoanApplication.newBuilder()
+                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withStatus(LoanApplication.Status.APPROVED)
+                .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
+                .withLoanProgram(LoanApplication.LoanProgram.COMMON)
+                .withClient(TestClientFactory.newStandardMarriedClient())
+                .withConditions(TestLoanApplicationFactory.newConditionsWithInsurance())
+                .withDocumentPackage(
+                        new Document(TestValues.FORM_DOCUMENT_ID, Document.Type.FORM, false),
+                        new Document(TestValues.CONDITIONS_DOCUMENT_ID, Document.Type.CONDITIONS, false))
+                .withOffer(newOffer())
+                .build();
+    }
+
+    public static LoanApplication newLoanApplicationWithoutDocuments() {
+        return LoanApplication.newBuilder()
+                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withStatus(LoanApplication.Status.APPROVED)
+                .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
+                .withLoanProgram(LoanApplication.LoanProgram.COMMON)
+                .withClient(TestClientFactory.newStandardMarriedClient())
+                .withConditions(TestLoanApplicationFactory.newConditionsWithInsurance())
+                .withOffer(newOffer())
+                .build();
     }
 
     public static Conditions newConditionsWithoutInsurance() {
@@ -102,22 +111,6 @@ public class TestLoanApplicationFactory {
                 TestValues.CONDITIONS_AMOUNT,
                 TestValues.CONDITIONS_PERIOD,
                 true);
-    }
-
-    public static LoanApplication newLoanApplicationWithOffer() {
-        var loanApplication = LoanApplication.newLoanApplication(
-                TestClientFactory.newStandardMarriedClient(),
-                null,
-                TestLoanApplicationFactory.newConditionsWithInsurance());
-
-        ReflectionTestUtils.setField(loanApplication, "riskDecision", TestRiskDecisionFactory.newApprovedRiskDecision());
-        ReflectionTestUtils.setField(loanApplication, "status", LoanApplication.Status.APPROVED);
-        ReflectionTestUtils.setField(loanApplication, "offer", newOffer());
-        ReflectionTestUtils.setField(loanApplication, "id", TestValues.LOAN_APPLICATION_ID);
-        ReflectionTestUtils.setField(loanApplication, "documentPackage",
-                new HashSet<>(Arrays.asList(TestValues.FORM_DOCUMENT_ID, TestValues.CONDITIONS_DOCUMENT_ID)));
-
-        return loanApplication;
     }
 
     private static Offer newOffer() {

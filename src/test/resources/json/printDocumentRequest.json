@@ -53,9 +53,9 @@
         "status": "APPROVED",
         "payroll": {
           "salary": {
-            "value": 90000.000000
+            "value": 60000.000000
           },
-          "lastSalaryDate": "2022-08-25"
+          "lastSalaryDate": "2022-08-28"
         },
         "conditionsRestrictions": {
           "maxAmount": {
@@ -82,10 +82,7 @@
           "value": 21000.000000
         }
       },
-      "documentPackage": [
-        "e5dde60e-7225-49f8-a9eb-a31e2acd239f",
-        "8b748bc8-8011-4392-b478-d95bb83a0ffe"
-      ],
+      "documentPackage": [ ],
       "issuanceId": null,
       "conditionsRestrictions": {
         "maxAmount": {

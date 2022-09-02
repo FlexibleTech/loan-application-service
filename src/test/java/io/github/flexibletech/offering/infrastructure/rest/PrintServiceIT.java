@@ -29,7 +29,7 @@ public class PrintServiceIT extends AbstractIntegrationTest {
                         .willReturn(WireMock.aResponse().withBody(expectedContent))
         );
 
-        var actualContent = printService.print(TestLoanApplicationFactory.newLoanApplicationWithOffer(), Document.Type.FORM);
+        var actualContent = printService.print(TestLoanApplicationFactory.newLoanApplicationWithoutDocuments(), Document.Type.FORM);
 
         Assertions.assertArrayEquals(expectedContent, actualContent);
     }
