@@ -126,8 +126,8 @@ public class LoanApplicationService {
 
     @Transactional
     @ReceiveTask(definitionKey = ProcessConstants.RISK_DECISION_RECEIVED,
-            variables = @ProcessVariable(name = ProcessConstants.STATUS, value = "toString()"))
-    public String addRiskDecisionToLoanApplication(@ProcessKeyValue String loanApplicationId, RiskDecision riskDecision) {
+            variables = @ProcessVariable(name = ProcessConstants.STATUS, value = "getStatus()"))
+    public LoanApplicationDto addRiskDecisionToLoanApplication(@ProcessKeyValue String loanApplicationId, RiskDecision riskDecision) {
         log.info("Adding risk decision to loan application {}...", loanApplicationId);
         var loanApplication = loanApplicationOfId(loanApplicationId);
 
@@ -138,7 +138,7 @@ public class LoanApplicationService {
             eventPublisher.publish(new LoanApplicationDeclined(loanApplicationId));
 
         log.info("Risk decision has been added to loan application {}", loanApplicationId);
-        return loanApplication.getStatus().name();
+        return domainObjectMapper.map(loanApplication, LoanApplicationDto.class);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -261,7 +261,7 @@ public class LoanApplicationService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Delegate(beanName = ProcessConstants.CANCEL_LOAN_APPLICATION_TASK, key = ProcessConstants.LOAN_APPLICATION_ID)
-    public String cancelLoanApplication(@ProcessKeyValue String loanApplicationId) {
+    public void cancelLoanApplication(@ProcessKeyValue String loanApplicationId) {
         log.info("Cancellation of loan application {}...", loanApplicationId);
         var loanApplication = loanApplicationOfId(loanApplicationId);
 
@@ -271,8 +271,6 @@ public class LoanApplicationService {
         eventPublisher.publish(new LoanApplicationCanceled(loanApplicationId));
 
         log.info("Loan application {} has been canceled", loanApplicationId);
-
-        return loanApplication.getStatus().name();
     }
 
     @Transactional(readOnly = true)

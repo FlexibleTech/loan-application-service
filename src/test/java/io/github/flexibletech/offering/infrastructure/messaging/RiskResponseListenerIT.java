@@ -3,7 +3,7 @@ package io.github.flexibletech.offering.infrastructure.messaging;
 import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.application.LoanApplicationService;
-import io.github.flexibletech.offering.domain.LoanApplication;
+import io.github.flexibletech.offering.application.TestApplicationObjectsFactory;
 import io.github.flexibletech.offering.domain.risk.RiskDecision;
 import io.github.flexibletech.offering.infrastructure.messaging.risk.response.RiskResponse;
 import org.awaitility.Awaitility;
@@ -37,7 +37,7 @@ public class RiskResponseListenerIT extends AbstractIntegrationTest {
     public void shouldReceiveRiskResponse() {
         Mockito.when(loanApplicationService.addRiskDecisionToLoanApplication(
                         Mockito.eq(TestValues.LOAN_APPLICATION_ID), riskDecisionArgumentCaptor.capture()))
-                .thenReturn(LoanApplication.Status.APPROVED.name());
+                .thenReturn(TestApplicationObjectsFactory.newLoanApplicationDtoWithOffer());
 
         inputDestination.send(MessageBuilder.withPayload(newRiskResponse()).build(), destination);
 

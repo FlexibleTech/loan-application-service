@@ -122,10 +122,10 @@ public class LoanApplicationServiceTest {
         Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
 
-        var status = loanApplicationService.addRiskDecisionToLoanApplication(TestValues.LOAN_APPLICATION_ID,
+        var loanApplication = loanApplicationService.addRiskDecisionToLoanApplication(TestValues.LOAN_APPLICATION_ID,
                 TestRiskDecisionFactory.newApprovedRiskDecision());
 
-        Assertions.assertEquals(status, LoanApplication.Status.APPROVED.name());
+        Assertions.assertEquals(loanApplication.getStatus(), LoanApplication.Status.APPROVED.name());
     }
 
     @Test
@@ -227,9 +227,7 @@ public class LoanApplicationServiceTest {
         Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplicationWithOffer()));
 
-        var status = loanApplicationService.cancelLoanApplication(TestValues.LOAN_APPLICATION_ID);
-
-        Assertions.assertEquals(status, LoanApplication.Status.CANCEL.name());
+        loanApplicationService.cancelLoanApplication(TestValues.LOAN_APPLICATION_ID);
 
         var loanApplicationCanceled = (LoanApplicationCanceled) eventCaptor.getValue();
         Assertions.assertEquals(loanApplicationCanceled.getLoanApplicationId(), TestValues.LOAN_APPLICATION_ID);
