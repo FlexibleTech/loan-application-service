@@ -32,6 +32,7 @@ import io.github.flexibletech.offering.domain.risk.RiskDecision;
 import io.github.flexibletech.offering.domain.risk.RiskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +64,7 @@ public class LoanApplicationService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
     @StartProcess(processKey = ProcessConstants.LOAN_APPLICATION_PROCESS,
             businessKeyName = ProcessConstants.LOAN_APPLICATION_ID,
             businessKeyValue = "getId()")
@@ -156,6 +158,7 @@ public class LoanApplicationService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
     @UserTask(definitionKey = ProcessConstants.CHOSE_CONDITIONS_TASK,
             variables = @ProcessVariable(name = ProcessConstants.INSURANCE, value = "getInsurance()"))
     public ConditionsDto choseConditionsForLoanApplication(@ProcessKeyValue String loanApplicationId, ConditionsDto conditions) {
@@ -218,6 +221,7 @@ public class LoanApplicationService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
     @UserTask(definitionKey = ProcessConstants.SING_DOCUMENTS_TASK)
     public void signDocumentPackageForLoanApplication(@ProcessKeyValue String loanApplicationId) {
         log.info("Signing document package of loan application {}...", loanApplicationId);
@@ -272,6 +276,7 @@ public class LoanApplicationService {
     }
 
     @Transactional(readOnly = true)
+    @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
     public LoanApplicationDto findLoanApplicationById(String loanApplicationId) {
         return loanApplicationRepository.findById(loanApplicationId)
                 .map(loanApplication -> domainObjectMapper.map(loanApplication, LoanApplicationDto.class))

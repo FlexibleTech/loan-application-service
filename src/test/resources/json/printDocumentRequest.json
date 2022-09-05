@@ -55,7 +55,7 @@
           "salary": {
             "value": 60000.000000
           },
-          "lastSalaryDate": "2022-08-28"
+          "lastSalaryDate": "${json-unit.any-string}"
         },
         "conditionsRestrictions": {
           "maxAmount": {
@@ -73,8 +73,8 @@
         "averageMonthlyPayment": {
           "value": 29963.837491
         },
-        "firstPaymentDate": "2022-10-02",
-        "lastPaymentDate": "2024-06-02",
+        "firstPaymentDate": "${json-unit.any-string}",
+        "lastPaymentDate": "${json-unit.any-string}",
         "singleInsurancePayment": {
           "value": 189333.333334
         },
@@ -82,7 +82,7 @@
           "value": 21000.000000
         }
       },
-      "documentPackage": [ ],
+      "documentPackage": [],
       "issuanceId": null,
       "conditionsRestrictions": {
         "maxAmount": {

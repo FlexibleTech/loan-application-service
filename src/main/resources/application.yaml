@@ -30,6 +30,12 @@ spring:
     properties:
       hibernate:
         default_schema: ${schemas.domain}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://keycloak:8080/auth/realms/test/protocol/openid-connect/certs
+          issuer-uri: http://keycloak:8080/auth/realms/test
   cloud:
     stream:
       function:
@@ -44,19 +50,19 @@ spring:
       bindings:
         riskResponseListener-in-0:
           binder: rabbit
-          destination: ${RISK_RESPONSE_QUEUE:risk.response}
+          destination: risk.response
         issuanceResponseListener-in-0:
           binder: rabbit
-          destination: ${ISSUANCE_RESPONSE_QUEUE:issuance.response}
+          destination: issuance.response
         issuanceDestination:
           binder: rabbit
-          destination: ${ISSUANCE_REQUEST_QUEUE:issuance.request}
+          destination: issuance.request
         riskDestination:
           binder: rabbit
-          destination: ${RISK_REQUEST_QUEUE:risk.request}
+          destination: risk.request
         eventDestination:
           binder: kafka
-          destination: ${EVENTS_TOPIC:loan.application.events}
+          destination: loan.application.events
 
 minio:
   access-key: minioadmin

@@ -21,6 +21,12 @@ spring:
     schemas: public
   application:
     name: loan-application-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://keycloak:8080/auth/realms/test/protocol/openid-connect/certs
+          issuer-uri: http://keycloak:8080/auth/realms/test
   cloud:
     stream:
       function:
@@ -48,6 +54,7 @@ spring:
         eventDestination:
           binder: kafka
           destination: loan.application.events
+
 minio:
   access-key: accessKey
   secret-key: secretKey

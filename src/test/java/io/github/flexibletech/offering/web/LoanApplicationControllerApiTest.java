@@ -1,13 +1,13 @@
 package io.github.flexibletech.offering.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.flexibletech.offering.ResourceUtil;
-import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.application.LoanApplicationNotFoundException;
 import io.github.flexibletech.offering.application.LoanApplicationService;
 import io.github.flexibletech.offering.application.TestApplicationObjectsFactory;
 import io.github.flexibletech.offering.application.dto.ConditionsDto;
 import io.github.flexibletech.offering.application.dto.StartNewLoanApplicationRequest;
+import io.github.flexibletech.offering.ResourceUtil;
+import io.github.flexibletech.offering.TestValues;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -20,10 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+@WithMockUser
 @WebMvcTest(LoanApplicationController.class)
 public class LoanApplicationControllerApiTest {
     @Autowired
@@ -41,7 +44,8 @@ public class LoanApplicationControllerApiTest {
 
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post("/api/loan-applications")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newStartNewLoanApplicationRequest())))
+                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newStartNewLoanApplicationRequest()))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn()
                 .getResponse()
@@ -58,7 +62,8 @@ public class LoanApplicationControllerApiTest {
 
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.get(
                                 "/api/loan-applications/{id}", TestValues.LOAN_APPLICATION_ID)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn()
                 .getResponse()
@@ -81,7 +86,8 @@ public class LoanApplicationControllerApiTest {
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post(
                                 "/api/loan-applications/{id}/conditions", TestValues.LOAN_APPLICATION_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newConditionsDto())))
+                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newConditionsDto()))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andReturn()
                 .getResponse()
@@ -97,7 +103,8 @@ public class LoanApplicationControllerApiTest {
 
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post(
                                 "/api/loan-applications/{id}/documents/sign", TestValues.LOAN_APPLICATION_ID)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andReturn()
                 .getResponse()
@@ -114,7 +121,8 @@ public class LoanApplicationControllerApiTest {
 
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.get(
                                 "/api/loan-applications/{id}", TestValues.LOAN_APPLICATION_ID)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andReturn()
                 .getResponse()
@@ -130,7 +138,8 @@ public class LoanApplicationControllerApiTest {
     public void shouldReturn400Response() throws Exception {
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post("/api/loan-applications")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newInvalidStartNewLoanApplicationRequest())))
+                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newInvalidStartNewLoanApplicationRequest()))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andReturn()
                 .getResponse()

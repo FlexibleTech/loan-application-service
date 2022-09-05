@@ -52,8 +52,8 @@ public class TestValues {
     //Payroll
     public static final Amount PAYROLL_SALARY = Amount.fromValue(BigDecimal.valueOf(90_000));
     public static final Amount PAYROLL_SALARY_LESS_THAN_INCOME = Amount.fromValue(BigDecimal.valueOf(60_000));
-    public static final LocalDate PAYROLL_LAST_SALARY_DATE = LocalDateUtils.currentLocalDateMinusDays(8);
-    public static final LocalDate PAYROLL_LAST_SALARY_DATE_LESS_THAN_CURRENT_DATE = LocalDateUtils.currentLocalDateMinusDays(5);
+    public static final LocalDate PAYROLL_LAST_SALARY_DATE = LocalDate.now().minusDays(8);
+    public static final LocalDate PAYROLL_LAST_SALARY_DATE_LESS_THAN_CURRENT_DATE = LocalDate.now().minusDays(5);
     //ConditionsRestrictions
     public static final Amount CONDITIONS_RESTRICTIONS_MAX_AMOUNT = Amount.fromValue(BigDecimal.valueOf(1_000000));
     public static final Amount CONDITIONS_RESTRICTIONS_LARGE_MAX_AMOUNT = Amount.fromValue(BigDecimal.valueOf(4_200000));

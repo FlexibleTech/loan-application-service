@@ -2,7 +2,7 @@ package io.github.flexibletech.offering.infrastructure.persistence;
 
 import io.github.flexibletech.offering.domain.LoanApplicationRepository;
 import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory;
-import io.github.flexibletech.offering.infrastructure.ApplicationConfig;
+import io.github.flexibletech.offering.infrastructure.config.ApplicationConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

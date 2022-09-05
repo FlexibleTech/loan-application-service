@@ -16,25 +16,23 @@ import io.github.flexibletech.offering.domain.risk.RiskDecision;
 import io.github.flexibletech.offering.infrastructure.messaging.issuance.response.IssuanceResponse;
 import io.github.flexibletech.offering.infrastructure.messaging.risk.response.RiskResponse;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.stream.binder.test.InputDestination;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
+@AutoConfigureMockMvc
 public class LoanApplicationE2ETest extends AbstractIntegrationTest {
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
     @MockBean
     private PreApprovedOfferRepository preApprovedOfferRepository;
 
@@ -47,6 +45,7 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
     @Autowired
     private LoanApplicationRepository loanApplicationRepository;
 
+    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
@@ -57,12 +56,8 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
     @Value("${spring.cloud.stream.bindings.issuanceResponseListener-in-0.destination}")
     private String issuanceDestination;
 
-    @BeforeEach
-    void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
     @Test
+    @WithMockUser(roles = "CLIENT")
     public void shouldGoThroughFullLoanApplicationProcess() throws Exception {
         Mockito.when(preApprovedOfferRepository.findForClient(Mockito.eq(TestValues.CLIENT_ID)))
                 .thenReturn(TestPreApprovedOfferFactory.newPreApprovedOffer());
@@ -74,7 +69,8 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
         //Start loan application process
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post("/api/loan-applications")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newStartNewLoanApplicationRequest())))
+                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newStartNewLoanApplicationRequest()))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -91,7 +87,8 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.post(
                                 "/api/loan-applications/{id}/conditions", loanApplicationDto.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newConditionsDto())))
+                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newConditionsDto()))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -101,7 +98,8 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
         //Sign documents
         mockMvc.perform(MockMvcRequestBuilders.post(
                                 "/api/loan-applications/{id}/documents/sign", loanApplicationDto.getId())
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();

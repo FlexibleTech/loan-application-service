@@ -1,8 +1,12 @@
-package io.github.flexibletech.offering.infrastructure;
+package io.github.flexibletech.offering.infrastructure.config;
 
 import io.github.flexibletech.offering.application.dto.LoanApplicationDto;
 import io.github.flexibletech.offering.domain.LoanApplication;
 import io.github.flexibletech.offering.domain.document.Document;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics;
+import io.micrometer.prometheus.PrometheusConfig;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.minio.MinioClient;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
@@ -26,6 +30,16 @@ import java.util.stream.Collectors;
 @EnableJpaAuditing(auditorAwareRef = "auditProvider")
 @EnableFeignClients("io.github.flexibletech.offering.infrastructure.rest")
 public class ApplicationConfig {
+
+    @Bean
+    public JvmThreadMetrics threadMetrics() {
+        return new JvmThreadMetrics();
+    }
+
+    @Bean
+    public MeterRegistry meterRegistry() {
+        return new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+    }
 
     @Bean
     public AuditorAware<String> auditProvider(@Value("${spring.application.name}") String application) {
@@ -62,4 +76,5 @@ public class ApplicationConfig {
                 .endpoint(url)
                 .build();
     }
+
 }
