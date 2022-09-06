@@ -13,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Schema(description = "Данные по организации-месту работы клиента", implementation = OrganizationDto.class)
+@Schema(description = "Данные по организации-месту работы клиента")
 public class OrganizationDto {
     @NotEmpty(message = "Client work place title can't be null or empty")
     @Schema(description = "Наименование организации-места работы клиента", required = true, example = "ООО \"В Контакте\"")

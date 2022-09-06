@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Schema(description = "Ограничения условий", implementation = ConditionsRestrictionsDto.class)
+@Schema(description = "Ограничения условий")
 public class ConditionsRestrictionsDto {
     @Schema(description = "Максимальная сумма", example = "500000", accessMode = Schema.AccessMode.READ_ONLY)
     private BigDecimal maxAmount;

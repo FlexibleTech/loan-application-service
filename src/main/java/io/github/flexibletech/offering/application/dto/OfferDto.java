@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Schema(description = "Рассчитанное предложение", implementation = OfferDto.class)
+@Schema(description = "Рассчитанное предложение")
 public class OfferDto {
     @Schema(description = "Процентная ставка по кредиту", example = "15", accessMode = Schema.AccessMode.READ_ONLY)
     private Double rate;

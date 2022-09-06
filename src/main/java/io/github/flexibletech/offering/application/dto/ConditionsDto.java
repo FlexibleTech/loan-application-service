@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Schema(description = "Выбранные условия кредита", required = true)
+@Schema(description = "Выбранные условия кредита")
 public class ConditionsDto {
     @Positive(message = "Conditions amount must be greater than 0")
     @NotNull(message = "Conditions amount can't be null")

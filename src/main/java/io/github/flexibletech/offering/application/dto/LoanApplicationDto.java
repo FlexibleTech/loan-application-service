@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Schema(description = "Кредитная заявка", implementation = LoanApplicationDto.class)
+@Schema(description = "Кредитная заявка")
 public class LoanApplicationDto extends RepresentationModel<LoanApplicationDto> {
     @Schema(description = "Идентификатор кредитной заявки", implementation = LoanApplicationDto.class,
             example = "LOANAPP2022000001", accessMode = Schema.AccessMode.READ_ONLY)

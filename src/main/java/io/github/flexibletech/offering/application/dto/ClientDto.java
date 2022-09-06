@@ -21,7 +21,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Schema(description = "Данные по клиенту", implementation = ClientDto.class)
+@Schema(description = "Данные по клиенту")
 public class ClientDto {
     @NotEmpty(message = "Client id can't be null or empty")
     @Schema(description = "Идентификатор клиента", required = true, example = "20056671")

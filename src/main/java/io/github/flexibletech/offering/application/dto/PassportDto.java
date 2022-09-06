@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Schema(description = "Паспорт клиента", implementation = PassportDto.class)
+@Schema(description = "Паспорт клиента")
 public class PassportDto {
     @NotEmpty(message = "Client passport series can't be null or empty")
     @Pattern(regexp = "[\\d]{4}", message = "Invalid passport series format")
