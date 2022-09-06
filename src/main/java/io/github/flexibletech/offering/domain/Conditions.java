@@ -25,7 +25,7 @@ public class Conditions implements ValueObject {
     private boolean insurance;
 
     @Transient
-    private static final Amount AMOUNT_THRESHOLD = Amount.fromValue(BigDecimal.valueOf(1_000000));
+    private static final Amount MAX_ALLOWABLE_AMOUNT = Amount.fromValue(BigDecimal.valueOf(1_000000));
     @Transient
     private static final double INSURANCE_COEFFICIENT = 0.00284;
     @Transient
@@ -42,13 +42,18 @@ public class Conditions implements ValueObject {
     }
 
     @JsonIgnore
-    boolean isChosenAmountLessThanThreshold() {
-        return this.amount.less(AMOUNT_THRESHOLD);
+    boolean isChosenAmountLessThanMaxAllowableValue() {
+        return this.amount.less(MAX_ALLOWABLE_AMOUNT);
     }
 
-    Conditions adjustAmountIfInsured(Double singleInsuranceRate) {
-        if (isInsurance() && Objects.nonNull(singleInsuranceRate)) {
-            var newAmount = calculateSingleInsurancePayment(singleInsuranceRate)
+    /**
+     * Корректировка суммы условий если выбрана страховка. сумма корректируется на единоразовую выблату по страховке.
+     *
+     * @return Новые условия.
+     */
+    Conditions adjustAmountIfInsuranceChosen() {
+        if (isInsurance()) {
+            var newAmount = calculateSingleInsurancePayment()
                     .add(this.amount);
 
             return new Conditions(newAmount, this.period, this.insurance);
@@ -56,34 +61,32 @@ public class Conditions implements ValueObject {
         return this;
     }
 
-    Amount calculateSingleInsurancePayment(Double singleInsuranceRate) {
-        return this.amount.divide(singleInsuranceRate / 100)
+    Amount calculateSingleInsurancePayment() {
+        return this.amount.divide(LoanApplication.SINGLE_INSURANCE_RATE / 100)
                 .multiply(this.period)
                 .multiply(INSURANCE_COEFFICIENT);
     }
 
     /**
-     * Formula for monthly payment calculation O*(Ps/(1 - (1 + Ps))^-(Pp-1)
-     * O - balance of the loan
-     * Ps - monthly rate
-     * Pp - periods until the end of the loan term
+     * Формула для расчета ежемесячного платежа O*(Ps/(1 - (1 + Ps))^-(Pp-1)
+     * O - остаток по кредиту
+     * Ps - ставка
+     * Pp - период до окончания срока кредита
      *
-     * @param rate Loan rate
-     * @return Monthly payment
+     * @return Ежемесячный платеж
      */
-    Amount calculateMonthlyPayment(double rate) {
+    Amount calculateMonthlyPayment() {
         var degree = -(this.period - 1);
-        return this.amount.multiply(monthlyRate(rate) / (1 - Math.pow(1 + monthlyRate(rate), degree)));
+        return this.amount.multiply(monthlyRate() / (1 - Math.pow(1 + monthlyRate(), degree)));
     }
 
     /**
-     * Monthly rate calculation.
+     * Расчет ставки.
      *
-     * @param rate Loan rate
-     * @return Monthly rate
+     * @return Рассчитанная ставка.
      */
-    private double monthlyRate(double rate) {
-        return rate / MONTHLY_PAYMENT_RATE_COEFFICIENT;
+    private double monthlyRate() {
+        return LoanApplication.LOAN_RATE / MONTHLY_PAYMENT_RATE_COEFFICIENT;
     }
 
     LocalDate calculateFirstPaymentDate() {

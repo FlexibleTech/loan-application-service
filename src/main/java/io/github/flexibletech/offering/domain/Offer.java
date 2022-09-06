@@ -38,7 +38,7 @@ public class Offer implements ValueObject {
                 LoanApplication.LOAN_RATE,
                 conditions.getAmount(),
                 conditions.getPeriod(),
-                conditions.calculateMonthlyPayment(LoanApplication.LOAN_RATE),
+                conditions.calculateMonthlyPayment(),
                 conditions.calculateFirstPaymentDate(),
                 conditions.calculateLastPaymentDate());
     }
@@ -48,10 +48,10 @@ public class Offer implements ValueObject {
                 LoanApplication.LOAN_RATE,
                 conditions.getAmount(),
                 conditions.getPeriod(),
-                conditions.calculateMonthlyPayment(LoanApplication.LOAN_RATE),
+                conditions.calculateMonthlyPayment(),
                 conditions.calculateFirstPaymentDate(),
                 conditions.calculateLastPaymentDate(),
-                conditions.calculateSingleInsurancePayment(LoanApplication.SINGLE_INSURANCE_RATE),
+                conditions.calculateSingleInsurancePayment(),
                 conditions.calculateInsurancePremium());
     }
 }

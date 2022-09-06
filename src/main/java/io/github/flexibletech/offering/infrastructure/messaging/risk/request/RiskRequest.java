@@ -54,7 +54,7 @@ public class RiskRequest {
         @RequiredArgsConstructor
         public enum Category {
             STANDARD("STANDARD", 60),
-            EMPLOYEE("EMPLOYEE", 89),
+            PAYROLL("PAYROLL", 89),
             PREMIUM("PREMIUM", 77);
 
             private final String value;

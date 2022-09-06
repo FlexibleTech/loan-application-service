@@ -29,7 +29,7 @@ public class RiskDecision implements Entity {
         return this.status == Status.APPROVED;
     }
 
-    public boolean checkSalaryIncome(Amount specifiedIncome) {
+    public boolean doesIncomeMatchSalary(Amount specifiedIncome) {
         return isSalaryIncomeLessThanSpecified(specifiedIncome) && this.payroll.isActual();
     }
 

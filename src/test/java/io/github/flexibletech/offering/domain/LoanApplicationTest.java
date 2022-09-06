@@ -72,13 +72,13 @@ public class LoanApplicationTest {
     }
 
     @Test
-    public void shouldCreateNewLoanApplicationWithEmployeeLoanProgram() {
+    public void shouldCreateNewLoanApplicationWithPayrollClientLoanProgram() {
         var loanApplication = LoanApplication.newLoanApplication(
-                TestClientFactory.newEmployeeUnmarriedClient(),
+                TestClientFactory.newPayrollUnmarriedClient(),
                 TestPreApprovedOfferFactory.newPreApprovedOffer(),
                 TestLoanApplicationFactory.newConditionsWithoutInsurance());
 
-        Assertions.assertEquals(loanApplication.getLoanProgram(), LoanApplication.LoanProgram.EMPLOYEE);
+        Assertions.assertEquals(loanApplication.getLoanProgram(), LoanApplication.LoanProgram.PAYROLL_CLIENT);
         var client = loanApplication.getClient();
 
         Assertions.assertEquals(client.getMaritalStatus(), Client.MaritalStatus.UNMARRIED);
@@ -200,17 +200,17 @@ public class LoanApplicationTest {
     }
 
     @Test
-    public void shouldDefinePayrollIncomeConfirmationTypeForEmployeeClient() {
+    public void shouldDefineSalaryReceiptIncomeConfirmationTypeForPayrollClient() {
         var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newEmployeeUnmarriedClient());
+                TestClientFactory.newPayrollUnmarriedClient());
 
         var incomeConfirmationType = loanApplication.defineIncomeConfirmationType(null);
 
-        Assertions.assertEquals(incomeConfirmationType, LoanApplication.IncomeConfirmationType.PAYROLL);
+        Assertions.assertEquals(incomeConfirmationType, LoanApplication.IncomeConfirmationType.SALARY_RECEIPT);
     }
 
     @Test
-    public void shouldDefineTwoNdflIncomeConfirmationTypeForEmployeeClient() {
+    public void shouldDefineTwoNdflIncomeConfirmationTypeForPayrollClient() {
         var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecisionAndNotActualPayroll();
 
         var incomeConfirmationType = loanApplication.defineIncomeConfirmationType(null);

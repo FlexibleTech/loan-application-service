@@ -26,7 +26,7 @@ public class TestClientFactory {
                 TestValues.CLIENT_BIRTH_DATE);
     }
 
-    public static Client newEmployeeUnmarriedClient() {
+    public static Client newPayrollUnmarriedClient() {
         return new Client(
                 TestValues.CLIENT_ID,
                 newPersonNameDetails(),
@@ -38,7 +38,7 @@ public class TestClientFactory {
                 TestValues.CLIENT_EMAIL,
                 TestValues.CLIENT_INCOME,
                 null,
-                Client.Category.EMPLOYEE,
+                Client.Category.PAYROLL,
                 TestValues.CLIENT_BIRTH_DATE);
     }
 

@@ -107,13 +107,22 @@ public class LoanApplication extends AggregateRoot {
         }
     }
 
+    /**
+     * Определение типа подтверждения дохода.
+     *
+     * @param preApprovedOffer  Предодобренное предложение.
+     * @return                  Тип подтверждения дохода.
+     */
     public IncomeConfirmationType defineIncomeConfirmationType(PreApprovedOffer preApprovedOffer) {
         Supplier<IncomeConfirmationType> incomeConfirmationTypeSupplier =
                 () -> {
-                    if (client.isEmployee() && riskDecision.checkSalaryIncome(this.client.getIncome()))
-                        return IncomeConfirmationType.PAYROLL;
-                    if (client.isPremium() && this.conditions.isChosenAmountLessThanThreshold())
+                    //Проверка условия - клиент зарплатный и указанный доход соответствует сумме зарплаты, полученной от рисков.
+                    if (client.isPayroll() && riskDecision.doesIncomeMatchSalary(this.client.getIncome()))
+                        return IncomeConfirmationType.SALARY_RECEIPT;
+                    //Проверка условия - клиент премиальный и выбранная сумма меньше максимально допустимого значения.
+                    if (client.isPremium() && this.conditions.isChosenAmountLessThanMaxAllowableValue())
                         return IncomeConfirmationType.NONE;
+                    //Проверка условия - достпуна ли выбранная сумма без подтверждения.
                     if (this.conditions.isChosenAmountAvailableWithoutConfirmation(preApprovedOffer))
                         return IncomeConfirmationType.NONE;
                     return IncomeConfirmationType.TWO_NDFL;
@@ -123,11 +132,18 @@ public class LoanApplication extends AggregateRoot {
         return this.incomeConfirmationType;
     }
 
+    /**
+     * Выбор условий.
+     *
+     * @param amount        Сумма.
+     * @param period        Период.
+     * @param insurance     Страховка.
+     */
     public void choseConditions(Amount amount, Integer period, Boolean insurance) {
         var newConditions = this.conditions.newConditions(amount, period, insurance);
         if (!this.conditions.equals(newConditions)) this.conditions = newConditions;
 
-        this.conditions = this.conditions.adjustAmountIfInsured(SINGLE_INSURANCE_RATE);
+        this.conditions = this.conditions.adjustAmountIfInsuranceChosen();
     }
 
     public void calculateOffer() {
@@ -213,7 +229,7 @@ public class LoanApplication extends AggregateRoot {
     }
 
     private static LoanApplication.LoanProgram defineLoanProgramForClient(Client client, PreApprovedOffer preApprovedOffer) {
-        if (client.isEmployee()) return LoanApplication.LoanProgram.EMPLOYEE;
+        if (client.isPayroll()) return LoanApplication.LoanProgram.PAYROLL_CLIENT;
         if (client.isPremium()) return LoanApplication.LoanProgram.SPECIAL;
         if (Objects.nonNull(preApprovedOffer)) return LoanApplication.LoanProgram.PREAPPROVED;
 
@@ -232,13 +248,13 @@ public class LoanApplication extends AggregateRoot {
     public enum LoanProgram {
         COMMON,
         PREAPPROVED,
-        EMPLOYEE,
+        PAYROLL_CLIENT,
         SPECIAL
     }
 
     public enum IncomeConfirmationType {
         NONE,
-        PAYROLL,
+        SALARY_RECEIPT,
         TWO_NDFL
     }
 

@@ -37,8 +37,8 @@ public class Client implements Entity {
     }
 
     @JsonIgnore
-    public boolean isEmployee() {
-        return this.category == Category.EMPLOYEE;
+    public boolean isPayroll() {
+        return this.category == Category.PAYROLL;
     }
 
     @JsonIgnore
@@ -68,7 +68,7 @@ public class Client implements Entity {
     @RequiredArgsConstructor
     public enum Category {
         STANDARD("STANDARD"),
-        EMPLOYEE("EMPLOYEE"),
+        PAYROLL("PAYROLL"),
         PREMIUM("PREMIUM");
 
         private final String value;

@@ -53,7 +53,7 @@ public class TestLoanApplicationFactory {
                 .withId(TestValues.LOAN_APPLICATION_ID)
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
-                .withClient(TestClientFactory.newEmployeeUnmarriedClient())
+                .withClient(TestClientFactory.newPayrollUnmarriedClient())
                 .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
                 .build();
     }

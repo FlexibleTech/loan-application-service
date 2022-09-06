@@ -63,7 +63,7 @@ public class ClientDto {
     @Schema(description = "Ежемесячный доход супруга(ги) клиента в рублях", example = "75000")
     private BigDecimal spouseIncome;
     @NotEmpty(message = "Client category can't be null or empty")
-    @Schema(description = "Категория клиента", example = "STANDARD", required = true, allowableValues = {"STANDARD", "EMPLOYEE", "PREMIUM"})
+    @Schema(description = "Категория клиента", example = "STANDARD", required = true, allowableValues = {"STANDARD", "PAYROLL", "PREMIUM"})
     private String category;
     @Past(message = "Invalid client birth date")
     @NotNull(message = "Client birthDate can't be null")
