@@ -42,7 +42,7 @@ public class LoanApplicationControllerApiTest {
         Mockito.when(loanApplicationService.startNewLoanApplication(ArgumentMatchers.any(StartNewLoanApplicationRequest.class)))
                 .thenReturn(TestApplicationObjectsFactory.newLoanApplicationDtoWithoutOffer());
 
-        var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post("/api/loan-applications")
+        var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/loan-applications")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newStartNewLoanApplicationRequest()))
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
@@ -61,7 +61,7 @@ public class LoanApplicationControllerApiTest {
                 .thenReturn(TestApplicationObjectsFactory.newLoanApplicationDtoWithOffer());
 
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.get(
-                                "/api/loan-applications/{id}", TestValues.LOAN_APPLICATION_ID)
+                                "/api/v1/loan-applications/{id}", TestValues.LOAN_APPLICATION_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -84,7 +84,7 @@ public class LoanApplicationControllerApiTest {
                 .thenReturn(TestApplicationObjectsFactory.newConditionsDto());
 
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post(
-                                "/api/loan-applications/{id}/conditions", TestValues.LOAN_APPLICATION_ID)
+                                "/api/v1/loan-applications/{id}/conditions", TestValues.LOAN_APPLICATION_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newConditionsDto()))
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
@@ -102,7 +102,7 @@ public class LoanApplicationControllerApiTest {
                 .signDocumentPackageForLoanApplication(Mockito.eq(TestValues.LOAN_APPLICATION_ID));
 
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post(
-                                "/api/loan-applications/{id}/documents/sign", TestValues.LOAN_APPLICATION_ID)
+                                "/api/v1/loan-applications/{id}/documents/sign", TestValues.LOAN_APPLICATION_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
@@ -120,7 +120,7 @@ public class LoanApplicationControllerApiTest {
                         String.format("Loan application with id %s is not found", TestValues.LOAN_APPLICATION_ID)));
 
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.get(
-                                "/api/loan-applications/{id}", TestValues.LOAN_APPLICATION_ID)
+                                "/api/v1/loan-applications/{id}", TestValues.LOAN_APPLICATION_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -136,7 +136,7 @@ public class LoanApplicationControllerApiTest {
 
     @Test
     public void shouldReturn400Response() throws Exception {
-        var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post("/api/loan-applications")
+        var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/loan-applications")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newInvalidStartNewLoanApplicationRequest()))
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))

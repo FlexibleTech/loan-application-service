@@ -21,13 +21,13 @@
   ],
   "_links": {
     "self": {
-      "href": "http://localhost/api/loan-applications/LOANAPP22082500001"
+      "href": "http://localhost/api/v1/loan-applications/LOANAPP22082500001"
     },
     "chose-conditions": {
-      "href": "http://localhost/api/loan-applications/LOANAPP22082500001/conditions"
+      "href": "http://localhost/api/v1/loan-applications/LOANAPP22082500001/conditions"
     },
     "sign-document-package": {
-      "href": "http://localhost/api/loan-applications/LOANAPP22082500001/documents/sign"
+      "href": "http://localhost/api/v1/loan-applications/LOANAPP22082500001/documents/sign"
     }
   }
 }

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Schema(description = "Запрос на запуск кредитной заявки", implementation = StartNewLoanApplicationRequest.class)
+@Schema(description = "Запрос на запуск кредитной заявки")
 public class StartNewLoanApplicationRequest {
     @Valid
     @NotNull(message = "Client can't be null")
