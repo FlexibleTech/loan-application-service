@@ -147,10 +147,10 @@ public class LoanApplicationTest {
     }
 
     @Test
-    public void shouldAddApprovedRiskDecision() {
+    public void shouldAcceptApprovedRiskDecision() {
         var loanApplication = TestLoanApplicationFactory.newLoanApplication();
 
-        loanApplication.addRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecision());
+        loanApplication.acceptRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecision());
 
         Assertions.assertEquals(loanApplication.getStatus(), LoanApplication.Status.APPROVED);
 
@@ -174,10 +174,10 @@ public class LoanApplicationTest {
     }
 
     @Test
-    public void shouldAddApprovedRiskDecisionWithLimitedConditionsRestrictionsAmount() {
+    public void shouldAcceptApprovedRiskDecisionWithLimitedConditionsRestrictionsAmount() {
         var loanApplication = TestLoanApplicationFactory.newLoanApplication();
 
-        loanApplication.addRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithLargeConditionsRestrictionsAmount());
+        loanApplication.acceptRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithLargeConditionsRestrictionsAmount());
 
         //Assert RiskDecision
         var riskDecision = loanApplication.getRiskDecision();
@@ -187,10 +187,10 @@ public class LoanApplicationTest {
     }
 
     @Test
-    public void shouldAddDeclinedRiskDecision() {
+    public void shouldAcceptDeclinedRiskDecision() {
         var loanApplication = TestLoanApplicationFactory.newLoanApplication();
 
-        loanApplication.addRiskDecision(TestRiskDecisionFactory.newDeclinedRiskDecision());
+        loanApplication.acceptRiskDecision(TestRiskDecisionFactory.newDeclinedRiskDecision());
 
         Assertions.assertEquals(loanApplication.getStatus(), LoanApplication.Status.DECLINED);
 

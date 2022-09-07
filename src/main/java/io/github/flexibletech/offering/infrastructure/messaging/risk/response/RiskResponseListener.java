@@ -16,7 +16,7 @@ public class RiskResponseListener implements Consumer<RiskResponse> {
 
     @Override
     public void accept(RiskResponse riskResponse) {
-        loanApplicationService.addRiskDecisionToLoanApplication(riskResponse.getApplicationId(), toRiskDecision(riskResponse));
+        loanApplicationService.acceptRiskDecisionToLoanApplication(riskResponse.getApplicationId(), toRiskDecision(riskResponse));
     }
 
     private RiskDecision toRiskDecision(RiskResponse response) {

@@ -35,7 +35,7 @@ public class RiskResponseListenerIT extends AbstractIntegrationTest {
 
     @Test
     public void shouldReceiveRiskResponse() {
-        Mockito.when(loanApplicationService.addRiskDecisionToLoanApplication(
+        Mockito.when(loanApplicationService.acceptRiskDecisionToLoanApplication(
                         Mockito.eq(TestValues.LOAN_APPLICATION_ID), riskDecisionArgumentCaptor.capture()))
                 .thenReturn(TestApplicationObjectsFactory.newLoanApplicationDtoWithOffer());
 

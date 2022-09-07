@@ -116,13 +116,13 @@ public class LoanApplicationServiceTest {
     }
 
     @Test
-    public void shouldAddRiskDecisionToLoanApplication() {
+    public void shouldAcceptRiskDecisionToLoanApplication() {
         Mockito.when(loanApplicationRepository.save(ArgumentMatchers.any(LoanApplication.class)))
                 .thenReturn(TestLoanApplicationFactory.newLoanApplication());
         Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
 
-        var loanApplication = loanApplicationService.addRiskDecisionToLoanApplication(TestValues.LOAN_APPLICATION_ID,
+        var loanApplication = loanApplicationService.acceptRiskDecisionToLoanApplication(TestValues.LOAN_APPLICATION_ID,
                 TestRiskDecisionFactory.newApprovedRiskDecision());
 
         Assertions.assertEquals(loanApplication.getStatus(), LoanApplication.Status.APPROVED.name());

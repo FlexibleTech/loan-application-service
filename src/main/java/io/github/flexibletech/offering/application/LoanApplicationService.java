@@ -127,11 +127,11 @@ public class LoanApplicationService {
     @Transactional
     @ReceiveTask(definitionKey = ProcessConstants.RISK_DECISION_RECEIVED,
             variables = @ProcessVariable(name = ProcessConstants.STATUS, value = "getStatus()"))
-    public LoanApplicationDto addRiskDecisionToLoanApplication(@ProcessKeyValue String loanApplicationId, RiskDecision riskDecision) {
+    public LoanApplicationDto acceptRiskDecisionToLoanApplication(@ProcessKeyValue String loanApplicationId, RiskDecision riskDecision) {
         log.info("Adding risk decision to loan application {}...", loanApplicationId);
         var loanApplication = loanApplicationOfId(loanApplicationId);
 
-        loanApplication.addRiskDecision(riskDecision);
+        loanApplication.acceptRiskDecision(riskDecision);
 
         loanApplicationRepository.save(loanApplication);
         if (loanApplication.isDeclined())

@@ -46,6 +46,11 @@ public class Client implements Entity {
         return this.category == Category.PREMIUM;
     }
 
+    @JsonIgnore
+    public boolean hasSpouseIncome() {
+        return Objects.nonNull(this.spouseIncome);
+    }
+
     public static Builder newBuilder() {
         return new Client().new Builder();
     }

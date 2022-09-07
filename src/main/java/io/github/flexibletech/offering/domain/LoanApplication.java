@@ -96,22 +96,28 @@ public class LoanApplication extends AggregateRoot {
         this.conditions = conditions;
     }
 
-    public void addRiskDecision(RiskDecision riskDecision) {
-        this.riskDecision = riskDecision;
-        this.riskDecision.limitConditionsRestrictionsAmount();
-
-        if (this.riskDecision.isApproved()) this.status = Status.APPROVED;
+    /**
+     * Получить решение рисков.
+     *
+     * @param riskDecision Решение рисков.
+     */
+    public void acceptRiskDecision(RiskDecision riskDecision) {
+        //Ограничить рассчитанную рисками максимальную сумму условий в соответствие с заданным пределом
+        riskDecision.limitConditionsRestrictionsAmount();
+        if (riskDecision.isApproved()) this.status = Status.APPROVED;
         else {
             this.status = Status.DECLINED;
             this.completedAt = LocalDateTime.now();
         }
+
+        this.riskDecision = riskDecision;
     }
 
     /**
      * Определение типа подтверждения дохода.
      *
-     * @param preApprovedOffer  Предодобренное предложение.
-     * @return                  Тип подтверждения дохода.
+     * @param preApprovedOffer Предодобренное предложение.
+     * @return Тип подтверждения дохода.
      */
     public IncomeConfirmationType defineIncomeConfirmationType(PreApprovedOffer preApprovedOffer) {
         Supplier<IncomeConfirmationType> incomeConfirmationTypeSupplier =
@@ -135,9 +141,9 @@ public class LoanApplication extends AggregateRoot {
     /**
      * Выбор условий.
      *
-     * @param amount        Сумма.
-     * @param period        Период.
-     * @param insurance     Страховка.
+     * @param amount    Сумма.
+     * @param period    Период.
+     * @param insurance Страховка.
      */
     public void choseConditions(Amount amount, Integer period, Boolean insurance) {
         var newConditions = this.conditions.newConditions(amount, period, insurance);
@@ -221,7 +227,7 @@ public class LoanApplication extends AggregateRoot {
 
     public static LoanApplication newLoanApplication(Client client, PreApprovedOffer preApprovedOffer, Conditions conditions) {
         var loanProgram = defineLoanProgramForClient(client, preApprovedOffer);
-        if (!client.isMarried() && Objects.nonNull(client.getSpouseIncome()))
+        if (!client.isMarried() && client.hasSpouseIncome())
             throw new IllegalArgumentException(String.format("Unable to specify spouse income for unmarried client %s",
                     client.getId()));
 
