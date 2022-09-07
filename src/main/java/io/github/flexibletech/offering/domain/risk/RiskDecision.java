@@ -29,19 +29,22 @@ public class RiskDecision implements Entity {
         return this.status == Status.APPROVED;
     }
 
+    /**
+     * Проверка - соответствует ли доход сумме, полученной из зарплатной ведомости.
+     *
+     * @param specifiedIncome   Указанный доход.
+     * @return                  true/false
+     */
+    @JsonIgnore
     public boolean doesIncomeMatchSalary(Amount specifiedIncome) {
-        return isSalaryIncomeLessThanSpecified(specifiedIncome) && this.payroll.isActual();
+        if (!this.payroll.isActual()) return false;
+        var incomeDifference = specifiedIncome.subtract(payroll.getSalary());
+        return incomeDifference.less(payroll.calculateThresholdAmount());
     }
 
     public void limitConditionsRestrictionsAmount() {
         if (this.conditionsRestrictions.isMaxAmountGreaterThanLimit())
             this.conditionsRestrictions = this.conditionsRestrictions.withLimitedAmount();
-    }
-
-    @JsonIgnore
-    private boolean isSalaryIncomeLessThanSpecified(Amount specifiedIncome) {
-        var incomeDifference = specifiedIncome.subtract(payroll.getSalary());
-        return incomeDifference.less(payroll.calculateThresholdAmount());
     }
 
     @RequiredArgsConstructor
