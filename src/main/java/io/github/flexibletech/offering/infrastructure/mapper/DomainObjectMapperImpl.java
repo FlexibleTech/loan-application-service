@@ -1,6 +1,7 @@
 package io.github.flexibletech.offering.infrastructure.mapper;
 
 import io.github.flexibletech.offering.application.DomainObjectMapper;
+import org.modelmapper.MappingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +15,11 @@ public class DomainObjectMapperImpl implements DomainObjectMapper {
 
     @Override
     public <D, T> T map(D object, Class<T> clazz) {
-       // try {
+        try {
             return mapper.map(object, clazz);
-      //  } catch (MappingException ex) {
-        //    throw new IllegalArgumentException(ex.getMessage());
-        //}
+        } catch (MappingException ex) {
+            throw new IllegalArgumentException(ex.getMessage());
+        }
     }
 
 }
