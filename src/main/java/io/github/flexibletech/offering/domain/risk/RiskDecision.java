@@ -42,6 +42,7 @@ public class RiskDecision implements Entity {
         return incomeDifference.less(payroll.calculateThresholdAmount());
     }
 
+    //Ограничиваем сумму, полученную от рисков.
     public void limitConditionsRestrictionsAmount() {
         if (this.conditionsRestrictions.isMaxAmountGreaterThanLimit())
             this.conditionsRestrictions = this.conditionsRestrictions.withLimitedAmount();

@@ -24,15 +24,28 @@ public class Conditions implements ValueObject {
     private int period;
     private boolean insurance;
 
+    //Минимальная сумма, доступная для выбора премиальному клиенту.
     @Transient
-    private static final Amount MAX_ALLOWABLE_AMOUNT = Amount.fromValue(BigDecimal.valueOf(1_000000));
+    private static final Amount MAX_PREMIUM_ALLOWABLE_AMOUNT = Amount.fromValue(BigDecimal.valueOf(1_000000));
     @Transient
+    //Коэффициент для расчета страховки.
     private static final double INSURANCE_COEFFICIENT = 0.00284;
     @Transient
+    //Коэффициент для расчета ежемесячного платежа.
     private static final double MONTHLY_PAYMENT_RATE_COEFFICIENT = 1200;
     @Transient
+    //Коэффициент для расчета страховой премии.
     private static final double INSURANCE_PREMIUM_COEFFICIENT = 0.042;
+    @Transient
+    //Ставка единовременного платежа по страховке
+    static final double SINGLE_INSURANCE_RATE = 15;
 
+    /**
+     * Проверка - доступна ли выбранная сумма без подтверждения дохода.
+     *
+     * @param preApprovedOffer  Предодобренное предложение.
+     * @return                  true/false
+     */
     @JsonIgnore
     boolean isChosenAmountAvailableWithoutConfirmation(PreApprovedOffer preApprovedOffer) {
         if (Objects.nonNull(preApprovedOffer))
@@ -42,12 +55,12 @@ public class Conditions implements ValueObject {
     }
 
     @JsonIgnore
-    boolean isChosenAmountLessThanMaxAllowableValue() {
-        return this.amount.less(MAX_ALLOWABLE_AMOUNT);
+    boolean isChosenAmountLessThanMaxPremiumAllowableValue() {
+        return this.amount.less(MAX_PREMIUM_ALLOWABLE_AMOUNT);
     }
 
     /**
-     * Корректировка суммы условий если выбрана страховка. Сумма корректируется на единоразовую выблату по страховке.
+     * Корректировка суммы условий если выбрана страховка. Сумма корректируется на единоразовую выплату по страховке.
      *
      * @return Новые условия.
      */
@@ -61,8 +74,9 @@ public class Conditions implements ValueObject {
         return this;
     }
 
+    //Расчет единовременного платежа по страховке
     Amount calculateSingleInsurancePayment() {
-        return this.amount.divide(LoanApplication.SINGLE_INSURANCE_RATE / 100)
+        return this.amount.divide(SINGLE_INSURANCE_RATE / 100)
                 .multiply(this.period)
                 .multiply(INSURANCE_COEFFICIENT);
     }
@@ -89,10 +103,12 @@ public class Conditions implements ValueObject {
         return LoanApplication.LOAN_RATE / MONTHLY_PAYMENT_RATE_COEFFICIENT;
     }
 
+    //Расчет даты первого платежа
     LocalDate calculateFirstPaymentDate() {
         return LocalDate.now().plusMonths(1);
     }
 
+    //Расчет даты последнего платежа
     LocalDate calculateLastPaymentDate() {
         return LocalDate.now().plusMonths(this.period + 1);
     }
@@ -103,6 +119,7 @@ public class Conditions implements ValueObject {
                 Optional.ofNullable(insurance).orElse(this.insurance));
     }
 
+    //Расчет страховой премии
     Amount calculateInsurancePremium() {
         return this.amount.multiply(INSURANCE_PREMIUM_COEFFICIENT);
     }

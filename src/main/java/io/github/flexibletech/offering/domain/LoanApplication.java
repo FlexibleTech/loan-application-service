@@ -86,8 +86,7 @@ public class LoanApplication extends AggregateRoot {
     private String issuanceId;
 
     @Transient
-    static final double SINGLE_INSURANCE_RATE = 15;
-    @Transient
+    //Ставка по кредиту в %
     public static final double LOAN_RATE = 16;
 
     private LoanApplication(Client client, LoanProgram loanProgram, Conditions conditions) {
@@ -126,7 +125,7 @@ public class LoanApplication extends AggregateRoot {
                     if (client.isPayroll() && riskDecision.doesIncomeMatchSalary(this.client.getIncome()))
                         return IncomeConfirmationType.SALARY_RECEIPT;
                     //Проверка условия - клиент премиальный и выбранная сумма меньше максимально допустимого значения.
-                    if (client.isPremium() && this.conditions.isChosenAmountLessThanMaxAllowableValue())
+                    if (client.isPremium() && this.conditions.isChosenAmountLessThanMaxPremiumAllowableValue())
                         return IncomeConfirmationType.NONE;
                     //Проверка условия - достпуна ли выбранная сумма без подтверждения.
                     if (this.conditions.isChosenAmountAvailableWithoutConfirmation(preApprovedOffer))
@@ -152,6 +151,7 @@ public class LoanApplication extends AggregateRoot {
         this.conditions = this.conditions.adjustAmountIfInsuranceChosen();
     }
 
+    //Расчет предложения
     public void calculateOffer() {
         if (conditions.isInsurance())
             this.offer = Offer.newOfferWithInsurance(this.conditions);
@@ -227,6 +227,7 @@ public class LoanApplication extends AggregateRoot {
 
     public static LoanApplication newLoanApplication(Client client, PreApprovedOffer preApprovedOffer, Conditions conditions) {
         var loanProgram = defineLoanProgramForClient(client, preApprovedOffer);
+        //Доход супруга(-ги) может быть указан только если клиент не холост.
         if (!client.isMarried() && client.hasSpouseIncome())
             throw new IllegalArgumentException(String.format("Unable to specify spouse income for unmarried client %s",
                     client.getId()));
@@ -234,6 +235,14 @@ public class LoanApplication extends AggregateRoot {
         return new LoanApplication(client, loanProgram, conditions);
     }
 
+    /**
+     * Оределение программы кредитования в зависимости от категории клиента
+     * и наличия предодобренного предложения.
+     *
+     * @param client            Клиент.
+     * @param preApprovedOffer  Предодобренное предложение.
+     * @return                  Программа кредитования.
+     */
     private static LoanApplication.LoanProgram defineLoanProgramForClient(Client client, PreApprovedOffer preApprovedOffer) {
         if (client.isPayroll()) return LoanApplication.LoanProgram.PAYROLL_CLIENT;
         if (client.isPremium()) return LoanApplication.LoanProgram.SPECIAL;
