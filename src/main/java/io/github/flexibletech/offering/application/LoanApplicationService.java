@@ -70,6 +70,7 @@ public class LoanApplicationService {
             businessKeyValue = "getId()")
     public LoanApplicationDto startNewLoanApplication(StartNewLoanApplicationRequest request) {
         log.info("Starting loan application...");
+
         var client = fromClientDto(request.getClient());
         var conditions = fromConditionsDto(request.getConditions());
 
@@ -129,8 +130,8 @@ public class LoanApplicationService {
             variables = @ProcessVariable(name = ProcessConstants.STATUS, value = "getStatus()"))
     public LoanApplicationDto acceptRiskDecisionToLoanApplication(@ProcessKeyValue String loanApplicationId, RiskDecision riskDecision) {
         log.info("Adding risk decision to loan application {}...", loanApplicationId);
-        var loanApplication = loanApplicationOfId(loanApplicationId);
 
+        var loanApplication = loanApplicationOfId(loanApplicationId);
         loanApplication.acceptRiskDecision(riskDecision);
 
         loanApplicationRepository.save(loanApplication);
@@ -146,6 +147,7 @@ public class LoanApplicationService {
             variables = @ProcessVariable(name = ProcessConstants.INCOME_CONFIRMATION_TYPE, value = "toString()"))
     public String defineIncomeConfirmationTypeForLoanApplication(@ProcessKeyValue String loanApplicationId) {
         log.info("Definition of income confirmation type for loan application {}", loanApplicationId);
+
         var loanApplication = loanApplicationOfId(loanApplicationId);
         var preApprovedOffer = preApprovedOfferRepository.findForClient(loanApplication.clientId());
 
@@ -163,8 +165,8 @@ public class LoanApplicationService {
             variables = @ProcessVariable(name = ProcessConstants.INSURANCE, value = "getInsurance()"))
     public ConditionsDto choseConditionsForLoanApplication(@ProcessKeyValue String loanApplicationId, ConditionsDto conditions) {
         log.info("Choosing conditions for loan application {}...", loanApplicationId);
-        var loanApplication = loanApplicationOfId(loanApplicationId);
 
+        var loanApplication = loanApplicationOfId(loanApplicationId);
         loanApplication.choseConditions(
                 Amount.fromValue(conditions.getAmount()),
                 conditions.getPeriod(),
@@ -181,10 +183,10 @@ public class LoanApplicationService {
     @Delegate(beanName = ProcessConstants.CALCULATE_OFFER_TASK, key = ProcessConstants.LOAN_APPLICATION_ID)
     public void calculateOfferForLoanApplication(@ProcessKeyValue String loanApplicationId) {
         log.info("Offer calculation for loan application {}...", loanApplicationId);
+
         var loanApplication = loanApplicationOfId(loanApplicationId);
 
         loanApplication.calculateOffer();
-
         var loanApplicationOfferCalculated = domainObjectMapper.map(loanApplication, LoanApplicationOfferCalculated.class);
 
         eventPublisher.publish(loanApplicationOfferCalculated);
@@ -206,6 +208,7 @@ public class LoanApplicationService {
                                                         @ProcessValue(value = "INSURANCE", type = Document.Type.class, delegate = ProcessConstants.PRINT_INSURANCE_TASK)
                                                 }) Document.Type documentType) {
         log.info("Printing document with type {} for loan application {}...", documentType, loanApplicationId);
+
         var loanApplication = loanApplicationOfId(loanApplicationId);
 
         byte[] content = printService.print(loanApplication, documentType);
@@ -225,8 +228,8 @@ public class LoanApplicationService {
     @UserTask(definitionKey = ProcessConstants.SING_DOCUMENTS_TASK)
     public void signDocumentPackageForLoanApplication(@ProcessKeyValue String loanApplicationId) {
         log.info("Signing document package of loan application {}...", loanApplicationId);
-        var loanApplication = loanApplicationOfId(loanApplicationId);
 
+        var loanApplication = loanApplicationOfId(loanApplicationId);
         loanApplication.signDocumentPackage();
 
         loanApplicationRepository.save(loanApplication);
@@ -238,6 +241,7 @@ public class LoanApplicationService {
     @Delegate(beanName = ProcessConstants.START_ISSUANCE_TASK, key = ProcessConstants.LOAN_APPLICATION_ID)
     public void startIssuanceForLoanApplication(@ProcessKeyValue String loanApplicationId) {
         log.info("Starting issuance for loan application {}...", loanApplicationId);
+
         var loanApplication = loanApplicationOfId(loanApplicationId);
 
         issuanceService.startIssuance(loanApplication);
@@ -249,8 +253,8 @@ public class LoanApplicationService {
     @ReceiveTask(definitionKey = ProcessConstants.LOAN_APPLICATION_COMPLETED)
     public void completeLoanApplication(@ProcessKeyValue String loanApplicationId, String issuanceId) {
         log.info("Completion loan application {}...", loanApplicationId);
-        var loanApplication = loanApplicationOfId(loanApplicationId);
 
+        var loanApplication = loanApplicationOfId(loanApplicationId);
         loanApplication.complete(issuanceId);
 
         loanApplicationRepository.save(loanApplication);
@@ -263,8 +267,8 @@ public class LoanApplicationService {
     @Delegate(beanName = ProcessConstants.CANCEL_LOAN_APPLICATION_TASK, key = ProcessConstants.LOAN_APPLICATION_ID)
     public void cancelLoanApplication(@ProcessKeyValue String loanApplicationId) {
         log.info("Cancellation of loan application {}...", loanApplicationId);
-        var loanApplication = loanApplicationOfId(loanApplicationId);
 
+        var loanApplication = loanApplicationOfId(loanApplicationId);
         loanApplication.cancel();
 
         loanApplicationRepository.save(loanApplication);
