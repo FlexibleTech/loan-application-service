@@ -1,6 +1,7 @@
 package io.github.flexibletech.offering.application;
 
 import io.github.flexibletech.offering.TestValues;
+import io.github.flexibletech.offering.application.dto.AcceptRiskDecisionRequest;
 import io.github.flexibletech.offering.application.dto.ClientDto;
 import io.github.flexibletech.offering.application.dto.ConditionsDto;
 import io.github.flexibletech.offering.application.dto.ConditionsRestrictionsDto;
@@ -12,6 +13,7 @@ import io.github.flexibletech.offering.application.dto.StartNewLoanApplicationRe
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationCompleted;
 import io.github.flexibletech.offering.domain.LoanApplication;
 import io.github.flexibletech.offering.domain.client.Client;
+import io.github.flexibletech.offering.domain.risk.RiskDecision;
 
 import java.util.Set;
 
@@ -126,4 +128,13 @@ public class TestApplicationObjectsFactory {
         return new LoanApplicationCompleted(TestValues.LOAN_APPLICATION_ID, TestValues.ISSUANCE_ID);
     }
 
+    public static AcceptRiskDecisionRequest newAcceptRiskDecisionRequest() {
+        return new AcceptRiskDecisionRequest(
+                TestValues.RISK_DECISION_ID,
+                RiskDecision.Status.APPROVED.name(),
+                TestValues.PAYROLL_SALARY.getValue(),
+                TestValues.PAYROLL_LAST_SALARY_DATE,
+                TestValues.CONDITIONS_RESTRICTIONS_MAX_AMOUNT.getValue(),
+                TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
+    }
 }

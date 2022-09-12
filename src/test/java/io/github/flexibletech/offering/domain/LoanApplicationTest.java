@@ -8,6 +8,7 @@ import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory
 import io.github.flexibletech.offering.domain.factory.TestPreApprovedOfferFactory;
 import io.github.flexibletech.offering.domain.factory.TestRiskDecisionFactory;
 import io.github.flexibletech.offering.domain.risk.ConditionsRestrictions;
+import io.github.flexibletech.offering.domain.risk.RiskDecision;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -147,6 +148,58 @@ public class LoanApplicationTest {
     }
 
     @Test
+    @SuppressWarnings("ConstantConditions")
+    public void shouldCreateNewRiskDecisionWithoutLimitedAmount() {
+        var riskDecision = RiskDecision.newRiskDecision(TestValues.RISK_DECISION_ID,
+                RiskDecision.Status.APPROVED.name(),
+                TestValues.PAYROLL_SALARY.getValue(),
+                TestValues.PAYROLL_LAST_SALARY_DATE,
+                TestValues.CONDITIONS_RESTRICTIONS_MAX_AMOUNT.getValue(),
+                TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
+
+        Assertions.assertTrue(riskDecision.isApproved());
+        Assertions.assertEquals(riskDecision.getId(), TestValues.RISK_DECISION_ID);
+
+        //Assert payroll
+        var payroll = riskDecision.getPayroll();
+        Assertions.assertNotNull(payroll);
+        Assertions.assertEquals(payroll.getLastSalaryDate(), TestValues.PAYROLL_LAST_SALARY_DATE);
+        Assertions.assertEquals(payroll.getSalary(), TestValues.PAYROLL_SALARY);
+
+        //Assert conditionsRestrictions
+        var conditionsRestrictions = riskDecision.getConditionsRestrictions();
+        Assertions.assertNotNull(conditionsRestrictions);
+        Assertions.assertEquals(conditionsRestrictions.getMaxAmount(), TestValues.CONDITIONS_RESTRICTIONS_MAX_AMOUNT);
+        Assertions.assertEquals(conditionsRestrictions.getMaxPeriod(), TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
+    }
+
+    @Test
+    @SuppressWarnings("ConstantConditions")
+    public void shouldCreateNewRiskDecisionWithLimitedAmount() {
+        var riskDecision = RiskDecision.newRiskDecision(TestValues.RISK_DECISION_ID,
+                RiskDecision.Status.APPROVED.name(),
+                TestValues.PAYROLL_SALARY.getValue(),
+                TestValues.PAYROLL_LAST_SALARY_DATE,
+                TestValues.CONDITIONS_RESTRICTIONS_LARGE_MAX_AMOUNT.getValue(),
+                TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
+
+        Assertions.assertTrue(riskDecision.isApproved());
+        Assertions.assertEquals(riskDecision.getId(), TestValues.RISK_DECISION_ID);
+
+        //Assert payroll
+        var payroll = riskDecision.getPayroll();
+        Assertions.assertNotNull(payroll);
+        Assertions.assertEquals(payroll.getLastSalaryDate(), TestValues.PAYROLL_LAST_SALARY_DATE);
+        Assertions.assertEquals(payroll.getSalary(), TestValues.PAYROLL_SALARY);
+
+        //Assert conditionsRestrictions
+        var conditionsRestrictions = riskDecision.getConditionsRestrictions();
+        Assertions.assertNotNull(conditionsRestrictions);
+        Assertions.assertEquals(conditionsRestrictions.getMaxAmount(), ConditionsRestrictions.AMOUNT_LIMIT);
+        Assertions.assertEquals(conditionsRestrictions.getMaxPeriod(), TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
+    }
+
+    @Test
     public void shouldAcceptApprovedRiskDecision() {
         var loanApplication = TestLoanApplicationFactory.newLoanApplication();
 
@@ -171,19 +224,6 @@ public class LoanApplicationTest {
         Assertions.assertNotNull(conditionsRestrictions);
         Assertions.assertEquals(conditionsRestrictions.getMaxAmount(), TestValues.CONDITIONS_RESTRICTIONS_MAX_AMOUNT);
         Assertions.assertEquals(conditionsRestrictions.getMaxPeriod(), TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
-    }
-
-    @Test
-    public void shouldAcceptApprovedRiskDecisionWithLimitedConditionsRestrictionsAmount() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplication();
-
-        loanApplication.acceptRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithLargeConditionsRestrictionsAmount());
-
-        //Assert RiskDecision
-        var riskDecision = loanApplication.getRiskDecision();
-        //Assert ConditionsRestrictions
-        var conditionsRestrictions = riskDecision.getConditionsRestrictions();
-        Assertions.assertEquals(conditionsRestrictions.getMaxAmount(), ConditionsRestrictions.AMOUNT_LIMIT);
     }
 
     @Test
@@ -252,7 +292,7 @@ public class LoanApplicationTest {
         var newConditions = loanApplication.getConditions();
         Assertions.assertNotNull(newConditions);
         Assertions.assertFalse(newConditions.isInsurance());
-        Assertions.assertEquals(newConditions.getAmount(), TestValues.NEW_CHOSEN_CONDITIONS_AMOUNT);
+        Assertions.assertEquals(newConditions.getAmount().getValue(), TestValues.NEW_CHOSEN_CONDITIONS_AMOUNT);
         Assertions.assertEquals(newConditions.getPeriod(), TestValues.NEW_CHOSEN_CONDITIONS_PERIOD);
     }
 

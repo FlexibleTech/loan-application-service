@@ -32,20 +32,14 @@ public class RiskDecision implements Entity {
     /**
      * Проверка - соответствует ли доход сумме, полученной из зарплатной ведомости.
      *
-     * @param specifiedIncome   Указанный доход.
-     * @return                  true/false
+     * @param specifiedIncome Указанный доход.
+     * @return true/false
      */
     @JsonIgnore
     public boolean doesIncomeMatchSalary(Amount specifiedIncome) {
         if (!this.payroll.isActual()) return false;
         var incomeDifference = specifiedIncome.subtract(payroll.getSalary());
         return incomeDifference.less(payroll.calculateThresholdAmount());
-    }
-
-    //Ограничиваем сумму, полученную от рисков.
-    public void limitConditionsRestrictionsAmount() {
-        if (this.conditionsRestrictions.isMaxAmountGreaterThanLimit())
-            this.conditionsRestrictions = this.conditionsRestrictions.withLimitedAmount();
     }
 
     @RequiredArgsConstructor
@@ -66,11 +60,17 @@ public class RiskDecision implements Entity {
 
     public static RiskDecision newRiskDecision(String id, String status, BigDecimal payrollSalary,
                                                LocalDate payrollLastSalaryDate, BigDecimal conditionsMaxAmount, int conditionsMaxPeriod) {
+        var conditionsRestrictions = ConditionsRestrictions.newConditionsRestrictions(
+                conditionsMaxAmount, conditionsMaxPeriod);
+        //Ограничиваем сумму, полученную от рисков.
+        if (conditionsRestrictions.isMaxAmountGreaterThanLimit())
+            conditionsRestrictions = conditionsRestrictions.withLimitedAmount();
+
         return new RiskDecision(
                 id,
                 Status.fromValue(status),
                 Payroll.newPayroll(payrollSalary, payrollLastSalaryDate),
-                ConditionsRestrictions.newConditionsRestrictions(conditionsMaxAmount, conditionsMaxPeriod));
+                conditionsRestrictions);
     }
 
     @Override

@@ -4,6 +4,7 @@ import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.application.LoanApplicationService;
 import io.github.flexibletech.offering.application.TestApplicationObjectsFactory;
+import io.github.flexibletech.offering.application.dto.AcceptRiskDecisionRequest;
 import io.github.flexibletech.offering.domain.risk.RiskDecision;
 import io.github.flexibletech.offering.infrastructure.messaging.risk.response.RiskResponse;
 import org.awaitility.Awaitility;
@@ -31,12 +32,13 @@ public class RiskResponseListenerIT extends AbstractIntegrationTest {
     private String destination;
 
     @Captor
-    private ArgumentCaptor<RiskDecision> riskDecisionArgumentCaptor;
+    private ArgumentCaptor<AcceptRiskDecisionRequest> acceptRiskDecisionRequestArgumentCaptor;
 
     @Test
+    @SuppressWarnings("ConstantConditions")
     public void shouldReceiveRiskResponse() {
         Mockito.when(loanApplicationService.acceptRiskDecisionToLoanApplication(
-                        Mockito.eq(TestValues.LOAN_APPLICATION_ID), riskDecisionArgumentCaptor.capture()))
+                        Mockito.eq(TestValues.LOAN_APPLICATION_ID), acceptRiskDecisionRequestArgumentCaptor.capture()))
                 .thenReturn(TestApplicationObjectsFactory.newLoanApplicationDtoWithOffer());
 
         inputDestination.send(MessageBuilder.withPayload(newRiskResponse()).build(), destination);
@@ -44,25 +46,15 @@ public class RiskResponseListenerIT extends AbstractIntegrationTest {
         Awaitility.await()
                 .atMost(5, TimeUnit.SECONDS)
                 .untilAsserted(() -> {
-                    var riskDecision = riskDecisionArgumentCaptor.getValue();
+                    var request = acceptRiskDecisionRequestArgumentCaptor.getValue();
 
-                    Assertions.assertNotNull(riskDecision);
-                    Assertions.assertTrue(riskDecision.isApproved());
-                    Assertions.assertEquals(riskDecision.getId(), TestValues.RISK_DECISION_ID);
-
-                    //Assert payroll
-                    var payroll = riskDecision.getPayroll();
-
-                    Assertions.assertNotNull(payroll);
-                    Assertions.assertEquals(payroll.getSalary(), TestValues.PAYROLL_SALARY);
-                    Assertions.assertEquals(payroll.getLastSalaryDate(), TestValues.PAYROLL_LAST_SALARY_DATE);
-
-                    //Assert ConditionsRestrictions
-                    var conditionsRestrictions = riskDecision.getConditionsRestrictions();
-
-                    Assertions.assertNotNull(conditionsRestrictions);
-                    Assertions.assertEquals(conditionsRestrictions.getMaxAmount(), TestValues.CONDITIONS_RESTRICTIONS_MAX_AMOUNT);
-                    Assertions.assertEquals(conditionsRestrictions.getMaxPeriod(), TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
+                    Assertions.assertNotNull(request);
+                    Assertions.assertEquals(request.getStatus(), RiskDecision.Status.APPROVED.name());
+                    Assertions.assertEquals(request.getId(), TestValues.RISK_DECISION_ID);
+                    Assertions.assertEquals(request.getSalary(), TestValues.PAYROLL_SALARY.getValue());
+                    Assertions.assertEquals(request.getLastSalaryDate(), TestValues.PAYROLL_LAST_SALARY_DATE);
+                    Assertions.assertEquals(request.getMaxPeriod(), TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
+                    Assertions.assertEquals(request.getMaxAmount(), TestValues.CONDITIONS_RESTRICTIONS_MAX_AMOUNT.getValue());
                 });
     }
 

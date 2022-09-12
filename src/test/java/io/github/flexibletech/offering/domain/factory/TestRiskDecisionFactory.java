@@ -17,14 +17,6 @@ public class TestRiskDecisionFactory {
                 newConditionsRestrictions());
     }
 
-    public static RiskDecision newApprovedRiskDecisionWithLargeConditionsRestrictionsAmount() {
-        return new RiskDecision(
-                TestValues.RISK_DECISION_ID,
-                RiskDecision.Status.APPROVED,
-                newPayroll(),
-                newConditionsRestrictionsWithLargeAmount());
-    }
-
     public static RiskDecision newApprovedRiskDecisionWithNotActualPayroll() {
         return new RiskDecision(
                 TestValues.RISK_DECISION_ID,
@@ -56,12 +48,6 @@ public class TestRiskDecisionFactory {
     private static ConditionsRestrictions newConditionsRestrictions() {
         return new ConditionsRestrictions(
                 TestValues.CONDITIONS_RESTRICTIONS_MAX_AMOUNT,
-                TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
-    }
-
-    private static ConditionsRestrictions newConditionsRestrictionsWithLargeAmount() {
-        return new ConditionsRestrictions(
-                TestValues.CONDITIONS_RESTRICTIONS_LARGE_MAX_AMOUNT,
                 TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
     }
 }

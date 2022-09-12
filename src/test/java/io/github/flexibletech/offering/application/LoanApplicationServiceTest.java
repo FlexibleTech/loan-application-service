@@ -14,7 +14,6 @@ import io.github.flexibletech.offering.domain.document.DocumentStorage;
 import io.github.flexibletech.offering.domain.document.PrintService;
 import io.github.flexibletech.offering.domain.factory.TestClientFactory;
 import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory;
-import io.github.flexibletech.offering.domain.factory.TestRiskDecisionFactory;
 import io.github.flexibletech.offering.domain.issuance.IssuanceService;
 import io.github.flexibletech.offering.domain.preapproved.PreApprovedOfferRepository;
 import io.github.flexibletech.offering.domain.risk.RiskService;
@@ -123,7 +122,7 @@ public class LoanApplicationServiceTest {
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
 
         var loanApplication = loanApplicationService.acceptRiskDecisionToLoanApplication(TestValues.LOAN_APPLICATION_ID,
-                TestRiskDecisionFactory.newApprovedRiskDecision());
+                TestApplicationObjectsFactory.newAcceptRiskDecisionRequest());
 
         Assertions.assertEquals(loanApplication.getStatus(), LoanApplication.Status.APPROVED.name());
     }

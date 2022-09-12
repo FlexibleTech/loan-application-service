@@ -3,6 +3,7 @@ package io.github.flexibletech.offering;
 import io.github.flexibletech.offering.domain.Amount;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 public class TestValues {
@@ -43,7 +44,7 @@ public class TestValues {
     //Conditions
     public static final Amount CONDITIONS_AMOUNT = Amount.fromValue(new BigDecimal(500_000));
     public static final int CONDITIONS_PERIOD = 20;
-    public static final Amount NEW_CHOSEN_CONDITIONS_AMOUNT = Amount.fromValue(new BigDecimal(700_000));
+    public static final BigDecimal NEW_CHOSEN_CONDITIONS_AMOUNT = BigDecimal.valueOf(700_000).setScale(6, RoundingMode.UP);
     public static final int NEW_CHOSEN_CONDITIONS_PERIOD = 30;
     public static final Amount ADJUSTED_CONDITIONS_AMOUNT = Amount.fromValue(BigDecimal.valueOf(689333.333334));
 

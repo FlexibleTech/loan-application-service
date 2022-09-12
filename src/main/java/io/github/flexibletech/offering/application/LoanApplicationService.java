@@ -9,6 +9,7 @@ import io.github.flexibletech.camunda.tools.process.values.ProcessValues;
 import io.github.flexibletech.camunda.tools.process.variables.ProcessVariable;
 import io.github.flexibletech.camunda.tools.task.receive.ReceiveTask;
 import io.github.flexibletech.camunda.tools.task.user.UserTask;
+import io.github.flexibletech.offering.application.dto.AcceptRiskDecisionRequest;
 import io.github.flexibletech.offering.application.dto.ClientDto;
 import io.github.flexibletech.offering.application.dto.ConditionsDto;
 import io.github.flexibletech.offering.application.dto.LoanApplicationDto;
@@ -128,10 +129,18 @@ public class LoanApplicationService {
     @Transactional
     @ReceiveTask(definitionKey = ProcessConstants.RISK_DECISION_RECEIVED,
             variables = @ProcessVariable(name = ProcessConstants.STATUS, value = "getStatus()"))
-    public LoanApplicationDto acceptRiskDecisionToLoanApplication(@ProcessKeyValue String loanApplicationId, RiskDecision riskDecision) {
+    public LoanApplicationDto acceptRiskDecisionToLoanApplication(@ProcessKeyValue String loanApplicationId, AcceptRiskDecisionRequest request) {
         log.info("Adding risk decision to loan application {}...", loanApplicationId);
 
         var loanApplication = loanApplicationOfId(loanApplicationId);
+
+        var riskDecision = RiskDecision.newRiskDecision(
+                request.getId(),
+                request.getStatus(),
+                request.getSalary(),
+                request.getLastSalaryDate(),
+                request.getMaxAmount(),
+                request.getMaxPeriod());
         loanApplication.acceptRiskDecision(riskDecision);
 
         loanApplicationRepository.save(loanApplication);
@@ -168,7 +177,7 @@ public class LoanApplicationService {
 
         var loanApplication = loanApplicationOfId(loanApplicationId);
         loanApplication.choseConditions(
-                Amount.fromValue(conditions.getAmount()),
+                conditions.getAmount(),
                 conditions.getPeriod(),
                 conditions.getInsurance());
 
@@ -185,8 +194,8 @@ public class LoanApplicationService {
         log.info("Offer calculation for loan application {}...", loanApplicationId);
 
         var loanApplication = loanApplicationOfId(loanApplicationId);
-
         loanApplication.calculateOffer();
+
         var loanApplicationOfferCalculated = domainObjectMapper.map(loanApplication, LoanApplicationOfferCalculated.class);
 
         eventPublisher.publish(loanApplicationOfferCalculated);

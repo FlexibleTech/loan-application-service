@@ -31,6 +31,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -101,8 +102,6 @@ public class LoanApplication extends AggregateRoot {
      * @param riskDecision Решение рисков.
      */
     public void acceptRiskDecision(RiskDecision riskDecision) {
-        //Ограничить рассчитанную рисками максимальную сумму условий в соответствие с заданным пределом
-        riskDecision.limitConditionsRestrictionsAmount();
         if (riskDecision.isApproved()) this.status = Status.APPROVED;
         else {
             this.status = Status.DECLINED;
@@ -144,8 +143,8 @@ public class LoanApplication extends AggregateRoot {
      * @param period    Период.
      * @param insurance Страховка.
      */
-    public void choseConditions(Amount amount, Integer period, Boolean insurance) {
-        var newConditions = this.conditions.newConditions(amount, period, insurance);
+    public void choseConditions(BigDecimal amount, Integer period, Boolean insurance) {
+        var newConditions = this.conditions.newConditions(Amount.fromValue(amount), period, insurance);
         if (!this.conditions.equals(newConditions)) this.conditions = newConditions;
 
         this.conditions = this.conditions.adjustAmountIfInsuranceChosen();
