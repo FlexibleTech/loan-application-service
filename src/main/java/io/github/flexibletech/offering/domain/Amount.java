@@ -55,6 +55,10 @@ public class Amount implements ValueObject, Comparable<Amount> {
         return this.multiply(value / 100);
     }
 
+    public Amount abs() {
+        return Amount.fromValue(this.value.abs());
+    }
+
     public Amount add(Amount amount) {
         return Amount.fromValue(this.value.add(amount.value));
     }

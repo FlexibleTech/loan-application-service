@@ -21,9 +21,9 @@ dependencies {
 
     implementation 'io.minio:minio:8.4.3'
 
-    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.3'
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.3'
-    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:3.1.3'
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.4'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.4'
+    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:3.1.4'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server:2.7.3'
     implementation 'org.springframework.boot:spring-boot-starter-security:2.7.3'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.7.3'
@@ -32,7 +32,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.3'
 
-    implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka:3.2.4'
+    implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka:3.2.5'
     implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit:3.2.4'
 
     implementation 'org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-webapp:7.17.0'

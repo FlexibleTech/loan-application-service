@@ -26,15 +26,22 @@ public class Payroll implements ValueObject {
         return new Payroll(Amount.fromValue(salary), lastSalaryDate);
     }
 
+    //Коэффициент сверки дохода.
     @Transient
     private static final double INCOME_RECONCILIATION_THRESHOLD_PERCENTAGE = 30;
+    //Допустимая разница между текущей датой и датой последней зарплаты в месяцах.
     @Transient
     private static final int ALLOWABLE_PAYROLL_DIFFERENCE = 3;
 
-    public Amount calculateThresholdAmount() {
+    //Расчет порогового значения зарплаты клиента, которому мы можем доверять без справки 2-НДФЛ.
+    public Amount calculateThresholdSalaryAmount() {
         return this.salary.calculatePercentage(INCOME_RECONCILIATION_THRESHOLD_PERCENTAGE);
     }
 
+    /*
+    Зарплата считается актуальной только если разница между текущей датой и датой последней
+    зарплаты не превыщает допустимого значения.
+     */
     @JsonIgnore
     public boolean isActual() {
         var difference = Period.between(this.lastSalaryDate, LocalDate.now());

@@ -31,6 +31,8 @@ public class RiskDecision implements Entity {
 
     /**
      * Проверка - соответствует ли доход сумме, полученной из зарплатной ведомости.
+     * Доход будет соответсвовать полученной зарплате если зарплата актуальна на текущую дату
+     * и разница между указанным доходом и зарплатой не превышает рассчитанного порогового значения.
      *
      * @param specifiedIncome Указанный доход.
      * @return true/false
@@ -38,8 +40,10 @@ public class RiskDecision implements Entity {
     @JsonIgnore
     public boolean doesIncomeMatchSalary(Amount specifiedIncome) {
         if (!this.payroll.isActual()) return false;
-        var incomeDifference = specifiedIncome.subtract(payroll.getSalary());
-        return incomeDifference.less(payroll.calculateThresholdAmount());
+        var incomeDifference = specifiedIncome
+                .subtract(payroll.getSalary())
+                .abs();
+        return incomeDifference.less(payroll.calculateThresholdSalaryAmount());
     }
 
     @RequiredArgsConstructor

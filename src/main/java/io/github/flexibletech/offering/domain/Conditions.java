@@ -43,8 +43,8 @@ public class Conditions implements ValueObject {
     /**
      * Проверка - доступна ли выбранная сумма без подтверждения дохода.
      *
-     * @param preApprovedOffer  Предодобренное предложение.
-     * @return                  true/false
+     * @param preApprovedOffer Предодобренное предложение.
+     * @return true/false
      */
     @JsonIgnore
     boolean isChosenAmountAvailableWithoutConfirmation(PreApprovedOffer preApprovedOffer) {
@@ -91,16 +91,9 @@ public class Conditions implements ValueObject {
      */
     Amount calculateMonthlyPayment() {
         var degree = -(this.period - 1);
-        return this.amount.multiply(monthlyRate() / (1 - Math.pow(1 + monthlyRate(), degree)));
-    }
-
-    /**
-     * Расчет ставки.
-     *
-     * @return Рассчитанная ставка.
-     */
-    private double monthlyRate() {
-        return LoanApplication.LOAN_RATE / MONTHLY_PAYMENT_RATE_COEFFICIENT;
+        //Расчет ставки
+        var monthlyRate = LoanApplication.LOAN_RATE / MONTHLY_PAYMENT_RATE_COEFFICIENT;
+        return this.amount.multiply(monthlyRate / (1 - Math.pow(1 + monthlyRate, degree)));
     }
 
     //Расчет даты первого платежа
