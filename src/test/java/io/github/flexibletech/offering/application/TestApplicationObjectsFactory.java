@@ -1,7 +1,7 @@
 package io.github.flexibletech.offering.application;
 
 import io.github.flexibletech.offering.TestValues;
-import io.github.flexibletech.offering.application.dto.AcceptRiskDecisionRequest;
+import io.github.flexibletech.offering.application.dto.RiskDecisionDto;
 import io.github.flexibletech.offering.application.dto.ClientDto;
 import io.github.flexibletech.offering.application.dto.ConditionsDto;
 import io.github.flexibletech.offering.application.dto.ConditionsRestrictionsDto;
@@ -128,8 +128,8 @@ public class TestApplicationObjectsFactory {
         return new LoanApplicationCompleted(TestValues.LOAN_APPLICATION_ID, TestValues.ISSUANCE_ID);
     }
 
-    public static AcceptRiskDecisionRequest newAcceptRiskDecisionRequest() {
-        return new AcceptRiskDecisionRequest(
+    public static RiskDecisionDto newRiskDecisionDto() {
+        return new RiskDecisionDto(
                 TestValues.RISK_DECISION_ID,
                 RiskDecision.Status.APPROVED.name(),
                 TestValues.PAYROLL_SALARY.getValue(),

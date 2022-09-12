@@ -9,7 +9,7 @@ import io.github.flexibletech.camunda.tools.process.values.ProcessValues;
 import io.github.flexibletech.camunda.tools.process.variables.ProcessVariable;
 import io.github.flexibletech.camunda.tools.task.receive.ReceiveTask;
 import io.github.flexibletech.camunda.tools.task.user.UserTask;
-import io.github.flexibletech.offering.application.dto.AcceptRiskDecisionRequest;
+import io.github.flexibletech.offering.application.dto.RiskDecisionDto;
 import io.github.flexibletech.offering.application.dto.ClientDto;
 import io.github.flexibletech.offering.application.dto.ConditionsDto;
 import io.github.flexibletech.offering.application.dto.LoanApplicationDto;
@@ -129,7 +129,7 @@ public class LoanApplicationService {
     @Transactional
     @ReceiveTask(definitionKey = ProcessConstants.RISK_DECISION_RECEIVED,
             variables = @ProcessVariable(name = ProcessConstants.STATUS, value = "getStatus()"))
-    public LoanApplicationDto acceptRiskDecisionToLoanApplication(@ProcessKeyValue String loanApplicationId, AcceptRiskDecisionRequest request) {
+    public LoanApplicationDto acceptRiskDecisionToLoanApplication(@ProcessKeyValue String loanApplicationId, RiskDecisionDto request) {
         log.info("Adding risk decision to loan application {}...", loanApplicationId);
 
         var loanApplication = loanApplicationOfId(loanApplicationId);

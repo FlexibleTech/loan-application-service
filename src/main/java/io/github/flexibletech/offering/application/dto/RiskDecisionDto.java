@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AcceptRiskDecisionRequest {
+public class RiskDecisionDto {
     private String id;
     private String status;
     private BigDecimal salary;

@@ -122,7 +122,7 @@ public class LoanApplicationServiceTest {
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
 
         var loanApplication = loanApplicationService.acceptRiskDecisionToLoanApplication(TestValues.LOAN_APPLICATION_ID,
-                TestApplicationObjectsFactory.newAcceptRiskDecisionRequest());
+                TestApplicationObjectsFactory.newRiskDecisionDto());
 
         Assertions.assertEquals(loanApplication.getStatus(), LoanApplication.Status.APPROVED.name());
     }

@@ -1,7 +1,7 @@
 package io.github.flexibletech.offering.infrastructure.messaging.risk.response;
 
 import io.github.flexibletech.offering.application.LoanApplicationService;
-import io.github.flexibletech.offering.application.dto.AcceptRiskDecisionRequest;
+import io.github.flexibletech.offering.application.dto.RiskDecisionDto;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;
@@ -16,11 +16,11 @@ public class RiskResponseListener implements Consumer<RiskResponse> {
 
     @Override
     public void accept(RiskResponse riskResponse) {
-        loanApplicationService.acceptRiskDecisionToLoanApplication(riskResponse.getApplicationId(), toAcceptRiskDecisionRequest(riskResponse));
+        loanApplicationService.acceptRiskDecisionToLoanApplication(riskResponse.getApplicationId(), toRiskDecisionDto(riskResponse));
     }
 
-    private AcceptRiskDecisionRequest toAcceptRiskDecisionRequest(RiskResponse response) {
-        return new AcceptRiskDecisionRequest(
+    private RiskDecisionDto toRiskDecisionDto(RiskResponse response) {
+        return new RiskDecisionDto(
                 response.getId(),
                 response.getStatus(),
                 response.getPayrollSalary(),
