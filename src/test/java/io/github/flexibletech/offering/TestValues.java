@@ -61,9 +61,9 @@ public class TestValues {
     public static final int CONDITIONS_RESTRICTIONS_MAX_PERIOD = 60;
 
     //Document
-    public static final String FORM_DOCUMENT_ID = "e5dde60e-7225-49f8-a9eb-a31e2acd239f";
-    public static final String CONDITIONS_DOCUMENT_ID = "8b748bc8-8011-4392-b478-d95bb83a0ffe";
-    public static final String INSURANCE_DOCUMENT_ID = "3e417929-9c48-4fcd-9099-d9a93b643ef5";
+    public static final String FORM_DOCUMENT_ID = "1662982189_LOANAPP22082500001_FORM.pdf";
+    public static final String CONDITIONS_DOCUMENT_ID = "1662982190_LOANAPP22082500001_CONDITIONS.pdf";
+    public static final String INSURANCE_DOCUMENT_ID = "1662982191_LOANAPP22082500001_INSURANCE.pdf";
     public static final String FILE_NAME = "test.pdf";
 
     //Issuance

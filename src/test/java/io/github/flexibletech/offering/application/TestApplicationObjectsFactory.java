@@ -1,6 +1,7 @@
 package io.github.flexibletech.offering.application;
 
 import io.github.flexibletech.offering.TestValues;
+import io.github.flexibletech.offering.application.dto.DocumentDto;
 import io.github.flexibletech.offering.application.dto.RiskDecisionDto;
 import io.github.flexibletech.offering.application.dto.ClientDto;
 import io.github.flexibletech.offering.application.dto.ConditionsDto;
@@ -13,6 +14,7 @@ import io.github.flexibletech.offering.application.dto.StartNewLoanApplicationRe
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationCompleted;
 import io.github.flexibletech.offering.domain.LoanApplication;
 import io.github.flexibletech.offering.domain.client.Client;
+import io.github.flexibletech.offering.domain.document.Document;
 import io.github.flexibletech.offering.domain.risk.RiskDecision;
 
 import java.util.Set;
@@ -77,7 +79,9 @@ public class TestApplicationObjectsFactory {
                 LoanApplication.Status.APPROVED.name(),
                 newOfferDto(),
                 newConditionsRestrictionsDto(),
-                Set.of(TestValues.FORM_DOCUMENT_ID, TestValues.CONDITIONS_DOCUMENT_ID));
+                Set.of(new DocumentDto(TestValues.FORM_DOCUMENT_ID, Document.Type.FORM.name()),
+                        new DocumentDto(TestValues.CONDITIONS_DOCUMENT_ID, Document.Type.CONDITIONS.name())
+                ));
     }
 
     private static ConditionsRestrictionsDto newConditionsRestrictionsDto() {

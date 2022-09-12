@@ -1,33 +1,39 @@
 {
-  "id": "LOANAPP22082500001",
-  "status": "APPROVED",
-  "offer": {
-    "rate": 16.0,
-    "amount": 500000.000000,
-    "period": 20,
-    "averageMonthlyPayment": 29963.837491,
-    "firstPaymentDate": "2022-09-27",
-    "lastPaymentDate": "2024-05-27",
-    "singleInsurancePayment": 189333.333334,
-    "insurancePremium": 21000.000000
+  "id":"LOANAPP22082500001",
+  "status":"APPROVED",
+  "offer":{
+    "rate":16.0,
+    "amount":500000.000000,
+    "period":20,
+    "averageMonthlyPayment":29963.837491,
+    "firstPaymentDate":"2022-10-12",
+    "lastPaymentDate":"2024-06-12",
+    "singleInsurancePayment":189333.333334,
+    "insurancePremium":21000.000000
   },
-  "conditionsRestrictions": {
-    "maxAmount": 1000000,
-    "maxPeriod": 60
+  "conditionsRestrictions":{
+    "maxAmount":1000000.000000,
+    "maxPeriod":60
   },
-  "documentPackage": [
-    "e5dde60e-7225-49f8-a9eb-a31e2acd239f",
-    "8b748bc8-8011-4392-b478-d95bb83a0ffe"
+  "documentPackage":[
+    {
+      "id":"1662982189_LOANAPP22082500001_FORM.pdf",
+      "type":"FORM"
+    },
+    {
+      "id":"1662982190_LOANAPP22082500001_CONDITIONS.pdf",
+      "type":"CONDITIONS"
+    }
   ],
-  "_links": {
-    "self": {
-      "href": "http://localhost/api/v1/loan-applications/LOANAPP22082500001"
+  "_links":{
+    "self":{
+      "href":"http://localhost/api/v1/loan-applications/LOANAPP22082500001"
     },
-    "chose-conditions": {
-      "href": "http://localhost/api/v1/loan-applications/LOANAPP22082500001/conditions"
+    "chose-conditions":{
+      "href":"http://localhost/api/v1/loan-applications/LOANAPP22082500001/conditions"
     },
-    "sign-document-package": {
-      "href": "http://localhost/api/v1/loan-applications/LOANAPP22082500001/documents/sign"
+    "sign-document-package":{
+      "href":"http://localhost/api/v1/loan-applications/LOANAPP22082500001/documents/sign"
     }
   }
 }

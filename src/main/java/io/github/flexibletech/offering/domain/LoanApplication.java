@@ -169,6 +169,10 @@ public class LoanApplication extends AggregateRoot {
         this.documentPackage.add(document);
     }
 
+    public void waitForDocumentPackageSignature() {
+        this.status = Status.PENDING_DOCUMENT_PACKAGE_SIGNATURE;
+    }
+
     public String makeDocumentName(Document.Type documentType) {
         var epoch = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond();
         return String.format("%s_%s_%s", epoch, this.id, documentType.name()) + Document.FORMAT;
@@ -238,9 +242,9 @@ public class LoanApplication extends AggregateRoot {
      * Оределение программы кредитования в зависимости от категории клиента
      * и наличия предодобренного предложения.
      *
-     * @param client            Клиент.
-     * @param preApprovedOffer  Предодобренное предложение.
-     * @return                  Программа кредитования.
+     * @param client           Клиент.
+     * @param preApprovedOffer Предодобренное предложение.
+     * @return Программа кредитования.
      */
     private static LoanApplication.LoanProgram defineLoanProgramForClient(Client client, PreApprovedOffer preApprovedOffer) {
         if (client.isPayroll()) return LoanApplication.LoanProgram.PAYROLL_CLIENT;
@@ -252,9 +256,10 @@ public class LoanApplication extends AggregateRoot {
 
     public enum Status {
         NEW,
-        PENDING_ISSUANCE,
         APPROVED,
         DECLINED,
+        PENDING_DOCUMENT_PACKAGE_SIGNATURE,
+        PENDING_ISSUANCE,
         CANCEL,
         COMPLETED
     }

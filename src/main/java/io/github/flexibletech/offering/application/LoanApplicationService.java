@@ -233,6 +233,19 @@ public class LoanApplicationService {
     }
 
     @Transactional
+    @Delegate(beanName = ProcessConstants.WAIT_FOR_DOCUMENT_PACKAGE_SIGNATURE_TASK, key = ProcessConstants.LOAN_APPLICATION_ID)
+    public void waitForDocumentPackageSignatureOfLoanApplication(@ProcessKeyValue String loanApplicationId) {
+        log.info("Transfer of the loan application {} pending signature", loanApplicationId);
+
+        var loanApplication = loanApplicationOfId(loanApplicationId);
+        loanApplication.waitForDocumentPackageSignature();
+
+        loanApplicationRepository.save(loanApplication);
+
+        log.info("loan application {} has been transferred to pending signature", loanApplicationId);
+    }
+
+    @Transactional
     @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
     @UserTask(definitionKey = ProcessConstants.SING_DOCUMENTS_TASK)
     public void signDocumentPackageForLoanApplication(@ProcessKeyValue String loanApplicationId) {

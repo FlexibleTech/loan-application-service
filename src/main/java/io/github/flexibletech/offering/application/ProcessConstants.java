@@ -24,6 +24,7 @@ class ProcessConstants {
     //Delegates
     final String REQUEST_RISK_DECISION_TASK = "requestRiskDecisionTask";
     final String DEFINE_INCOME_CONFIRMATION_TYPE_TASK = "defineIncomeConfirmationTypeTask";
+    final String WAIT_FOR_DOCUMENT_PACKAGE_SIGNATURE_TASK = "waitForDocumentPackageSignatureTask";
     final String CALCULATE_OFFER_TASK = "calculateOfferTask";
     final String PRINT_FORM_TASK = "printFormTask";
     final String PRINT_CONDITIONS_TASK = "printConditionsTask";

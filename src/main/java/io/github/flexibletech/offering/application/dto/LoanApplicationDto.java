@@ -21,7 +21,7 @@ public class LoanApplicationDto extends RepresentationModel<LoanApplicationDto> 
             example = "LOANAPP2022000001", accessMode = Schema.AccessMode.READ_ONLY)
     private String id;
     @Schema(description = "Статус кредитной заявки", example = "NEW", accessMode = Schema.AccessMode.READ_ONLY,
-            allowableValues = {"NEW", "PENDING_ISSUANCE", "APPROVED", "DECLINED", "CANCELED", "COMPLETED"})
+            allowableValues = {"NEW", "PENDING_ISSUANCE", "PENDING_DOCUMENT_PACKAGE_SIGNATURE", "APPROVED", "DECLINED", "CANCELED", "COMPLETED"})
     private String status;
     @Schema(description = "Рассчитанное предложение", implementation = OfferDto.class, example = "LOANAPP2022000001",
             accessMode = Schema.AccessMode.READ_ONLY)
@@ -29,7 +29,6 @@ public class LoanApplicationDto extends RepresentationModel<LoanApplicationDto> 
     @Schema(description = "Ограничения условий", implementation = ConditionsRestrictionsDto.class,
             accessMode = Schema.AccessMode.READ_ONLY)
     private ConditionsRestrictionsDto conditionsRestrictions;
-    @Schema(description = "Пакет документов (список идентификаторов)", example = "e5dde60e-7225-49f8-a9eb-a31e2acd239f",
-            accessMode = Schema.AccessMode.READ_ONLY)
-    private Set<String> documentPackage;
+    @Schema(description = "Пакет документов", accessMode = Schema.AccessMode.READ_ONLY)
+    private Set<DocumentDto> documentPackage;
 }

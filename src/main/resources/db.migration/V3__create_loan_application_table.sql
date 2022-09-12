@@ -1,7 +1,7 @@
 create table loan_applications
 (
     id                       varchar(60) primary key not null,
-    status                   varchar(30)             not null,
+    status                   varchar(40)             not null,
     client                   jsonb                   not null,
     conditions               jsonb                   not null,
     document_package         jsonb                   null,

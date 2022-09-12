@@ -15,8 +15,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Schema(description = "Ограничения условий")
 public class ConditionsRestrictionsDto {
-    @Schema(description = "Максимальная сумма", example = "500000", accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "Максимальная сумма", example = "500000", accessMode = Schema.AccessMode.READ_ONLY, required = true)
     private BigDecimal maxAmount;
-    @Schema(description = "Максимальный период", example = "60", accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "Максимальный период", example = "60", accessMode = Schema.AccessMode.READ_ONLY, required = true)
     private Integer maxPeriod;
 }
