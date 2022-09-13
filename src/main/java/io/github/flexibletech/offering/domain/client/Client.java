@@ -66,7 +66,7 @@ public class Client implements Entity {
             return Arrays.stream(values())
                     .filter(maritalStatus -> maritalStatus == MaritalStatus.valueOf(value))
                     .findAny()
-                    .orElseThrow(() -> new IllegalArgumentException(String.format("Unknown marital status %s ", value)));
+                    .orElseThrow(() -> new IllegalArgumentException(String.format("Unknown marital status %s", value)));
         }
     }
 
@@ -82,7 +82,7 @@ public class Client implements Entity {
             return Arrays.stream(values())
                     .filter(category -> category == Category.valueOf(value))
                     .findAny()
-                    .orElseThrow(() -> new IllegalArgumentException(String.format("Unknown category %s ", value)));
+                    .orElseThrow(() -> new IllegalArgumentException(String.format("Unknown category %s", value)));
         }
     }
 

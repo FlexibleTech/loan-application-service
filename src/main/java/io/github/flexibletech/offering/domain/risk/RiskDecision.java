@@ -58,7 +58,7 @@ public class RiskDecision implements Entity {
             return Arrays.stream(values())
                     .filter(status -> status == Status.valueOf(value))
                     .findAny()
-                    .orElseThrow(() -> new IllegalArgumentException(String.format("Unknown status %s ", value)));
+                    .orElseThrow(() -> new IllegalArgumentException(String.format("Unknown risk decision status %s", value)));
         }
     }
 

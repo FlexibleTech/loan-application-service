@@ -1,7 +1,8 @@
-package io.github.flexibletech.offering.web;
+package io.github.flexibletech.offering.web.error;
 
 import io.github.flexibletech.offering.application.LoanApplicationNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.MismatchingMessageCorrelationException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +22,9 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @ControllerAdvice(annotations = RestController.class)
-public class WebExceptionHandler extends ResponseEntityExceptionHandler {
+class WebExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final String INTERNAL_ERROR_MESSAGE = "Internal error.";
+    private static final String INVALID_LOAN_APPLICATION_STATUS_MESSAGE = "Invalid loan application status for this action.";
 
     @ExceptionHandler(LoanApplicationNotFoundException.class)
     private ResponseEntity<WebError> catchLoanApplicationNotFoundException(LoanApplicationNotFoundException ex) {
@@ -40,7 +43,7 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(new WebError(
                         HttpStatus.INTERNAL_SERVER_ERROR,
                         LocalDateTime.now(),
-                        ex.getMessage()));
+                        INTERNAL_ERROR_MESSAGE));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -61,6 +64,16 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
                         HttpStatus.CONFLICT,
                         LocalDateTime.now(),
                         ex.getMessage()));
+    }
+
+    @ExceptionHandler(MismatchingMessageCorrelationException.class)
+    private ResponseEntity<WebError> catchMismatchingMessageCorrelationException(MismatchingMessageCorrelationException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new WebError(
+                        HttpStatus.CONFLICT,
+                        LocalDateTime.now(),
+                        INVALID_LOAN_APPLICATION_STATUS_MESSAGE));
     }
 
     @NotNull

@@ -6,7 +6,7 @@ import lombok.experimental.UtilityClass;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 @UtilityClass
-public class HypermediaUtil {
+class HypermediaUtil {
 
     void addLinks(LoanApplicationDto loanApplication) {
         addSelfLink(loanApplication);
