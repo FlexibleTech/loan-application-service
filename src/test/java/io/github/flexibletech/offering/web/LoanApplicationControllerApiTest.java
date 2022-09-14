@@ -125,13 +125,9 @@ public class LoanApplicationControllerApiTest {
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andReturn()
-                .getResponse()
-                .getContentAsString();
+                .getResponse();
 
-        var expectedResponse = ResourceUtil.getString("classpath:json/loanApplicationNotFoundResponse.json");
-        JSONAssert.assertEquals(
-                expectedResponse, actualResponse,
-                new CustomComparator(JSONCompareMode.LENIENT, new Customization("timestamp", (o, t1) -> true)));
+        Assertions.assertEquals(actualResponse.getErrorMessage(), TestValues.LOAN_APPLICATION_NOT_FOUND_ERROR_MESSAGE);
     }
 
     @Test
@@ -142,13 +138,9 @@ public class LoanApplicationControllerApiTest {
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andReturn()
-                .getResponse()
-                .getContentAsString();
+                .getResponse();
 
-        var expectedResponse = ResourceUtil.getString("classpath:json/loanApplicationBadRequestResponse.json");
-        JSONAssert.assertEquals(
-                expectedResponse, actualResponse,
-                new CustomComparator(JSONCompareMode.STRICT, new Customization("timestamp", (o, t1) -> true)));
+        Assertions.assertEquals(actualResponse.getErrorMessage(), TestValues.EMPTY_CLIENT_NAME_MESSAGE);
     }
 
 }

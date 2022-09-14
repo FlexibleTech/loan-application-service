@@ -20,8 +20,6 @@ spring:
       mode: always
       schema-locations: classpath:schema.sql
   flyway:
-    enabled: true
-    baseline-on-migrate: true
     locations: classpath:db.migration
     default-schema: ${schemas.domain}
     schemas: ${schemas.domain}
@@ -112,3 +110,13 @@ service:
     url: http://localhost:8085
   preapprovedoffer:
     url: http://localhost:8087
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+server:
+  error:
+    include-message: always

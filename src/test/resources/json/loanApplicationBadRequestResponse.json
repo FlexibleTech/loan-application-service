@@ -1,5 +1,0 @@
-{
-  "status":"BAD_REQUEST",
-  "timestamp":"24-08-2022 09:35:41",
-  "message":"field error: client.name - Client name can't be null or empty, actual value: [null]"
-}

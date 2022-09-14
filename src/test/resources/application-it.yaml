@@ -14,8 +14,6 @@ spring:
     url: jdbc:tc:postgresql:12.4:///integration-tests-db
     driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
   flyway:
-    enabled: true
-    baseline-on-migrate: true
     locations: classpath:db.migration
     default-schema: public
     schemas: public
@@ -99,3 +97,13 @@ camunda:
       table-prefix: public.
       type: postgres
     default-number-of-retries: 1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+server:
+  error:
+    include-message: always

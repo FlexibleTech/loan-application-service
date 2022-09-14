@@ -75,4 +75,8 @@ public class TestValues {
     public static final LocalDate OFFER_LAST_PAYMENT_DATE = LocalDate.now().plusMonths(CONDITIONS_PERIOD + 1);
     public static final Amount OFFER_SINGLE_INSURANCE_PAYMENT = Amount.fromValue(BigDecimal.valueOf(189333.333334));
     public static final Amount OFFER_INSURANCE_PREMIUM = Amount.fromValue(BigDecimal.valueOf(21000));
+
+    //Web errors
+    public static final String LOAN_APPLICATION_NOT_FOUND_ERROR_MESSAGE = "Loan application with id LOANAPP22082500001 is not found";
+    public static final String EMPTY_CLIENT_NAME_MESSAGE = "field error: client.name - Client name can't be null or empty, actual value: [null]";
 }
