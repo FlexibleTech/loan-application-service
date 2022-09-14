@@ -11,14 +11,6 @@ public class TestLoanApplicationFactory {
     private TestLoanApplicationFactory() {
     }
 
-    public static LoanApplication newLoanApplicationWithoutId() {
-        return LoanApplication.newBuilder()
-                .withLoanProgram(LoanApplication.LoanProgram.COMMON)
-                .withClient(TestClientFactory.newStandardMarriedClient())
-                .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
-                .build();
-    }
-
     public static LoanApplication newLoanApplication() {
         return LoanApplication.newBuilder()
                 .withId(TestValues.LOAN_APPLICATION_ID)
