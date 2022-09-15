@@ -1,6 +1,7 @@
 package io.github.flexibletech.offering.infrastructure.persistence;
 
 import io.github.flexibletech.offering.TestValues;
+import io.github.flexibletech.offering.domain.LoanApplicationId;
 import io.github.flexibletech.offering.domain.LoanApplicationRepository;
 import io.github.flexibletech.offering.infrastructure.config.ApplicationConfig;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +28,8 @@ public class LoanApplicationRepositoryIT {
     @Transactional
     @Sql("/sql/insert_loan_application.sql")
     public void shouldFindLoanApplicationById() {
-        var loanApplication = loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID).orElse(null);
+        var loanApplication = loanApplicationRepository.findById(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
+                .orElse(null);
 
         Assertions.assertNotNull(loanApplication);
     }

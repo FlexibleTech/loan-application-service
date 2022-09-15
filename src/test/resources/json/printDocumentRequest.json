@@ -4,9 +4,13 @@
     "loanApplication": {
       "createdAt": null,
       "updatedAt": null,
-      "id": "LOANAPP22082500001",
+      "id": {
+        "id": "LOANAPP22082500001"
+      },
       "client": {
-        "id": "20056671",
+        "id": {
+          "id": "20056671"
+        },
         "personNameDetails": {
           "name": "Тест",
           "middleName": "Тестович",
@@ -49,7 +53,9 @@
       "loanProgram": "COMMON",
       "completedAt": null,
       "riskDecision": {
-        "id": "RSK202200911",
+        "id": {
+          "id": "RSK202200911"
+        },
         "status": "APPROVED",
         "payroll": {
           "salary": {

@@ -3,8 +3,10 @@ package io.github.flexibletech.offering.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import io.github.flexibletech.offering.domain.client.Client;
+import io.github.flexibletech.offering.domain.client.ClientId;
 import io.github.flexibletech.offering.domain.common.AggregateRoot;
 import io.github.flexibletech.offering.domain.document.Document;
+import io.github.flexibletech.offering.domain.issuance.IssuanceId;
 import io.github.flexibletech.offering.domain.preapproved.PreApprovedOffer;
 import io.github.flexibletech.offering.domain.risk.ConditionsRestrictions;
 import io.github.flexibletech.offering.domain.risk.RiskDecision;
@@ -19,8 +21,11 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
@@ -28,7 +33,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
@@ -50,13 +54,15 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class LoanApplication extends AggregateRoot {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "loan_application_id_generator")
+    @EmbeddedId
     @GenericGenerator(
             name = "loan_application_id_generator",
-            strategy = "io.github.flexibletech.offering.infrastructure.persistence.LoanApplicationIdGenerator",
+            strategy = "io.github.flexibletech.offering.infrastructure.persistence.LoanApplicationIdentifierGenerator",
             parameters = @Parameter(name = SequenceStyleGenerator.SEQUENCE_PARAM, value = "loan_application_seq"))
-    private String id;
+    @GeneratedValue(
+            generator = "loan_application_id_generator",
+            strategy = GenerationType.SEQUENCE)
+    private LoanApplicationId id;
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     @Basic(fetch = FetchType.LAZY)
@@ -84,7 +90,9 @@ public class LoanApplication extends AggregateRoot {
     @Column(columnDefinition = "jsonb")
     @Basic(fetch = FetchType.LAZY)
     private Set<Document> documentPackage = new HashSet<>();
-    private String issuanceId;
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "issuance_id"))
+    private IssuanceId issuanceId;
 
     @Transient
     //Ставка по кредиту в %
@@ -198,7 +206,7 @@ public class LoanApplication extends AggregateRoot {
     }
 
     public void complete(String issuanceId) {
-        this.issuanceId = issuanceId;
+        this.issuanceId = new IssuanceId(issuanceId);
         this.completedAt = LocalDateTime.now();
         this.status = Status.COMPLETED;
     }
@@ -218,7 +226,7 @@ public class LoanApplication extends AggregateRoot {
         return this.status == Status.COMPLETED;
     }
 
-    public String clientId() {
+    public ClientId clientId() {
         return this.client.getId();
     }
 
@@ -284,7 +292,7 @@ public class LoanApplication extends AggregateRoot {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public class Builder {
 
-        public Builder withId(String id) {
+        public Builder withId(LoanApplicationId id) {
             LoanApplication.this.id = id;
             return this;
         }

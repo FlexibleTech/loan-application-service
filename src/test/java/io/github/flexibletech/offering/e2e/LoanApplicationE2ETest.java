@@ -6,7 +6,9 @@ import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.application.TestApplicationObjectsFactory;
 import io.github.flexibletech.offering.application.dto.LoanApplicationDto;
 import io.github.flexibletech.offering.domain.LoanApplication;
+import io.github.flexibletech.offering.domain.LoanApplicationId;
 import io.github.flexibletech.offering.domain.LoanApplicationRepository;
+import io.github.flexibletech.offering.domain.client.ClientId;
 import io.github.flexibletech.offering.domain.document.Document;
 import io.github.flexibletech.offering.domain.document.DocumentStorage;
 import io.github.flexibletech.offering.domain.document.PrintService;
@@ -59,7 +61,7 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
     @Test
     @WithMockUser(roles = "CLIENT")
     public void shouldGoThroughFullLoanApplicationProcess() throws Exception {
-        Mockito.when(preApprovedOfferRepository.findForClient(Mockito.eq(TestValues.CLIENT_ID)))
+        Mockito.when(preApprovedOfferRepository.findForClient(ArgumentMatchers.any(ClientId.class)))
                 .thenReturn(TestPreApprovedOfferFactory.newPreApprovedOffer());
         Mockito.when(printService.print(ArgumentMatchers.any(LoanApplication.class), ArgumentMatchers.any(Document.Type.class)))
                 .thenReturn(ResourceUtil.getByteArray("classpath:files/test.pdf"));
@@ -112,7 +114,8 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
 
         Thread.sleep(1000);
 
-        var loanApplication = loanApplicationRepository.findById(loanApplicationDto.getId()).orElse(null);
+        var loanApplication = loanApplicationRepository.findById(LoanApplicationId.fromValue(loanApplicationDto.getId()))
+                .orElse(null);
         Assertions.assertNotNull(loanApplication);
         Assertions.assertTrue(loanApplication.isCompleted());
     }

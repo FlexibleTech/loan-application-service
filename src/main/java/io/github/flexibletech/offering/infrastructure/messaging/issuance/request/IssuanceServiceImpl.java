@@ -25,10 +25,10 @@ public class IssuanceServiceImpl implements IssuanceService {
                 ISSUANCE_REQUEST_DESTINATION,
                 MessageBuilder.withPayload(
                                 new StartIssuanceRequest(
-                                        loanApplication.getId(),
+                                        loanApplication.getId().toString(),
                                         conditions.getAmount().getValue(),
                                         conditions.getPeriod(),
-                                        client.getId()))
+                                        client.getId().toString()))
                         .build());
     }
 

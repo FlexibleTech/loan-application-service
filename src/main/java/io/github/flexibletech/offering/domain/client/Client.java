@@ -18,7 +18,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Client implements Entity {
-    private String id;
+    private ClientId id;
     private PersonNameDetails personNameDetails;
     private Passport passport;
     private MaritalStatus maritalStatus;
@@ -90,7 +90,7 @@ public class Client implements Entity {
     public class Builder {
 
         public Builder withId(String id) {
-            Client.this.id = id;
+            Client.this.id = new ClientId(id);
             return this;
         }
 

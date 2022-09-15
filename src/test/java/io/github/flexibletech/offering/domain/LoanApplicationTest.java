@@ -158,7 +158,7 @@ public class LoanApplicationTest {
                 TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
 
         Assertions.assertTrue(riskDecision.isApproved());
-        Assertions.assertEquals(riskDecision.getId(), TestValues.RISK_DECISION_ID);
+        Assertions.assertEquals(riskDecision.getId().toString(), TestValues.RISK_DECISION_ID);
 
         //Assert payroll
         var payroll = riskDecision.getPayroll();
@@ -184,7 +184,7 @@ public class LoanApplicationTest {
                 TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
 
         Assertions.assertTrue(riskDecision.isApproved());
-        Assertions.assertEquals(riskDecision.getId(), TestValues.RISK_DECISION_ID);
+        Assertions.assertEquals(riskDecision.getId().toString(), TestValues.RISK_DECISION_ID);
 
         //Assert payroll
         var payroll = riskDecision.getPayroll();
@@ -211,7 +211,7 @@ public class LoanApplicationTest {
         var riskDecision = loanApplication.getRiskDecision();
         Assertions.assertNotNull(riskDecision);
         Assertions.assertTrue(riskDecision.isApproved());
-        Assertions.assertEquals(riskDecision.getId(), TestValues.RISK_DECISION_ID);
+        Assertions.assertEquals(riskDecision.getId().toString(), TestValues.RISK_DECISION_ID);
 
         //Assert payroll
         var payroll = riskDecision.getPayroll();
@@ -366,7 +366,7 @@ public class LoanApplicationTest {
 
         Assertions.assertEquals(loanApplication.getStatus(), LoanApplication.Status.COMPLETED);
         Assertions.assertEquals(loanApplication.getCompletedAt().toLocalDate(), LocalDate.now());
-        Assertions.assertEquals(loanApplication.getIssuanceId(), TestValues.ISSUANCE_ID);
+        Assertions.assertEquals(loanApplication.getIssuanceId().toString(), TestValues.ISSUANCE_ID);
     }
 
     @Test

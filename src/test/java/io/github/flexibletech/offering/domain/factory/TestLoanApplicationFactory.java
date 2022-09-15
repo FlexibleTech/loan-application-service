@@ -3,6 +3,7 @@ package io.github.flexibletech.offering.domain.factory;
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.domain.Conditions;
 import io.github.flexibletech.offering.domain.LoanApplication;
+import io.github.flexibletech.offering.domain.LoanApplicationId;
 import io.github.flexibletech.offering.domain.Offer;
 import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.document.Document;
@@ -13,7 +14,7 @@ public class TestLoanApplicationFactory {
 
     public static LoanApplication newLoanApplication() {
         return LoanApplication.newBuilder()
-                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
                 .withClient(TestClientFactory.newStandardMarriedClient())
                 .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
@@ -22,7 +23,7 @@ public class TestLoanApplicationFactory {
 
     public static LoanApplication newLoanApplicationWithRiskDecision(Client client) {
         return LoanApplication.newBuilder()
-                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecision())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
                 .withClient(client)
@@ -32,7 +33,7 @@ public class TestLoanApplicationFactory {
 
     public static LoanApplication newInsuredLoanApplicationWithRiskDecision() {
         return LoanApplication.newBuilder()
-                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecision())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
                 .withClient(TestClientFactory.newStandardMarriedClient())
@@ -42,7 +43,7 @@ public class TestLoanApplicationFactory {
 
     public static LoanApplication newLoanApplicationWithRiskDecisionAndNotActualPayroll() {
         return LoanApplication.newBuilder()
-                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
                 .withClient(TestClientFactory.newPayrollUnmarriedClient())
@@ -52,7 +53,7 @@ public class TestLoanApplicationFactory {
 
     public static LoanApplication newLoanApplicationWithDocumentPackage() {
         return LoanApplication.newBuilder()
-                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
                 .withClient(TestClientFactory.newStandardMarriedClient())
@@ -66,7 +67,7 @@ public class TestLoanApplicationFactory {
 
     public static LoanApplication newLoanApplicationWithOffer() {
         return LoanApplication.newBuilder()
-                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withStatus(LoanApplication.Status.APPROVED)
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
@@ -81,7 +82,7 @@ public class TestLoanApplicationFactory {
 
     public static LoanApplication newLoanApplicationWithoutDocuments() {
         return LoanApplication.newBuilder()
-                .withId(TestValues.LOAN_APPLICATION_ID)
+                .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withStatus(LoanApplication.Status.APPROVED)
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)

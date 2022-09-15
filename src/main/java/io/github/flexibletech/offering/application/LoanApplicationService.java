@@ -22,6 +22,7 @@ import io.github.flexibletech.offering.application.dto.events.LoanApplicationOff
 import io.github.flexibletech.offering.domain.Amount;
 import io.github.flexibletech.offering.domain.Conditions;
 import io.github.flexibletech.offering.domain.LoanApplication;
+import io.github.flexibletech.offering.domain.LoanApplicationId;
 import io.github.flexibletech.offering.domain.LoanApplicationRepository;
 import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.document.Document;
@@ -302,14 +303,14 @@ public class LoanApplicationService {
     @Transactional(readOnly = true)
     @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
     public LoanApplicationDto findLoanApplicationById(String loanApplicationId) {
-        return loanApplicationRepository.findById(loanApplicationId)
+        return loanApplicationRepository.findById(LoanApplicationId.fromValue(loanApplicationId))
                 .map(loanApplication -> domainObjectMapper.map(loanApplication, LoanApplicationDto.class))
                 .orElseThrow(() -> new LoanApplicationNotFoundException(
                         String.format("Loan application with id %s is not found", loanApplicationId)));
     }
 
     private LoanApplication loanApplicationOfId(String loanApplicationId) {
-        return loanApplicationRepository.findById(loanApplicationId)
+        return loanApplicationRepository.findById(LoanApplicationId.fromValue(loanApplicationId))
                 .orElseThrow(() -> new LoanApplicationNotFoundException(
                         String.format("Loan application with id %s is not found", loanApplicationId)));
     }

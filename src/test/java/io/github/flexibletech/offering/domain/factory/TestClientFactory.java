@@ -2,6 +2,7 @@ package io.github.flexibletech.offering.domain.factory;
 
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.domain.client.Client;
+import io.github.flexibletech.offering.domain.client.ClientId;
 import io.github.flexibletech.offering.domain.client.Organization;
 import io.github.flexibletech.offering.domain.client.Passport;
 import io.github.flexibletech.offering.domain.client.PersonNameDetails;
@@ -12,7 +13,7 @@ public class TestClientFactory {
 
     public static Client newStandardMarriedClient() {
         return new Client(
-                TestValues.CLIENT_ID,
+                new ClientId(TestValues.CLIENT_ID),
                 newPersonNameDetails(),
                 newPassport(),
                 Client.MaritalStatus.MARRIED,
@@ -28,7 +29,7 @@ public class TestClientFactory {
 
     public static Client newPayrollUnmarriedClient() {
         return new Client(
-                TestValues.CLIENT_ID,
+                new ClientId(TestValues.CLIENT_ID),
                 newPersonNameDetails(),
                 newPassport(),
                 Client.MaritalStatus.UNMARRIED,
@@ -44,7 +45,7 @@ public class TestClientFactory {
 
     public static Client newPremiumClient() {
         return new Client(
-                TestValues.CLIENT_ID,
+                new ClientId(TestValues.CLIENT_ID),
                 newPersonNameDetails(),
                 newPassport(),
                 Client.MaritalStatus.MARRIED,
@@ -60,7 +61,7 @@ public class TestClientFactory {
 
     public static Client newUnmarriedClientWithSpouseIncome() {
         return new Client(
-                TestValues.CLIENT_ID,
+                new ClientId(TestValues.CLIENT_ID),
                 newPersonNameDetails(),
                 newPassport(),
                 Client.MaritalStatus.UNMARRIED,

@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import io.github.flexibletech.offering.ResourceUtil;
 import io.github.flexibletech.offering.TestValues;
+import io.github.flexibletech.offering.domain.client.ClientId;
 import io.github.flexibletech.offering.domain.preapproved.PreApprovedOfferRepository;
 import io.github.flexibletech.offering.AbstractIntegrationTest;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +28,7 @@ public class PreApprovedOfferRepositoryIT extends AbstractIntegrationTest {
                                         ResourceUtil.getString("classpath:json/getPreApprovedOfferResponse.json"))
                                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)));
 
-        var preApprovedOffer = preApprovedOfferRepository.findForClient(TestValues.CLIENT_ID);
+        var preApprovedOffer = preApprovedOfferRepository.findForClient(new ClientId(TestValues.CLIENT_ID));
 
         Assertions.assertNotNull(preApprovedOffer);
         Assertions.assertEquals(preApprovedOffer.getClientId(), TestValues.CLIENT_ID);

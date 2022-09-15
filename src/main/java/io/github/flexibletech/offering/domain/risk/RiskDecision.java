@@ -19,7 +19,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RiskDecision implements Entity {
-    private String id;
+    private RiskDecisionId id;
     private Status status;
     private Payroll payroll;
     private ConditionsRestrictions conditionsRestrictions;
@@ -71,7 +71,7 @@ public class RiskDecision implements Entity {
             conditionsRestrictions = conditionsRestrictions.withLimitedAmount();
 
         return new RiskDecision(
-                id,
+                new RiskDecisionId(id),
                 Status.fromValue(status),
                 Payroll.newPayroll(payrollSalary, payrollLastSalaryDate),
                 conditionsRestrictions);

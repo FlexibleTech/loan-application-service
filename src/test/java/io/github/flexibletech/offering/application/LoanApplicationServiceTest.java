@@ -8,7 +8,9 @@ import io.github.flexibletech.offering.application.dto.events.LoanApplicationCom
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationCreated;
 import io.github.flexibletech.offering.application.dto.events.LoanApplicationOfferCalculated;
 import io.github.flexibletech.offering.domain.LoanApplication;
+import io.github.flexibletech.offering.domain.LoanApplicationId;
 import io.github.flexibletech.offering.domain.LoanApplicationRepository;
+import io.github.flexibletech.offering.domain.client.ClientId;
 import io.github.flexibletech.offering.domain.document.Document;
 import io.github.flexibletech.offering.domain.document.DocumentStorage;
 import io.github.flexibletech.offering.domain.document.PrintService;
@@ -74,7 +76,7 @@ public class LoanApplicationServiceTest {
         Mockito.when(loanApplicationRepository.save(ArgumentMatchers.any(LoanApplication.class)))
                 .thenReturn(TestLoanApplicationFactory.newLoanApplication());
         Mockito.doNothing().when(eventPublisher).publish(eventCaptor.capture());
-        Mockito.when(preApprovedOfferRepository.findForClient(TestValues.CLIENT_ID)).thenReturn(null);
+        Mockito.when(preApprovedOfferRepository.findForClient(ArgumentMatchers.any(ClientId.class))).thenReturn(null);
 
         var loanApplicationDto = loanApplicationService.startNewLoanApplication(
                 TestApplicationObjectsFactory.newStartNewLoanApplicationRequest());
@@ -102,7 +104,7 @@ public class LoanApplicationServiceTest {
     public void shouldAcceptRiskDecisionToLoanApplication() {
         Mockito.when(loanApplicationRepository.save(ArgumentMatchers.any(LoanApplication.class)))
                 .thenReturn(TestLoanApplicationFactory.newLoanApplication());
-        Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
+        Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
 
         var loanApplication = loanApplicationService.acceptRiskDecisionToLoanApplication(TestValues.LOAN_APPLICATION_ID,
@@ -113,7 +115,7 @@ public class LoanApplicationServiceTest {
 
     @Test
     public void shouldRequestRiskDecisionForLoanApplication() {
-        Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
+        Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
         Mockito.doNothing().when(riskService).requestRiskDecision(loanApplicationArgumentCaptor.capture());
 
@@ -125,10 +127,10 @@ public class LoanApplicationServiceTest {
 
     @Test
     public void shouldDefineIncomeConfirmationTypeForLoanApplication() {
-        Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
+        Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
                         TestClientFactory.newPremiumClient())));
-        Mockito.when(preApprovedOfferRepository.findForClient(Mockito.eq(TestValues.CLIENT_ID))).thenReturn(null);
+        Mockito.when(preApprovedOfferRepository.findForClient(ArgumentMatchers.any(ClientId.class))).thenReturn(null);
 
         var incomeConfirmationType = loanApplicationService.defineIncomeConfirmationTypeForLoanApplication(
                 TestValues.LOAN_APPLICATION_ID);
@@ -138,7 +140,7 @@ public class LoanApplicationServiceTest {
 
     @Test
     public void shouldChoseConditionsForLoanApplication() {
-        Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
+        Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
 
         var conditions = loanApplicationService.choseConditionsForLoanApplication(
@@ -154,7 +156,7 @@ public class LoanApplicationServiceTest {
     public void shouldCalculateOfferForLoanApplication() {
         Mockito.when(loanApplicationRepository.save(ArgumentMatchers.any(LoanApplication.class)))
                 .thenReturn(TestLoanApplicationFactory.newLoanApplication());
-        Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
+        Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
         Mockito.doNothing().when(eventPublisher).publish(eventCaptor.capture());
 
@@ -176,7 +178,7 @@ public class LoanApplicationServiceTest {
     public void shouldPrintFormForLoanApplication() {
         Mockito.when(loanApplicationRepository.save(ArgumentMatchers.any(LoanApplication.class)))
                 .thenReturn(TestLoanApplicationFactory.newLoanApplication());
-        Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
+        Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
         Mockito.when(printService.print(ArgumentMatchers.any(LoanApplication.class), Mockito.eq(Document.Type.FORM)))
                 .thenReturn(new byte[]{});
@@ -192,7 +194,7 @@ public class LoanApplicationServiceTest {
 
     @Test
     public void shouldStartIssuanceForLoanApplication() {
-        Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
+        Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
         Mockito.doNothing().when(issuanceService).startIssuance(loanApplicationArgumentCaptor.capture());
 
@@ -207,7 +209,7 @@ public class LoanApplicationServiceTest {
         Mockito.when(loanApplicationRepository.save(ArgumentMatchers.any(LoanApplication.class)))
                 .thenReturn(TestLoanApplicationFactory.newLoanApplication());
         Mockito.doNothing().when(eventPublisher).publish(eventCaptor.capture());
-        Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
+        Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplicationWithOffer()));
 
         loanApplicationService.cancelLoanApplication(TestValues.LOAN_APPLICATION_ID);
@@ -220,7 +222,7 @@ public class LoanApplicationServiceTest {
     public void shouldCompleteLoanApplication() {
         Mockito.when(loanApplicationRepository.save(ArgumentMatchers.any(LoanApplication.class)))
                 .thenReturn(TestLoanApplicationFactory.newLoanApplication());
-        Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
+        Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
         Mockito.doNothing().when(eventPublisher).publish(eventCaptor.capture());
 
@@ -232,7 +234,7 @@ public class LoanApplicationServiceTest {
 
     @Test
     public void shouldFindLoanApplicationById() {
-        Mockito.when(loanApplicationRepository.findById(TestValues.LOAN_APPLICATION_ID))
+        Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplicationWithOffer()));
 
         var loanApplicationDto = loanApplicationService.findLoanApplicationById(TestValues.LOAN_APPLICATION_ID);

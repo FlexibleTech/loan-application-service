@@ -4,6 +4,7 @@ import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.domain.risk.ConditionsRestrictions;
 import io.github.flexibletech.offering.domain.risk.Payroll;
 import io.github.flexibletech.offering.domain.risk.RiskDecision;
+import io.github.flexibletech.offering.domain.risk.RiskDecisionId;
 
 public class TestRiskDecisionFactory {
     private TestRiskDecisionFactory() {
@@ -11,7 +12,7 @@ public class TestRiskDecisionFactory {
 
     public static RiskDecision newApprovedRiskDecision() {
         return new RiskDecision(
-                TestValues.RISK_DECISION_ID,
+                new RiskDecisionId(TestValues.RISK_DECISION_ID),
                 RiskDecision.Status.APPROVED,
                 newPayroll(),
                 newConditionsRestrictions());
@@ -19,7 +20,7 @@ public class TestRiskDecisionFactory {
 
     public static RiskDecision newApprovedRiskDecisionWithNotActualPayroll() {
         return new RiskDecision(
-                TestValues.RISK_DECISION_ID,
+                new RiskDecisionId(TestValues.RISK_DECISION_ID),
                 RiskDecision.Status.APPROVED,
                 newNotActualPayroll(),
                 newConditionsRestrictions());
@@ -27,7 +28,7 @@ public class TestRiskDecisionFactory {
 
     public static RiskDecision newDeclinedRiskDecision() {
         return new RiskDecision(
-                TestValues.RISK_DECISION_ID,
+                new RiskDecisionId(TestValues.RISK_DECISION_ID),
                 RiskDecision.Status.DECLINED,
                 newPayroll(),
                 newConditionsRestrictions());

@@ -36,7 +36,7 @@ public class RiskServiceImpl implements RiskService {
         var maritalStatus = RiskRequest.Client.MaritalStatus.valueOf(client.getMaritalStatus().name()).getCode();
 
         return new RiskRequest(
-                loanApplication.getId(),
+                loanApplication.getId().toString(),
                 toClient(client, category, maritalStatus),
                 conditions.getAmount().getValue(),
                 conditions.getPeriod());
@@ -52,7 +52,7 @@ public class RiskServiceImpl implements RiskService {
     private RiskRequest.Client toClient(Client client, int category, int maritalStatus) {
         var personNameDetails = client.getPersonNameDetails();
         return new RiskRequest.Client(
-                client.getId(),
+                client.getId().toString(),
                 personNameDetails.getName(),
                 personNameDetails.getMiddleName(),
                 personNameDetails.getSurName(),

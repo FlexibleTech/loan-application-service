@@ -1,5 +1,6 @@
 package io.github.flexibletech.offering.infrastructure.rest.preapprovedoffer;
 
+import io.github.flexibletech.offering.domain.client.ClientId;
 import io.github.flexibletech.offering.domain.preapproved.PreApprovedOffer;
 import io.github.flexibletech.offering.domain.preapproved.PreApprovedOfferRepository;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
@@ -26,8 +27,8 @@ public class PreApprovedOfferRepositoryImpl implements PreApprovedOfferRepositor
     @Bulkhead(name = PRE_APPROVED_OFFER_SERVICE)
     @Cacheable(cacheNames = CACHE_NAME, unless = "#result == null")
     @CircuitBreaker(name = PRE_APPROVED_OFFER_SERVICE, fallbackMethod = "fallback")
-    public PreApprovedOffer findForClient(String clientId) {
-        var preApprovedOfferResponse = preApprovedOfferServiceClient.getByClientId(clientId);
+    public PreApprovedOffer findForClient(ClientId clientId) {
+        var preApprovedOfferResponse = preApprovedOfferServiceClient.getByClientId(clientId.toString());
         return PreApprovedOffer.newPreApprovedOffer(
                 preApprovedOfferResponse.getId(),
                 preApprovedOfferResponse.getMinAmount(),
