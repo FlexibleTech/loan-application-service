@@ -22,10 +22,6 @@ public class Amount implements ValueObject, Comparable<Amount> {
         return new Amount(value.setScale(6, RoundingMode.UP));
     }
 
-    public void setValue(BigDecimal value) {
-        this.value = value.setScale(6, RoundingMode.UP);
-    }
-
     public boolean greater(Amount amount) {
         return compareTo(amount) > 0;
     }
