@@ -1,7 +1,7 @@
 package io.github.flexibletech.offering.web;
 
-import io.github.flexibletech.offering.application.dto.ConditionsDto;
-import io.github.flexibletech.offering.application.dto.LoanApplicationDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.LoanApplicationDto;
 import lombok.experimental.UtilityClass;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 

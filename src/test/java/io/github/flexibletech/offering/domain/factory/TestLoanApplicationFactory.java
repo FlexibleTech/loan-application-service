@@ -1,12 +1,12 @@
 package io.github.flexibletech.offering.domain.factory;
 
 import io.github.flexibletech.offering.TestValues;
-import io.github.flexibletech.offering.domain.Conditions;
-import io.github.flexibletech.offering.domain.LoanApplication;
-import io.github.flexibletech.offering.domain.LoanApplicationId;
-import io.github.flexibletech.offering.domain.Offer;
-import io.github.flexibletech.offering.domain.client.Client;
-import io.github.flexibletech.offering.domain.document.Document;
+import io.github.flexibletech.offering.domain.loanapplication.Conditions;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationCreated;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationId;
+import io.github.flexibletech.offering.domain.loanapplication.Offer;
+import io.github.flexibletech.offering.domain.loanapplication.document.Document;
 
 public class TestLoanApplicationFactory {
     private TestLoanApplicationFactory() {
@@ -16,17 +16,17 @@ public class TestLoanApplicationFactory {
         return LoanApplication.newBuilder()
                 .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
-                .withClient(TestClientFactory.newStandardMarriedClient())
+                .withClient(TestValues.CLIENT_ID)
                 .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
                 .build();
     }
 
-    public static LoanApplication newLoanApplicationWithRiskDecision(Client client) {
+    public static LoanApplication newLoanApplicationWithRiskDecision() {
         return LoanApplication.newBuilder()
                 .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecision())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
-                .withClient(client)
+                .withClient(TestValues.CLIENT_ID)
                 .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
                 .build();
     }
@@ -36,7 +36,7 @@ public class TestLoanApplicationFactory {
                 .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecision())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
-                .withClient(TestClientFactory.newStandardMarriedClient())
+                .withClient(TestValues.CLIENT_ID)
                 .withConditions(TestLoanApplicationFactory.newConditionsWithInsurance())
                 .build();
     }
@@ -46,7 +46,7 @@ public class TestLoanApplicationFactory {
                 .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
-                .withClient(TestClientFactory.newPayrollUnmarriedClient())
+                .withClient(TestValues.CLIENT_ID)
                 .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
                 .build();
     }
@@ -56,7 +56,7 @@ public class TestLoanApplicationFactory {
                 .withId(LoanApplicationId.fromValue(TestValues.LOAN_APPLICATION_ID))
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
-                .withClient(TestClientFactory.newStandardMarriedClient())
+                .withClient(TestValues.CLIENT_ID)
                 .withConditions(TestLoanApplicationFactory.newConditionsWithoutInsurance())
                 .withDocumentPackage(
                         new Document(TestValues.FORM_DOCUMENT_ID, Document.Type.FORM, false),
@@ -71,7 +71,7 @@ public class TestLoanApplicationFactory {
                 .withStatus(LoanApplication.Status.APPROVED)
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
-                .withClient(TestClientFactory.newStandardMarriedClient())
+                .withClient(TestValues.CLIENT_ID)
                 .withConditions(TestLoanApplicationFactory.newConditionsWithInsurance())
                 .withDocumentPackage(
                         new Document(TestValues.FORM_DOCUMENT_ID, Document.Type.FORM, false),
@@ -86,7 +86,7 @@ public class TestLoanApplicationFactory {
                 .withStatus(LoanApplication.Status.APPROVED)
                 .withRiskDecision(TestRiskDecisionFactory.newApprovedRiskDecisionWithNotActualPayroll())
                 .withLoanProgram(LoanApplication.LoanProgram.COMMON)
-                .withClient(TestClientFactory.newStandardMarriedClient())
+                .withClient(TestValues.CLIENT_ID)
                 .withConditions(TestLoanApplicationFactory.newConditionsWithInsurance())
                 .withOffer(newOffer())
                 .build();
@@ -110,4 +110,7 @@ public class TestLoanApplicationFactory {
         return Offer.newOfferWithInsurance(newConditionsWithInsurance());
     }
 
+    public static LoanApplicationCreated newLoanApplicationCreatedDomainEvent() {
+        return new LoanApplicationCreated(TestClientFactory.newStandardMarriedClient());
+    }
 }

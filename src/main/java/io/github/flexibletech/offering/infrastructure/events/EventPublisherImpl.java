@@ -1,7 +1,7 @@
 package io.github.flexibletech.offering.infrastructure.events;
 
 import io.github.flexibletech.offering.application.EventPublisher;
-import io.github.flexibletech.offering.application.dto.events.IntegrationEvent;
+import io.github.flexibletech.offering.application.IntegrationEvent;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;

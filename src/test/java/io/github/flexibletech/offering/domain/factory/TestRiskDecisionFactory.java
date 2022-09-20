@@ -1,10 +1,10 @@
 package io.github.flexibletech.offering.domain.factory;
 
 import io.github.flexibletech.offering.TestValues;
-import io.github.flexibletech.offering.domain.risk.ConditionsRestrictions;
-import io.github.flexibletech.offering.domain.risk.Payroll;
-import io.github.flexibletech.offering.domain.risk.RiskDecision;
-import io.github.flexibletech.offering.domain.risk.RiskDecisionId;
+import io.github.flexibletech.offering.domain.loanapplication.risk.ConditionsRestrictions;
+import io.github.flexibletech.offering.domain.loanapplication.risk.Payroll;
+import io.github.flexibletech.offering.domain.loanapplication.risk.RiskDecision;
+import io.github.flexibletech.offering.domain.loanapplication.risk.RiskDecisionId;
 
 public class TestRiskDecisionFactory {
     private TestRiskDecisionFactory() {

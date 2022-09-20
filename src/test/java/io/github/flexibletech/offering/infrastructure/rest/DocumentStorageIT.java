@@ -3,7 +3,7 @@ package io.github.flexibletech.offering.infrastructure.rest;
 import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.ResourceUtil;
 import io.github.flexibletech.offering.TestValues;
-import io.github.flexibletech.offering.domain.document.DocumentStorage;
+import io.github.flexibletech.offering.domain.loanapplication.document.DocumentStorage;
 import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;

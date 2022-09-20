@@ -1,6 +1,6 @@
 package io.github.flexibletech.offering.domain.client;
 
-import io.github.flexibletech.offering.domain.common.ValueObject;
+import io.github.flexibletech.offering.domain.ValueObject;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

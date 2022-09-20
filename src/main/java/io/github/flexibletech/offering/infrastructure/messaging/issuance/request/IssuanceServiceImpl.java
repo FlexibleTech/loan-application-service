@@ -1,7 +1,7 @@
 package io.github.flexibletech.offering.infrastructure.messaging.issuance.request;
 
-import io.github.flexibletech.offering.domain.LoanApplication;
-import io.github.flexibletech.offering.domain.issuance.IssuanceService;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
+import io.github.flexibletech.offering.domain.loanapplication.issuance.IssuanceService;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,6 @@ public class IssuanceServiceImpl implements IssuanceService {
 
     @Override
     public void startIssuance(LoanApplication loanApplication) {
-        var client = loanApplication.getClient();
         var conditions = loanApplication.getConditions();
 
         streamBridge.send(
@@ -28,7 +27,7 @@ public class IssuanceServiceImpl implements IssuanceService {
                                         loanApplication.getId().toString(),
                                         conditions.getAmount().getValue(),
                                         conditions.getPeriod(),
-                                        client.getId().toString()))
+                                        loanApplication.getClientId().toString()))
                         .build());
     }
 

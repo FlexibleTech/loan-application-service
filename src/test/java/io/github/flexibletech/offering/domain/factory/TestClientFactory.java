@@ -2,6 +2,7 @@ package io.github.flexibletech.offering.domain.factory;
 
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.domain.client.Client;
+import io.github.flexibletech.offering.domain.client.ClientDetails;
 import io.github.flexibletech.offering.domain.client.ClientId;
 import io.github.flexibletech.offering.domain.client.Organization;
 import io.github.flexibletech.offering.domain.client.Passport;
@@ -24,6 +25,23 @@ public class TestClientFactory {
                 TestValues.CLIENT_INCOME,
                 TestValues.CLIENT_SPOUSE_INCOME,
                 Client.Category.STANDARD,
+                TestValues.CLIENT_BIRTH_DATE,
+                null,
+                null);
+    }
+
+    public static ClientDetails newClientDetailsForStandardMarriedClientWithNewCategory() {
+        return new ClientDetails(
+                newPersonNameDetails(),
+                newPassport(),
+                Client.MaritalStatus.MARRIED,
+                newOrganization(),
+                TestValues.CLIENT_FULL_REGISTRATION_ADDRESS,
+                TestValues.CLIENT_PHONE_NUMBER,
+                TestValues.CLIENT_EMAIL,
+                TestValues.CLIENT_INCOME,
+                TestValues.CLIENT_SPOUSE_INCOME,
+                Client.Category.PREMIUM,
                 TestValues.CLIENT_BIRTH_DATE);
     }
 
@@ -40,7 +58,9 @@ public class TestClientFactory {
                 TestValues.CLIENT_INCOME,
                 null,
                 Client.Category.PAYROLL,
-                TestValues.CLIENT_BIRTH_DATE);
+                TestValues.CLIENT_BIRTH_DATE,
+                null,
+                null);
     }
 
     public static Client newPremiumClient() {
@@ -56,7 +76,9 @@ public class TestClientFactory {
                 TestValues.CLIENT_INCOME,
                 TestValues.CLIENT_SPOUSE_INCOME,
                 Client.Category.PREMIUM,
-                TestValues.CLIENT_BIRTH_DATE);
+                TestValues.CLIENT_BIRTH_DATE,
+                null,
+                null);
     }
 
     public static Client newUnmarriedClientWithSpouseIncome() {
@@ -72,7 +94,9 @@ public class TestClientFactory {
                 TestValues.CLIENT_INCOME,
                 TestValues.CLIENT_SPOUSE_INCOME,
                 Client.Category.PREMIUM,
-                TestValues.CLIENT_BIRTH_DATE);
+                TestValues.CLIENT_BIRTH_DATE,
+                null,
+                null);
     }
 
     private static PersonNameDetails newPersonNameDetails() {

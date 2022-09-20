@@ -1,24 +1,26 @@
 package io.github.flexibletech.offering.application;
 
 import io.github.flexibletech.offering.TestValues;
-import io.github.flexibletech.offering.application.dto.DocumentDto;
-import io.github.flexibletech.offering.application.dto.events.IntegrationEvent;
-import io.github.flexibletech.offering.application.dto.events.LoanApplicationCanceled;
-import io.github.flexibletech.offering.application.dto.events.LoanApplicationCompleted;
-import io.github.flexibletech.offering.application.dto.events.LoanApplicationCreated;
-import io.github.flexibletech.offering.application.dto.events.LoanApplicationOfferCalculated;
-import io.github.flexibletech.offering.domain.LoanApplication;
-import io.github.flexibletech.offering.domain.LoanApplicationId;
-import io.github.flexibletech.offering.domain.LoanApplicationRepository;
+import io.github.flexibletech.offering.application.loanapplication.LoanApplicationService;
+import io.github.flexibletech.offering.application.loanapplication.dto.DocumentDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCanceled;
+import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCompleted;
+import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCreated;
+import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationOfferCalculated;
+import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.client.ClientId;
-import io.github.flexibletech.offering.domain.document.Document;
-import io.github.flexibletech.offering.domain.document.DocumentStorage;
-import io.github.flexibletech.offering.domain.document.PrintService;
+import io.github.flexibletech.offering.domain.client.ClientRepository;
 import io.github.flexibletech.offering.domain.factory.TestClientFactory;
 import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory;
-import io.github.flexibletech.offering.domain.issuance.IssuanceService;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationId;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationRepository;
+import io.github.flexibletech.offering.domain.loanapplication.document.Document;
+import io.github.flexibletech.offering.domain.loanapplication.document.DocumentStorage;
+import io.github.flexibletech.offering.domain.loanapplication.document.PrintService;
+import io.github.flexibletech.offering.domain.loanapplication.issuance.IssuanceService;
+import io.github.flexibletech.offering.domain.loanapplication.risk.RiskService;
 import io.github.flexibletech.offering.domain.preapproved.PreApprovedOfferRepository;
-import io.github.flexibletech.offering.domain.risk.RiskService;
 import io.github.flexibletech.offering.infrastructure.mapper.DomainObjectMapperImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,14 +33,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 
 import java.util.Optional;
 import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("ConstantConditions")
-public class LoanApplicationServiceTest {
+public class LoanApplicationServiceTest extends AbstractApplicationServiceTest {
     @Spy
     private DomainObjectMapper domainObjectMapper = new DomainObjectMapperImpl(newModelMapper());
     @Mock
@@ -55,6 +56,8 @@ public class LoanApplicationServiceTest {
     private PrintService printService;
     @Mock
     private DocumentStorage documentStorage;
+    @Mock
+    private ClientRepository clientRepository;
 
     @InjectMocks
     private LoanApplicationService loanApplicationService;
@@ -62,14 +65,9 @@ public class LoanApplicationServiceTest {
     @Captor
     private ArgumentCaptor<LoanApplication> loanApplicationArgumentCaptor;
     @Captor
+    private ArgumentCaptor<Client> clientArgumentCaptor;
+    @Captor
     private ArgumentCaptor<? extends IntegrationEvent> eventCaptor;
-
-    private ModelMapper newModelMapper() {
-        var mapper = new ModelMapper();
-        mapper.getConfiguration().setAmbiguityIgnored(true);
-
-        return mapper;
-    }
 
     @Test
     public void shouldStartNewLoanApplication() {
@@ -117,25 +115,30 @@ public class LoanApplicationServiceTest {
     public void shouldRequestRiskDecisionForLoanApplication() {
         Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
-        Mockito.doNothing().when(riskService).requestRiskDecision(loanApplicationArgumentCaptor.capture());
+        Mockito.doNothing().when(riskService)
+                .requestRiskDecision(loanApplicationArgumentCaptor.capture(), clientArgumentCaptor.capture());
+        Mockito.when(clientRepository.findById(ArgumentMatchers.any(ClientId.class)))
+                .thenReturn(Optional.of(TestClientFactory.newStandardMarriedClient()));
 
         loanApplicationService.requestRiskDecisionForLoanApplication(TestValues.LOAN_APPLICATION_ID);
 
         Assertions.assertNotNull(loanApplicationArgumentCaptor.getValue());
-        Mockito.verify(riskService, Mockito.times(1)).requestRiskDecision(ArgumentMatchers.any(LoanApplication.class));
+        Mockito.verify(riskService, Mockito.times(1))
+                .requestRiskDecision(ArgumentMatchers.any(LoanApplication.class), ArgumentMatchers.any(Client.class));
     }
 
     @Test
     public void shouldDefineIncomeConfirmationTypeForLoanApplication() {
         Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
-                .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                        TestClientFactory.newPremiumClient())));
+                .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplicationWithRiskDecision()));
         Mockito.when(preApprovedOfferRepository.findForClient(ArgumentMatchers.any(ClientId.class))).thenReturn(null);
+        Mockito.when(clientRepository.findById(ArgumentMatchers.any(ClientId.class)))
+                .thenReturn(Optional.of(TestClientFactory.newStandardMarriedClient()));
 
         var incomeConfirmationType = loanApplicationService.defineIncomeConfirmationTypeForLoanApplication(
                 TestValues.LOAN_APPLICATION_ID);
 
-        Assertions.assertEquals(incomeConfirmationType, LoanApplication.IncomeConfirmationType.NONE.name());
+        Assertions.assertEquals(incomeConfirmationType, LoanApplication.IncomeConfirmationType.TWO_NDFL.name());
     }
 
     @Test
@@ -180,15 +183,18 @@ public class LoanApplicationServiceTest {
                 .thenReturn(TestLoanApplicationFactory.newLoanApplication());
         Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
-        Mockito.when(printService.print(ArgumentMatchers.any(LoanApplication.class), Mockito.eq(Document.Type.FORM)))
-                .thenReturn(new byte[]{});
+        Mockito.when(printService.print(ArgumentMatchers.any(LoanApplication.class),
+                Mockito.eq(Document.Type.FORM),
+                ArgumentMatchers.any(Client.class))).thenReturn(new byte[]{});
         Mockito.when(documentStorage.place(ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(TestValues.FORM_DOCUMENT_ID);
+        Mockito.when(clientRepository.findById(ArgumentMatchers.any(ClientId.class)))
+                .thenReturn(Optional.of(TestClientFactory.newStandardMarriedClient()));
 
         loanApplicationService.printDocumentForLoanApplication(TestValues.LOAN_APPLICATION_ID, Document.Type.FORM);
 
         Mockito.verify(printService, Mockito.times(1))
-                .print(ArgumentMatchers.any(LoanApplication.class), Mockito.eq(Document.Type.FORM));
+                .print(ArgumentMatchers.any(LoanApplication.class), Mockito.eq(Document.Type.FORM), ArgumentMatchers.any(Client.class));
         Mockito.verify(documentStorage, Mockito.times(1)).place(ArgumentMatchers.anyString(), ArgumentMatchers.any());
     }
 

@@ -1,7 +1,7 @@
 package io.github.flexibletech.offering.domain.preapproved;
 
 import io.github.flexibletech.offering.domain.Amount;
-import io.github.flexibletech.offering.domain.common.Entity;
+import io.github.flexibletech.offering.domain.Entity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,14 +14,14 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PreApprovedOffer implements Entity {
-    private String id;
+    private PreApprovedOfferId id;
     private Amount minAmount;
     private Amount maxAmount;
     private String clientId;
 
     public static PreApprovedOffer newPreApprovedOffer(String id, BigDecimal minAmount, BigDecimal maxAmount, String clientId) {
         return new PreApprovedOffer(
-                id,
+                new PreApprovedOfferId(id),
                 Amount.fromValue(minAmount),
                 Amount.fromValue(maxAmount),
                 clientId);

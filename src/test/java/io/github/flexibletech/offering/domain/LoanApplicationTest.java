@@ -2,13 +2,14 @@ package io.github.flexibletech.offering.domain;
 
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.domain.client.Client;
-import io.github.flexibletech.offering.domain.document.Document;
 import io.github.flexibletech.offering.domain.factory.TestClientFactory;
 import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory;
 import io.github.flexibletech.offering.domain.factory.TestPreApprovedOfferFactory;
 import io.github.flexibletech.offering.domain.factory.TestRiskDecisionFactory;
-import io.github.flexibletech.offering.domain.risk.ConditionsRestrictions;
-import io.github.flexibletech.offering.domain.risk.RiskDecision;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
+import io.github.flexibletech.offering.domain.loanapplication.document.Document;
+import io.github.flexibletech.offering.domain.loanapplication.risk.ConditionsRestrictions;
+import io.github.flexibletech.offering.domain.loanapplication.risk.RiskDecision;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -29,30 +30,7 @@ public class LoanApplicationTest {
         Assertions.assertEquals(loanApplication.getIncomeConfirmationType(), LoanApplication.IncomeConfirmationType.TWO_NDFL);
         Assertions.assertEquals(loanApplication.getStatus(), LoanApplication.Status.NEW);
         Assertions.assertNull(loanApplication.getCompletedAt());
-
-        //Assert Client
-        var client = loanApplication.getClient();
-        Assertions.assertNotNull(client);
-        Assertions.assertEquals(client.getMaritalStatus(), Client.MaritalStatus.MARRIED);
-        Assertions.assertEquals(client.getFullRegistrationAddress(), TestValues.CLIENT_FULL_REGISTRATION_ADDRESS);
-        Assertions.assertEquals(client.getPhoneNumber(), TestValues.CLIENT_PHONE_NUMBER);
-        Assertions.assertEquals(client.getEmail(), TestValues.CLIENT_EMAIL);
-
-        //Assert incomes
-        Assertions.assertEquals(client.getIncome(), TestValues.CLIENT_INCOME);
-        Assertions.assertEquals(client.getSpouseIncome(), TestValues.CLIENT_SPOUSE_INCOME);
-
-        //Assert PersonNameDetails
-        var personNameDetails = client.getPersonNameDetails();
-        Assertions.assertEquals(personNameDetails.getName(), TestValues.NAME);
-        Assertions.assertEquals(personNameDetails.getMiddleName(), TestValues.MIDDLE_NAME);
-        Assertions.assertEquals(personNameDetails.getSurName(), TestValues.SUR_NAME);
-
-        //Assert WorkPlace
-        var workPlace = client.getWorkPlace();
-        Assertions.assertEquals(workPlace.getTitle(), TestValues.ORGANIZATION_TITLE);
-        Assertions.assertEquals(workPlace.getInn(), TestValues.ORGANIZATION_INN);
-        Assertions.assertEquals(workPlace.getFullAddress(), TestValues.ORGANIZATION_FULL_ADDRESS);
+        Assertions.assertEquals(loanApplication.getClientId().getId(), TestValues.CLIENT_ID);
 
         //Assert conditions
         var conditions = loanApplication.getConditions();
@@ -80,10 +58,6 @@ public class LoanApplicationTest {
                 TestLoanApplicationFactory.newConditionsWithoutInsurance());
 
         Assertions.assertEquals(loanApplication.getLoanProgram(), LoanApplication.LoanProgram.PAYROLL_CLIENT);
-        var client = loanApplication.getClient();
-
-        Assertions.assertEquals(client.getMaritalStatus(), Client.MaritalStatus.UNMARRIED);
-        Assertions.assertNull(client.getSpouseIncome());
     }
 
     @Test
@@ -241,10 +215,10 @@ public class LoanApplicationTest {
 
     @Test
     public void shouldDefineSalaryReceiptIncomeConfirmationTypeForPayrollClient() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newPayrollUnmarriedClient());
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
 
-        var incomeConfirmationType = loanApplication.defineIncomeConfirmationType(null);
+        var incomeConfirmationType = loanApplication.defineIncomeConfirmationType(null,
+                TestClientFactory.newPayrollUnmarriedClient());
 
         Assertions.assertEquals(incomeConfirmationType, LoanApplication.IncomeConfirmationType.SALARY_RECEIPT);
     }
@@ -253,36 +227,44 @@ public class LoanApplicationTest {
     public void shouldDefineTwoNdflIncomeConfirmationTypeForPayrollClient() {
         var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecisionAndNotActualPayroll();
 
-        var incomeConfirmationType = loanApplication.defineIncomeConfirmationType(null);
+        var incomeConfirmationType = loanApplication.defineIncomeConfirmationType(null,
+                TestClientFactory.newPayrollUnmarriedClient());
+
+        Assertions.assertEquals(incomeConfirmationType, LoanApplication.IncomeConfirmationType.TWO_NDFL);
+    }
+
+    @Test
+    public void shouldDefineTwoNdflIncomeConfirmationTypeForNullableClient() {
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
+
+        var incomeConfirmationType = loanApplication.defineIncomeConfirmationType(null, null);
 
         Assertions.assertEquals(incomeConfirmationType, LoanApplication.IncomeConfirmationType.TWO_NDFL);
     }
 
     @Test
     public void shouldDefineNoneIncomeConfirmationTypeForPremiumClient() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newPremiumClient());
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
 
-        var incomeConfirmationType = loanApplication.defineIncomeConfirmationType(null);
+        var incomeConfirmationType = loanApplication.defineIncomeConfirmationType(null,
+                TestClientFactory.newPremiumClient());
 
         Assertions.assertEquals(incomeConfirmationType, LoanApplication.IncomeConfirmationType.NONE);
     }
 
     @Test
     public void shouldDefineTwoNdflIncomeConfirmationTypeForStandardClientWithPreApprovedOffer() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newStandardMarriedClient());
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
 
         var incomeConfirmationType = loanApplication.defineIncomeConfirmationType(
-                TestPreApprovedOfferFactory.newPreApprovedOfferWithSmallMaxOfferAmount());
+                TestPreApprovedOfferFactory.newPreApprovedOfferWithSmallMaxOfferAmount(), TestClientFactory.newStandardMarriedClient());
 
         Assertions.assertEquals(incomeConfirmationType, LoanApplication.IncomeConfirmationType.TWO_NDFL);
     }
 
     @Test
     public void shouldChoseNewConditionsWithoutInsurance() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newStandardMarriedClient());
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
 
         loanApplication.choseConditions(
                 TestValues.NEW_CHOSEN_CONDITIONS_AMOUNT,
@@ -298,8 +280,7 @@ public class LoanApplicationTest {
 
     @Test
     public void shouldNotChoseNewConditions() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newStandardMarriedClient());
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
 
         loanApplication.choseConditions(null, null, null);
 
@@ -312,8 +293,7 @@ public class LoanApplicationTest {
 
     @Test
     public void shouldChoseNewConditionsWithInsurance() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newStandardMarriedClient());
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
 
         loanApplication.choseConditions(null, null, true);
 
@@ -323,8 +303,7 @@ public class LoanApplicationTest {
 
     @Test
     public void shouldAddFormDocument() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newStandardMarriedClient());
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
 
         loanApplication.addDocument(TestValues.FORM_DOCUMENT_ID, Document.Type.FORM);
 
@@ -335,8 +314,7 @@ public class LoanApplicationTest {
 
     @Test
     public void shouldAddConditionsDocument() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newStandardMarriedClient());
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
 
         loanApplication.addDocument(TestValues.CONDITIONS_DOCUMENT_ID, Document.Type.CONDITIONS);
 
@@ -347,8 +325,7 @@ public class LoanApplicationTest {
 
     @Test
     public void shouldAddInsuranceDocument() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newStandardMarriedClient());
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
 
         loanApplication.addDocument(TestValues.INSURANCE_DOCUMENT_ID, Document.Type.INSURANCE);
 
@@ -359,8 +336,7 @@ public class LoanApplicationTest {
 
     @Test
     public void shouldCompleteLoanApplication() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newStandardMarriedClient());
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
 
         loanApplication.complete(TestValues.ISSUANCE_ID);
 
@@ -371,8 +347,7 @@ public class LoanApplicationTest {
 
     @Test
     public void shouldCalculateOfferWithoutInsurance() {
-        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision(
-                TestClientFactory.newStandardMarriedClient());
+        var loanApplication = TestLoanApplicationFactory.newLoanApplicationWithRiskDecision();
 
         loanApplication.calculateOffer();
 

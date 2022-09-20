@@ -4,7 +4,7 @@ import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.application.EventPublisher;
 import io.github.flexibletech.offering.application.TestApplicationObjectsFactory;
-import io.github.flexibletech.offering.application.dto.events.LoanApplicationCompleted;
+import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCompleted;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

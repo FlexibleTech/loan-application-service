@@ -1,7 +1,7 @@
 package io.github.flexibletech.offering.infrastructure.messaging.risk.response;
 
-import io.github.flexibletech.offering.application.LoanApplicationService;
-import io.github.flexibletech.offering.application.dto.RiskDecisionDto;
+import io.github.flexibletech.offering.application.loanapplication.LoanApplicationService;
+import io.github.flexibletech.offering.application.loanapplication.dto.RiskDecisionDto;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;

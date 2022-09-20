@@ -1,26 +1,15 @@
 package io.github.flexibletech.offering.infrastructure.persistence;
 
 import io.github.flexibletech.offering.TestValues;
-import io.github.flexibletech.offering.domain.LoanApplicationId;
-import io.github.flexibletech.offering.domain.LoanApplicationRepository;
-import io.github.flexibletech.offering.infrastructure.config.ApplicationConfig;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationId;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles("it")
-@DataJpaTest(includeFilters = @ComponentScan.Filter(
-        type = FilterType.ASSIGNABLE_TYPE,
-        classes = ApplicationConfig.class))
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class LoanApplicationRepositoryIT {
+public class LoanApplicationRepositoryIT extends AbstractPersistenceTest {
     @Autowired
     private LoanApplicationRepository loanApplicationRepository;
 

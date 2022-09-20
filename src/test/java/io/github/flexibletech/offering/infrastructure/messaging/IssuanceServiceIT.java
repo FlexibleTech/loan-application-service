@@ -3,7 +3,7 @@ package io.github.flexibletech.offering.infrastructure.messaging;
 import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory;
-import io.github.flexibletech.offering.domain.issuance.IssuanceService;
+import io.github.flexibletech.offering.domain.loanapplication.issuance.IssuanceService;
 import io.github.flexibletech.offering.infrastructure.messaging.issuance.request.StartIssuanceRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

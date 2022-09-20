@@ -2,44 +2,11 @@
   "template": "form",
   "variables": {
     "loanApplication": {
-      "createdAt": null,
-      "updatedAt": null,
       "id": {
         "id": "LOANAPP22082500001"
       },
-      "client": {
-        "id": {
-          "id": "20056671"
-        },
-        "personNameDetails": {
-          "name": "Тест",
-          "middleName": "Тестович",
-          "surName": "Тестов"
-        },
-        "passport": {
-          "series": "4401",
-          "number": "190134",
-          "issueDate": "2000-09-02",
-          "department": "ОВД КИТАЙ-ГОРОД 1 РУВД ЦАО Г. МОСКВЫ",
-          "departmentCode": "772-001"
-        },
-        "maritalStatus": "MARRIED",
-        "workPlace": {
-          "title": "ООО \"В Контакте\"",
-          "inn": "7842349892",
-          "fullAddress": "191024, ГОРОД САНКТ-ПЕТЕРБУРГ, УЛИЦА ХЕРСОНСКАЯ, ДОМ 12-14, ЛИТЕР А, ПОМЕЩЕНИЕ 1Н"
-        },
-        "fullRegistrationAddress": "125009, город Москва, Тверская ул. 10 с1",
-        "phoneNumber": "79851325677",
-        "email": "test@mail.ru",
-        "income": {
-          "value": 100000.000000
-        },
-        "spouseIncome": {
-          "value": 70000.000000
-        },
-        "category": "STANDARD",
-        "birthDate": "1986-01-22"
+      "clientId": {
+        "id": "20056671"
       },
       "status": "APPROVED",
       "conditions": {
@@ -88,14 +55,53 @@
           "value": 21000.000000
         }
       },
-      "documentPackage": [],
+      "documentPackage": [
+      ],
       "issuanceId": null,
+      "createdAt": null,
+      "updatedAt": null,
       "conditionsRestrictions": {
         "maxAmount": {
           "value": 1000000.000000
         },
         "maxPeriod": 60
       }
+    },
+    "client": {
+      "id": {
+        "id": "20056671"
+      },
+      "personNameDetails": {
+        "name": "Тест",
+        "middleName": "Тестович",
+        "surName": "Тестов"
+      },
+      "passport": {
+        "series": "4401",
+        "number": "190134",
+        "issueDate": "2000-09-02",
+        "department": "ОВД КИТАЙ-ГОРОД 1 РУВД ЦАО Г. МОСКВЫ",
+        "departmentCode": "772-001"
+      },
+      "maritalStatus": "MARRIED",
+      "workPlace": {
+        "title": "ООО \"В Контакте\"",
+        "inn": "7842349892",
+        "fullAddress": "191024, ГОРОД САНКТ-ПЕТЕРБУРГ, УЛИЦА ХЕРСОНСКАЯ, ДОМ 12-14, ЛИТЕР А, ПОМЕЩЕНИЕ 1Н"
+      },
+      "fullRegistrationAddress": "125009, город Москва, Тверская ул. 10 с1",
+      "phoneNumber": "79851325677",
+      "email": "test@mail.ru",
+      "income": {
+        "value": 100000.000000
+      },
+      "spouseIncome": {
+        "value": 70000.000000
+      },
+      "category": "STANDARD",
+      "birthDate": "1986-01-22",
+      "createdAt": null,
+      "updatedAt": null
     }
   },
   "format": "PDF"

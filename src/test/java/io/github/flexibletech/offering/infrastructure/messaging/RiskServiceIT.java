@@ -2,8 +2,9 @@ package io.github.flexibletech.offering.infrastructure.messaging;
 
 import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.TestValues;
+import io.github.flexibletech.offering.domain.factory.TestClientFactory;
 import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory;
-import io.github.flexibletech.offering.domain.risk.RiskService;
+import io.github.flexibletech.offering.domain.loanapplication.risk.RiskService;
 import io.github.flexibletech.offering.infrastructure.messaging.risk.request.RiskRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class RiskServiceIT extends AbstractIntegrationTest {
     public void shouldSendRiskRequestToQueue() throws IOException {
         var loanApplication = TestLoanApplicationFactory.newLoanApplication();
 
-        riskService.requestRiskDecision(loanApplication);
+        riskService.requestRiskDecision(loanApplication, TestClientFactory.newStandardMarriedClient());
 
         var message = outputDestination.receive(3000);
         var riskRequest = objectMapper.readValue(message.getPayload(), RiskRequest.class);

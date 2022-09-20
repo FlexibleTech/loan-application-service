@@ -1,6 +1,6 @@
 package io.github.flexibletech.offering.infrastructure.messaging.issuance.response;
 
-import io.github.flexibletech.offering.application.LoanApplicationService;
+import io.github.flexibletech.offering.application.loanapplication.LoanApplicationService;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;

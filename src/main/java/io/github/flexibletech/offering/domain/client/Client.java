@@ -1,40 +1,77 @@
 package io.github.flexibletech.offering.domain.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import io.github.flexibletech.offering.domain.Amount;
-import io.github.flexibletech.offering.domain.common.Entity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.domain.AbstractAggregateRoot;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
 
-@Data
+@Getter
+@Entity
 @AllArgsConstructor
+@Table(name = "clients")
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Client implements Entity {
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+public class Client extends AbstractAggregateRoot<Client> {
+    @EmbeddedId
     private ClientId id;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
     private PersonNameDetails personNameDetails;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
     private Passport passport;
+    @Enumerated(EnumType.STRING)
     private MaritalStatus maritalStatus;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    @Basic(fetch = FetchType.LAZY)
     private Organization workPlace;
     private String fullRegistrationAddress;
     private String phoneNumber;
     private String email;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "income"))
     private Amount income;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "spouse_income"))
     private Amount spouseIncome;
+    @Enumerated(EnumType.STRING)
     private Category category;
     private LocalDate birthDate;
-
-    @JsonIgnore
-    public boolean isMarried() {
-        return this.maritalStatus == MaritalStatus.MARRIED;
-    }
+    @CreatedDate
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     @JsonIgnore
     public boolean isPayroll() {
@@ -47,8 +84,37 @@ public class Client implements Entity {
     }
 
     @JsonIgnore
-    public boolean hasSpouseIncome() {
-        return Objects.nonNull(this.spouseIncome);
+    public boolean hasSpouseIncomeAndUnmarried() {
+        return (this.maritalStatus == MaritalStatus.UNMARRIED && Objects.nonNull(this.spouseIncome));
+    }
+
+    public ClientDetails createClientDetails() {
+        return new ClientDetails(
+                this.personNameDetails,
+                this.passport,
+                this.maritalStatus,
+                this.workPlace,
+                this.fullRegistrationAddress,
+                this.phoneNumber,
+                this.email,
+                this.income,
+                this.spouseIncome,
+                this.category,
+                this.birthDate);
+    }
+
+    public void update(ClientDetails clientDetails) {
+        this.personNameDetails = clientDetails.getPersonNameDetails();
+        this.passport = clientDetails.getPassport();
+        this.maritalStatus = clientDetails.getMaritalStatus();
+        this.workPlace = clientDetails.getWorkPlace();
+        this.fullRegistrationAddress = clientDetails.getFullRegistrationAddress();
+        this.phoneNumber = clientDetails.getPhoneNumber();
+        this.email = clientDetails.getEmail();
+        this.income = clientDetails.getIncome();
+        this.spouseIncome = clientDetails.getSpouseIncome();
+        this.category = clientDetails.getCategory();
+        this.birthDate = clientDetails.getBirthDate();
     }
 
     public static Builder newBuilder() {

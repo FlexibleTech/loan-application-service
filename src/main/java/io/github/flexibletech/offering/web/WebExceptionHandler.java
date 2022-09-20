@@ -1,6 +1,6 @@
 package io.github.flexibletech.offering.web;
 
-import io.github.flexibletech.offering.application.LoanApplicationNotFoundException;
+import io.github.flexibletech.offering.application.loanapplication.LoanApplicationNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.MismatchingMessageCorrelationException;
 import org.springframework.dao.DataAccessException;

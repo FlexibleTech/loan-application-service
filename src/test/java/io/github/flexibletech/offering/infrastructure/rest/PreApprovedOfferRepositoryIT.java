@@ -34,6 +34,6 @@ public class PreApprovedOfferRepositoryIT extends AbstractIntegrationTest {
         Assertions.assertEquals(preApprovedOffer.getClientId(), TestValues.CLIENT_ID);
         Assertions.assertEquals(preApprovedOffer.getMaxAmount(), TestValues.PRE_APPROVED_OFFER_MAX_AMOUNT);
         Assertions.assertEquals(preApprovedOffer.getMinAmount(), TestValues.PRE_APPROVED_OFFER_MIN_AMOUNT);
-        Assertions.assertEquals(preApprovedOffer.getId(), TestValues.PRE_APPROVED_OFFER_ID);
+        Assertions.assertEquals(preApprovedOffer.getId().toString(), TestValues.PRE_APPROVED_OFFER_ID);
     }
 }

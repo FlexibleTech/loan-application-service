@@ -1,9 +1,9 @@
 package io.github.flexibletech.offering.web;
 
-import io.github.flexibletech.offering.application.LoanApplicationService;
-import io.github.flexibletech.offering.application.dto.ConditionsDto;
-import io.github.flexibletech.offering.application.dto.LoanApplicationDto;
-import io.github.flexibletech.offering.application.dto.StartNewLoanApplicationRequest;
+import io.github.flexibletech.offering.application.loanapplication.LoanApplicationService;
+import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.LoanApplicationDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.StartNewLoanApplicationRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

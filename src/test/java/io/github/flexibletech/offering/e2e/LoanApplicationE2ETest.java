@@ -4,17 +4,18 @@ import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.ResourceUtil;
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.application.TestApplicationObjectsFactory;
-import io.github.flexibletech.offering.application.dto.LoanApplicationDto;
-import io.github.flexibletech.offering.domain.LoanApplication;
-import io.github.flexibletech.offering.domain.LoanApplicationId;
-import io.github.flexibletech.offering.domain.LoanApplicationRepository;
+import io.github.flexibletech.offering.application.loanapplication.dto.LoanApplicationDto;
+import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.client.ClientId;
-import io.github.flexibletech.offering.domain.document.Document;
-import io.github.flexibletech.offering.domain.document.DocumentStorage;
-import io.github.flexibletech.offering.domain.document.PrintService;
 import io.github.flexibletech.offering.domain.factory.TestPreApprovedOfferFactory;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationId;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationRepository;
+import io.github.flexibletech.offering.domain.loanapplication.document.Document;
+import io.github.flexibletech.offering.domain.loanapplication.document.DocumentStorage;
+import io.github.flexibletech.offering.domain.loanapplication.document.PrintService;
+import io.github.flexibletech.offering.domain.loanapplication.risk.RiskDecision;
 import io.github.flexibletech.offering.domain.preapproved.PreApprovedOfferRepository;
-import io.github.flexibletech.offering.domain.risk.RiskDecision;
 import io.github.flexibletech.offering.infrastructure.messaging.issuance.response.IssuanceResponse;
 import io.github.flexibletech.offering.infrastructure.messaging.risk.response.RiskResponse;
 import org.junit.jupiter.api.Assertions;
@@ -30,10 +31,12 @@ import org.springframework.http.MediaType;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class LoanApplicationE2ETest extends AbstractIntegrationTest {
     @MockBean
     private PreApprovedOfferRepository preApprovedOfferRepository;
@@ -63,7 +66,9 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
     public void shouldGoThroughFullLoanApplicationProcess() throws Exception {
         Mockito.when(preApprovedOfferRepository.findForClient(ArgumentMatchers.any(ClientId.class)))
                 .thenReturn(TestPreApprovedOfferFactory.newPreApprovedOffer());
-        Mockito.when(printService.print(ArgumentMatchers.any(LoanApplication.class), ArgumentMatchers.any(Document.Type.class)))
+        Mockito.when(printService.print(ArgumentMatchers.any(LoanApplication.class),
+                        ArgumentMatchers.any(Document.Type.class),
+                        ArgumentMatchers.any(Client.class)))
                 .thenReturn(ResourceUtil.getByteArray("classpath:files/test.pdf"));
         Mockito.when(documentStorage.place(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
                 .thenAnswer(invocation -> invocation.getArgument(0));

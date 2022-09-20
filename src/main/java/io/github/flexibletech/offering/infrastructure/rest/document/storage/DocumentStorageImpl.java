@@ -1,6 +1,6 @@
 package io.github.flexibletech.offering.infrastructure.rest.document.storage;
 
-import io.github.flexibletech.offering.domain.document.DocumentStorage;
+import io.github.flexibletech.offering.domain.loanapplication.document.DocumentStorage;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.minio.MinioClient;

@@ -1,11 +1,11 @@
 package io.github.flexibletech.offering.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.flexibletech.offering.application.LoanApplicationNotFoundException;
-import io.github.flexibletech.offering.application.LoanApplicationService;
+import io.github.flexibletech.offering.application.loanapplication.LoanApplicationNotFoundException;
+import io.github.flexibletech.offering.application.loanapplication.LoanApplicationService;
 import io.github.flexibletech.offering.application.TestApplicationObjectsFactory;
-import io.github.flexibletech.offering.application.dto.ConditionsDto;
-import io.github.flexibletech.offering.application.dto.StartNewLoanApplicationRequest;
+import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.StartNewLoanApplicationRequest;
 import io.github.flexibletech.offering.ResourceUtil;
 import io.github.flexibletech.offering.TestValues;
 import org.junit.jupiter.api.Assertions;

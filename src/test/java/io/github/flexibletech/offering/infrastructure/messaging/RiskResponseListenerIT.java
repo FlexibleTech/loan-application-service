@@ -2,10 +2,10 @@ package io.github.flexibletech.offering.infrastructure.messaging;
 
 import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.TestValues;
-import io.github.flexibletech.offering.application.LoanApplicationService;
+import io.github.flexibletech.offering.application.loanapplication.LoanApplicationService;
 import io.github.flexibletech.offering.application.TestApplicationObjectsFactory;
-import io.github.flexibletech.offering.application.dto.RiskDecisionDto;
-import io.github.flexibletech.offering.domain.risk.RiskDecision;
+import io.github.flexibletech.offering.application.loanapplication.dto.RiskDecisionDto;
+import io.github.flexibletech.offering.domain.loanapplication.risk.RiskDecision;
 import io.github.flexibletech.offering.infrastructure.messaging.risk.response.RiskResponse;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Assertions;

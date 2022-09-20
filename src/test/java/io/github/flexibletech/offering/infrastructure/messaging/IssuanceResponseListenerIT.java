@@ -2,7 +2,7 @@ package io.github.flexibletech.offering.infrastructure.messaging;
 
 import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.TestValues;
-import io.github.flexibletech.offering.application.LoanApplicationService;
+import io.github.flexibletech.offering.application.loanapplication.LoanApplicationService;
 import io.github.flexibletech.offering.infrastructure.messaging.issuance.response.IssuanceResponse;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Assertions;

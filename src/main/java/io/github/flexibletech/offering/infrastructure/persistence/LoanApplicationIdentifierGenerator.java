@@ -1,6 +1,6 @@
 package io.github.flexibletech.offering.infrastructure.persistence;
 
-import io.github.flexibletech.offering.domain.LoanApplicationId;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationId;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
 import org.hibernate.Session;

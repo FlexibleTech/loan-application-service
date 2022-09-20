@@ -1,21 +1,21 @@
 package io.github.flexibletech.offering.application;
 
 import io.github.flexibletech.offering.TestValues;
-import io.github.flexibletech.offering.application.dto.DocumentDto;
-import io.github.flexibletech.offering.application.dto.RiskDecisionDto;
-import io.github.flexibletech.offering.application.dto.ClientDto;
-import io.github.flexibletech.offering.application.dto.ConditionsDto;
-import io.github.flexibletech.offering.application.dto.ConditionsRestrictionsDto;
-import io.github.flexibletech.offering.application.dto.LoanApplicationDto;
-import io.github.flexibletech.offering.application.dto.OfferDto;
-import io.github.flexibletech.offering.application.dto.OrganizationDto;
-import io.github.flexibletech.offering.application.dto.PassportDto;
-import io.github.flexibletech.offering.application.dto.StartNewLoanApplicationRequest;
-import io.github.flexibletech.offering.application.dto.events.LoanApplicationCompleted;
-import io.github.flexibletech.offering.domain.LoanApplication;
+import io.github.flexibletech.offering.application.loanapplication.dto.DocumentDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.RiskDecisionDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.ClientDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsRestrictionsDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.LoanApplicationDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.OfferDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.OrganizationDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.PassportDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.StartNewLoanApplicationRequest;
+import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCompleted;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
 import io.github.flexibletech.offering.domain.client.Client;
-import io.github.flexibletech.offering.domain.document.Document;
-import io.github.flexibletech.offering.domain.risk.RiskDecision;
+import io.github.flexibletech.offering.domain.loanapplication.document.Document;
+import io.github.flexibletech.offering.domain.loanapplication.risk.RiskDecision;
 
 import java.util.Set;
 

@@ -1,8 +1,9 @@
 package io.github.flexibletech.offering.infrastructure.rest.document.print;
 
-import io.github.flexibletech.offering.domain.LoanApplication;
-import io.github.flexibletech.offering.domain.document.Document;
-import io.github.flexibletech.offering.domain.document.PrintService;
+import io.github.flexibletech.offering.domain.client.Client;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
+import io.github.flexibletech.offering.domain.loanapplication.document.Document;
+import io.github.flexibletech.offering.domain.loanapplication.document.PrintService;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class PrintServiceImpl implements PrintService {
     private static final String PRINT_SERVICE = "print-service";
     private static final String PDF_FORMAT = "PDF";
     private static final String LOAN_APPLICATION_VARIABLE_NAME = "loanApplication";
+    private static final String CLIENT_VARIABLE_NAME = "client";
 
     public PrintServiceImpl(PrintServiceClient printServiceClient) {
         this.printServiceClient = printServiceClient;
@@ -24,11 +26,11 @@ public class PrintServiceImpl implements PrintService {
     @Override
     @Bulkhead(name = PRINT_SERVICE)
     @CircuitBreaker(name = PRINT_SERVICE)
-    public byte[] print(LoanApplication loanApplication, Document.Type documentType) {
+    public byte[] print(LoanApplication loanApplication, Document.Type documentType, Client client) {
         return printServiceClient.print(
                 new PrintDocumentRequest(
                         defineTemplate(documentType),
-                        Map.of(LOAN_APPLICATION_VARIABLE_NAME, loanApplication),
+                        Map.of(LOAN_APPLICATION_VARIABLE_NAME, loanApplication, CLIENT_VARIABLE_NAME, client),
                         PDF_FORMAT));
     }
 

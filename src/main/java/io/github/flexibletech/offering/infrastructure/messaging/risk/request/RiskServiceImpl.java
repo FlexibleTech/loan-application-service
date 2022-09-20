@@ -1,11 +1,11 @@
 package io.github.flexibletech.offering.infrastructure.messaging.risk.request;
 
 import io.github.flexibletech.offering.domain.Amount;
-import io.github.flexibletech.offering.domain.LoanApplication;
+import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
 import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.client.Organization;
 import io.github.flexibletech.offering.domain.client.Passport;
-import io.github.flexibletech.offering.domain.risk.RiskService;
+import io.github.flexibletech.offering.domain.loanapplication.risk.RiskService;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
@@ -24,12 +24,11 @@ public class RiskServiceImpl implements RiskService {
     }
 
     @Override
-    public void requestRiskDecision(LoanApplication loanApplication) {
-        streamBridge.send(RISK_REQUEST_DESTINATION, MessageBuilder.withPayload(toRiskRequest(loanApplication)).build());
+    public void requestRiskDecision(LoanApplication loanApplication, Client client) {
+        streamBridge.send(RISK_REQUEST_DESTINATION, MessageBuilder.withPayload(toRiskRequest(loanApplication, client)).build());
     }
 
-    private RiskRequest toRiskRequest(LoanApplication loanApplication) {
-        var client = loanApplication.getClient();
+    private RiskRequest toRiskRequest(LoanApplication loanApplication, Client client) {
         var conditions = loanApplication.getConditions();
 
         var category = RiskRequest.Client.Category.valueOf(client.getCategory().name()).getCode();

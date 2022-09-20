@@ -1,16 +1,17 @@
 package io.github.flexibletech.offering.domain;
 
-import io.github.flexibletech.offering.domain.common.ValueObject;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
 @Getter
+@Embeddable
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Amount implements ValueObject, Comparable<Amount> {
