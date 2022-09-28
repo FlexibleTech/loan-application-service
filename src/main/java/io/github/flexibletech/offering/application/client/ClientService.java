@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@Transactional
 public class ClientService {
     private final ClientRepository clientRepository;
 
@@ -17,7 +18,6 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    @Transactional
     public void createNewClient(ClientDetails clientDetails) {
         log.info("Client {} creation...", clientDetails.getClientId().toString());
         var client = Client.newBuilder()
@@ -50,7 +50,6 @@ public class ClientService {
         log.info("Client {} has been created", clientDetails.getClientId().toString());
     }
 
-    @Transactional
     public void updateClient(String clientId, ClientDetails clientDetails) {
         log.info("Client {} updating...", clientDetails);
         clientRepository.findById(new ClientId(clientId))
