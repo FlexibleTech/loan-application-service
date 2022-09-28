@@ -1,21 +1,15 @@
 package io.github.flexibletech.offering.application;
 
 import io.github.flexibletech.offering.TestValues;
-import io.github.flexibletech.offering.application.loanapplication.dto.DocumentDto;
-import io.github.flexibletech.offering.application.loanapplication.dto.RiskDecisionDto;
-import io.github.flexibletech.offering.application.loanapplication.dto.ClientDto;
-import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.ChoseConditionsRequest;
 import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsRestrictionsDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.DocumentDto;
 import io.github.flexibletech.offering.application.loanapplication.dto.LoanApplicationDto;
 import io.github.flexibletech.offering.application.loanapplication.dto.OfferDto;
-import io.github.flexibletech.offering.application.loanapplication.dto.OrganizationDto;
-import io.github.flexibletech.offering.application.loanapplication.dto.PassportDto;
 import io.github.flexibletech.offering.application.loanapplication.dto.StartNewLoanApplicationRequest;
 import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCompleted;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
-import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.loanapplication.document.Document;
-import io.github.flexibletech.offering.domain.loanapplication.risk.RiskDecision;
 
 import java.util.Set;
 
@@ -25,43 +19,11 @@ public class TestApplicationObjectsFactory {
     }
 
     public static StartNewLoanApplicationRequest newStartNewLoanApplicationRequest() {
-        return new StartNewLoanApplicationRequest(newClientDto(), newConditionsDto());
-    }
-
-    public static ClientDto newClientDto() {
-        return new ClientDto(
+        return new StartNewLoanApplicationRequest(
                 TestValues.CLIENT_ID,
-                TestValues.NAME,
-                TestValues.MIDDLE_NAME,
-                TestValues.SUR_NAME,
-                newPassportDto(),
-                Client.MaritalStatus.UNMARRIED.name(),
-                newOrganizationDto(),
-                TestValues.CLIENT_FULL_REGISTRATION_ADDRESS,
-                TestValues.CLIENT_PHONE_NUMBER,
-                TestValues.CLIENT_EMAIL,
-                TestValues.CLIENT_INCOME.getValue(),
-                null,
-                Client.Category.STANDARD.name(),
-                TestValues.CLIENT_BIRTH_DATE);
-    }
-
-    private static ClientDto newInvalidClientDto() {
-        return new ClientDto(
-                TestValues.CLIENT_ID,
-                null,
-                TestValues.MIDDLE_NAME,
-                TestValues.SUR_NAME,
-                newPassportDto(),
-                Client.MaritalStatus.UNMARRIED.name(),
-                newOrganizationDto(),
-                TestValues.CLIENT_FULL_REGISTRATION_ADDRESS,
-                TestValues.CLIENT_PHONE_NUMBER,
-                TestValues.CLIENT_EMAIL,
-                TestValues.CLIENT_INCOME.getValue(),
-                null,
-                Client.Category.STANDARD.name(),
-                TestValues.CLIENT_BIRTH_DATE);
+                TestValues.CONDITIONS_AMOUNT.getValue(),
+                TestValues.CONDITIONS_PERIOD,
+                false);
     }
 
     public static LoanApplicationDto newLoanApplicationDtoWithoutOffer() {
@@ -90,7 +52,11 @@ public class TestApplicationObjectsFactory {
     }
 
     public static StartNewLoanApplicationRequest newInvalidStartNewLoanApplicationRequest() {
-        return new StartNewLoanApplicationRequest(newInvalidClientDto(), newConditionsDto());
+        return new StartNewLoanApplicationRequest(
+                TestValues.CLIENT_ID,
+                TestValues.CONDITIONS_AMOUNT.getValue(),
+                null,
+                false);
     }
 
     private static OfferDto newOfferDto() {
@@ -105,24 +71,8 @@ public class TestApplicationObjectsFactory {
                 TestValues.OFFER_INSURANCE_PREMIUM.getValue());
     }
 
-    private static PassportDto newPassportDto() {
-        return new PassportDto(
-                TestValues.PASSPORT_SERIES,
-                TestValues.PASSPORT_NUMBER,
-                TestValues.PASSPORT_ISSUE_DATE,
-                TestValues.PASSPORT_DEPARTMENT,
-                TestValues.PASSPORT_DEPARTMENT_CODE);
-    }
-
-    private static OrganizationDto newOrganizationDto() {
-        return new OrganizationDto(
-                TestValues.ORGANIZATION_TITLE,
-                TestValues.ORGANIZATION_INN,
-                TestValues.ORGANIZATION_FULL_ADDRESS);
-    }
-
-    public static ConditionsDto newConditionsDto() {
-        return new ConditionsDto(
+    public static ChoseConditionsRequest newConditionsDto() {
+        return new ChoseConditionsRequest(
                 TestValues.CONDITIONS_AMOUNT.getValue(),
                 TestValues.CONDITIONS_PERIOD,
                 false);
@@ -130,15 +80,5 @@ public class TestApplicationObjectsFactory {
 
     public static LoanApplicationCompleted newLoanApplicationCompleted() {
         return new LoanApplicationCompleted(TestValues.LOAN_APPLICATION_ID, TestValues.ISSUANCE_ID);
-    }
-
-    public static RiskDecisionDto newRiskDecisionDto() {
-        return new RiskDecisionDto(
-                TestValues.RISK_DECISION_ID,
-                RiskDecision.Status.APPROVED.name(),
-                TestValues.PAYROLL_SALARY.getValue(),
-                TestValues.PAYROLL_LAST_SALARY_DATE,
-                TestValues.CONDITIONS_RESTRICTIONS_MAX_AMOUNT.getValue(),
-                TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
     }
 }

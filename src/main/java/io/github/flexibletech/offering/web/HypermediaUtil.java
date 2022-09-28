@@ -1,6 +1,6 @@
 package io.github.flexibletech.offering.web;
 
-import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.ChoseConditionsRequest;
 import io.github.flexibletech.offering.application.loanapplication.dto.LoanApplicationDto;
 import lombok.experimental.UtilityClass;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -26,7 +26,7 @@ class HypermediaUtil {
         loanApplication.add(
                 WebMvcLinkBuilder.linkTo(
                                 WebMvcLinkBuilder.methodOn(LoanApplicationController.class)
-                                        .choseConditionsForLoanApplication(loanApplication.getId(), new ConditionsDto()))
+                                        .choseConditionsForLoanApplication(loanApplication.getId(), new ChoseConditionsRequest()))
                         .withRel("chose-conditions"));
     }
 

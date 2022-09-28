@@ -1,4 +1,4 @@
-package io.github.flexibletech.offering.infrastructure.events;
+package io.github.flexibletech.offering.infrastructure.events.loanapplication;
 
 import io.github.flexibletech.offering.application.EventPublisher;
 import io.github.flexibletech.offering.application.IntegrationEvent;

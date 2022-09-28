@@ -2,6 +2,7 @@ package io.github.flexibletech.offering.domain.loanapplication;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import io.github.flexibletech.offering.domain.AggregateRoot;
 import io.github.flexibletech.offering.domain.Amount;
 import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.client.ClientId;
@@ -19,9 +20,6 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.AttributeOverride;
@@ -56,7 +54,7 @@ import java.util.stream.Collectors;
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class LoanApplication extends AbstractAggregateRoot<LoanApplication> {
+public class LoanApplication extends AggregateRoot {
     @EmbeddedId
     @GenericGenerator(
             name = "loan_application_id_generator",
@@ -95,10 +93,6 @@ public class LoanApplication extends AbstractAggregateRoot<LoanApplication> {
     @Embedded
     @AttributeOverride(name = "id", column = @Column(name = "issuance_id"))
     private IssuanceId issuanceId;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     @Transient
     //Ставка по кредиту в %
@@ -239,16 +233,26 @@ public class LoanApplication extends AbstractAggregateRoot<LoanApplication> {
                 .orElse(null);
     }
 
-    public void raiseLoanApplicationCreatedDomainEvent(Client client) {
-        registerEvent(new LoanApplicationCreated(client));
+    public Amount getAmount() {
+        return this.conditions.getAmount();
     }
 
-    public static LoanApplication newLoanApplication(Client client, PreApprovedOffer preApprovedOffer, Conditions conditions) {
+    public Integer getPeriod() {
+        return this.conditions.getPeriod();
+    }
+
+    public boolean isInsurance() {
+        return this.conditions.isInsurance();
+    }
+
+    public static LoanApplication newLoanApplication(Client client, PreApprovedOffer preApprovedOffer,
+                                                     BigDecimal amount, int period, boolean insurance) {
         var loanProgram = defineLoanProgramForClient(client, preApprovedOffer);
         //Доход супруга(-ги) может быть указан только если клиент не холост.
         if (client.hasSpouseIncomeAndUnmarried())
             throw new IllegalArgumentException(String.format("Unable to specify spouse income for unmarried client %s",
                     client.getId()));
+        var conditions = Conditions.newConditions(amount, period, insurance);
 
         return new LoanApplication(client.getId(), loanProgram, conditions);
     }

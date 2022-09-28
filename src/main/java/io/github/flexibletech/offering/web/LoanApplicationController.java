@@ -1,7 +1,7 @@
 package io.github.flexibletech.offering.web;
 
 import io.github.flexibletech.offering.application.loanapplication.LoanApplicationService;
-import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.ChoseConditionsRequest;
 import io.github.flexibletech.offering.application.loanapplication.dto.LoanApplicationDto;
 import io.github.flexibletech.offering.application.loanapplication.dto.StartNewLoanApplicationRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,7 +55,7 @@ public class LoanApplicationController {
             @ApiResponse(responseCode = "400", description = "Некорректный запрос"),
             @ApiResponse(responseCode = "404", description = "Заявка на кредит с данным id не найдена")})
     public ResponseEntity<Void> choseConditionsForLoanApplication(@PathVariable("id") String loanApplicationId,
-                                                                  @Valid @RequestBody ConditionsDto conditions) {
+                                                                  @Valid @RequestBody ChoseConditionsRequest conditions) {
         loanApplicationService.choseConditionsForLoanApplication(loanApplicationId, conditions);
         return ResponseEntity.noContent().build();
     }

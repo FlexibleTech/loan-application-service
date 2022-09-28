@@ -16,6 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Configuration
 @EnableCaching
@@ -37,6 +38,11 @@ public class ApplicationConfig {
     @Bean
     public AuditorAware<String> auditProvider(@Value("${spring.application.name}") String application) {
         return () -> Optional.of(application);
+    }
+
+    @Bean
+    public Consumer<String> forgetSubscriber() {
+        return s -> {};
     }
 
     @Bean

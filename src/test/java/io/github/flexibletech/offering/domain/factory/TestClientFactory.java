@@ -4,122 +4,128 @@ import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.client.ClientDetails;
 import io.github.flexibletech.offering.domain.client.ClientId;
-import io.github.flexibletech.offering.domain.client.Organization;
-import io.github.flexibletech.offering.domain.client.Passport;
-import io.github.flexibletech.offering.domain.client.PersonNameDetails;
 
 public class TestClientFactory {
     private TestClientFactory() {
     }
 
     public static Client newStandardMarriedClient() {
-        return new Client(
+        return Client.newBuilder()
+                .withId(new ClientId(TestValues.CLIENT_ID))
+                .withPersonNameDetails(TestValues.NAME, TestValues.MIDDLE_NAME, TestValues.SUR_NAME)
+                .withPassport(TestValues.PASSPORT_SERIES, TestValues.PASSPORT_NUMBER, TestValues.PASSPORT_ISSUE_DATE,
+                        TestValues.PASSPORT_DEPARTMENT, TestValues.PASSPORT_DEPARTMENT_CODE)
+                .withWorkplace(TestValues.ORGANIZATION_TITLE, TestValues.ORGANIZATION_INN, TestValues.ORGANIZATION_FULL_ADDRESS)
+                .withMaritalStatus(Client.MaritalStatus.MARRIED)
+                .withCategory(Client.Category.STANDARD)
+                .withEmail(TestValues.CLIENT_EMAIL)
+                .withBirthDate(TestValues.CLIENT_BIRTH_DATE)
+                .withIncome(TestValues.CLIENT_INCOME)
+                .withSpouseIncome(TestValues.CLIENT_SPOUSE_INCOME)
+                .withPhoneNumber(TestValues.CLIENT_PHONE_NUMBER)
+                .withFullRegistrationAddress(TestValues.CLIENT_FULL_REGISTRATION_ADDRESS)
+                .build();
+    }
+
+    public static Client newPayrollUnmarriedClient() {
+        return Client.newBuilder()
+                .withId(new ClientId(TestValues.CLIENT_ID))
+                .withPersonNameDetails(TestValues.NAME, TestValues.MIDDLE_NAME, TestValues.SUR_NAME)
+                .withPassport(TestValues.PASSPORT_SERIES, TestValues.PASSPORT_NUMBER, TestValues.PASSPORT_ISSUE_DATE,
+                        TestValues.PASSPORT_DEPARTMENT, TestValues.PASSPORT_DEPARTMENT_CODE)
+                .withWorkplace(TestValues.ORGANIZATION_TITLE, TestValues.ORGANIZATION_INN, TestValues.ORGANIZATION_FULL_ADDRESS)
+                .withMaritalStatus(Client.MaritalStatus.UNMARRIED)
+                .withCategory(Client.Category.PAYROLL)
+                .withEmail(TestValues.CLIENT_EMAIL)
+                .withBirthDate(TestValues.CLIENT_BIRTH_DATE)
+                .withIncome(TestValues.CLIENT_INCOME)
+                .withSpouseIncome(null)
+                .withPhoneNumber(TestValues.CLIENT_PHONE_NUMBER)
+                .withFullRegistrationAddress(TestValues.CLIENT_FULL_REGISTRATION_ADDRESS)
+                .build();
+    }
+
+    public static Client newPremiumClient() {
+        return Client.newBuilder()
+                .withId(new ClientId(TestValues.CLIENT_ID))
+                .withPersonNameDetails(TestValues.NAME, TestValues.MIDDLE_NAME, TestValues.SUR_NAME)
+                .withPassport(TestValues.PASSPORT_SERIES, TestValues.PASSPORT_NUMBER, TestValues.PASSPORT_ISSUE_DATE,
+                        TestValues.PASSPORT_DEPARTMENT, TestValues.PASSPORT_DEPARTMENT_CODE)
+                .withWorkplace(TestValues.ORGANIZATION_TITLE, TestValues.ORGANIZATION_INN, TestValues.ORGANIZATION_FULL_ADDRESS)
+                .withMaritalStatus(Client.MaritalStatus.UNMARRIED)
+                .withCategory(Client.Category.PREMIUM)
+                .withEmail(TestValues.CLIENT_EMAIL)
+                .withBirthDate(TestValues.CLIENT_BIRTH_DATE)
+                .withIncome(TestValues.CLIENT_INCOME)
+                .withSpouseIncome(null)
+                .withPhoneNumber(TestValues.CLIENT_PHONE_NUMBER)
+                .withFullRegistrationAddress(TestValues.CLIENT_FULL_REGISTRATION_ADDRESS)
+                .build();
+    }
+
+    public static Client newUnmarriedClientWithSpouseIncome() {
+        return Client.newBuilder()
+                .withId(new ClientId(TestValues.CLIENT_ID))
+                .withPersonNameDetails(TestValues.NAME, TestValues.MIDDLE_NAME, TestValues.SUR_NAME)
+                .withPassport(TestValues.PASSPORT_SERIES, TestValues.PASSPORT_NUMBER, TestValues.PASSPORT_ISSUE_DATE,
+                        TestValues.PASSPORT_DEPARTMENT, TestValues.PASSPORT_DEPARTMENT_CODE)
+                .withWorkplace(TestValues.ORGANIZATION_TITLE, TestValues.ORGANIZATION_INN, TestValues.ORGANIZATION_FULL_ADDRESS)
+                .withMaritalStatus(Client.MaritalStatus.UNMARRIED)
+                .withCategory(Client.Category.PREMIUM)
+                .withEmail(TestValues.CLIENT_EMAIL)
+                .withBirthDate(TestValues.CLIENT_BIRTH_DATE)
+                .withIncome(TestValues.CLIENT_INCOME)
+                .withSpouseIncome(TestValues.CLIENT_SPOUSE_INCOME)
+                .withPhoneNumber(TestValues.CLIENT_PHONE_NUMBER)
+                .withFullRegistrationAddress(TestValues.CLIENT_FULL_REGISTRATION_ADDRESS)
+                .build();
+    }
+
+    public static ClientDetails newClientDetailsForCreate() {
+        return new ClientDetails(
                 new ClientId(TestValues.CLIENT_ID),
-                newPersonNameDetails(),
-                newPassport(),
+                TestValues.NAME,
+                TestValues.MIDDLE_NAME,
+                TestValues.SUR_NAME,
+                TestValues.PASSPORT_SERIES,
+                TestValues.PASSPORT_NUMBER,
+                TestValues.PASSPORT_ISSUE_DATE,
+                TestValues.PASSPORT_DEPARTMENT,
+                TestValues.PASSPORT_DEPARTMENT_CODE,
                 Client.MaritalStatus.MARRIED,
-                newOrganization(),
+                TestValues.ORGANIZATION_TITLE,
+                TestValues.ORGANIZATION_INN,
+                TestValues.ORGANIZATION_FULL_ADDRESS,
                 TestValues.CLIENT_FULL_REGISTRATION_ADDRESS,
                 TestValues.CLIENT_PHONE_NUMBER,
                 TestValues.CLIENT_EMAIL,
                 TestValues.CLIENT_INCOME,
                 TestValues.CLIENT_SPOUSE_INCOME,
                 Client.Category.STANDARD,
-                TestValues.CLIENT_BIRTH_DATE,
-                null,
-                null);
-    }
-
-    public static ClientDetails newClientDetailsForStandardMarriedClientWithNewCategory() {
-        return new ClientDetails(
-                newPersonNameDetails(),
-                newPassport(),
-                Client.MaritalStatus.MARRIED,
-                newOrganization(),
-                TestValues.CLIENT_FULL_REGISTRATION_ADDRESS,
-                TestValues.CLIENT_PHONE_NUMBER,
-                TestValues.CLIENT_EMAIL,
-                TestValues.CLIENT_INCOME,
-                TestValues.CLIENT_SPOUSE_INCOME,
-                Client.Category.PREMIUM,
                 TestValues.CLIENT_BIRTH_DATE);
     }
 
-    public static Client newPayrollUnmarriedClient() {
-        return new Client(
+    public static ClientDetails newClientDetailsForUpdate() {
+        return new ClientDetails(
                 new ClientId(TestValues.CLIENT_ID),
-                newPersonNameDetails(),
-                newPassport(),
+                TestValues.NEW_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
                 Client.MaritalStatus.UNMARRIED,
-                newOrganization(),
-                TestValues.CLIENT_FULL_REGISTRATION_ADDRESS,
-                TestValues.CLIENT_PHONE_NUMBER,
-                TestValues.CLIENT_EMAIL,
-                TestValues.CLIENT_INCOME,
                 null,
-                Client.Category.PAYROLL,
-                TestValues.CLIENT_BIRTH_DATE,
+                TestValues.ORGANIZATION_NEW_INN,
                 null,
-                null);
-    }
-
-    public static Client newPremiumClient() {
-        return new Client(
-                new ClientId(TestValues.CLIENT_ID),
-                newPersonNameDetails(),
-                newPassport(),
-                Client.MaritalStatus.MARRIED,
-                newOrganization(),
-                TestValues.CLIENT_FULL_REGISTRATION_ADDRESS,
-                TestValues.CLIENT_PHONE_NUMBER,
-                TestValues.CLIENT_EMAIL,
-                TestValues.CLIENT_INCOME,
-                TestValues.CLIENT_SPOUSE_INCOME,
+                null,
+                null,
+                null,
+                TestValues.CLIENT_NEW_INCOME,
+                null,
                 Client.Category.PREMIUM,
-                TestValues.CLIENT_BIRTH_DATE,
-                null,
                 null);
     }
-
-    public static Client newUnmarriedClientWithSpouseIncome() {
-        return new Client(
-                new ClientId(TestValues.CLIENT_ID),
-                newPersonNameDetails(),
-                newPassport(),
-                Client.MaritalStatus.UNMARRIED,
-                newOrganization(),
-                TestValues.CLIENT_FULL_REGISTRATION_ADDRESS,
-                TestValues.CLIENT_PHONE_NUMBER,
-                TestValues.CLIENT_EMAIL,
-                TestValues.CLIENT_INCOME,
-                TestValues.CLIENT_SPOUSE_INCOME,
-                Client.Category.PREMIUM,
-                TestValues.CLIENT_BIRTH_DATE,
-                null,
-                null);
-    }
-
-    private static PersonNameDetails newPersonNameDetails() {
-        return new PersonNameDetails(
-                TestValues.NAME,
-                TestValues.MIDDLE_NAME,
-                TestValues.SUR_NAME);
-    }
-
-    private static Organization newOrganization() {
-        return new Organization(
-                TestValues.ORGANIZATION_TITLE,
-                TestValues.ORGANIZATION_INN,
-                TestValues.ORGANIZATION_FULL_ADDRESS);
-    }
-
-    private static Passport newPassport() {
-        return new Passport(
-                TestValues.PASSPORT_SERIES,
-                TestValues.PASSPORT_NUMBER,
-                TestValues.PASSPORT_ISSUE_DATE,
-                TestValues.PASSPORT_DEPARTMENT,
-                TestValues.PASSPORT_DEPARTMENT_CODE);
-    }
-
 }

@@ -8,13 +8,11 @@ import io.github.flexibletech.offering.domain.factory.TestClientFactory;
 import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory;
 import io.github.flexibletech.offering.domain.loanapplication.document.Document;
 import io.github.flexibletech.offering.domain.loanapplication.document.PrintService;
-import io.github.flexibletech.offering.infrastructure.rest.document.print.PrintDocumentRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.util.Map;
 
 @WireMockTest(httpPort = 8085)
 public class PrintServiceIT extends AbstractIntegrationTest {
@@ -31,11 +29,6 @@ public class PrintServiceIT extends AbstractIntegrationTest {
                         )
                         .willReturn(WireMock.aResponse().withBody(expectedContent))
         );
-
-        System.out.println(objectMapper.writeValueAsString(new PrintDocumentRequest(
-                "form",
-                Map.of("loanApplication", TestLoanApplicationFactory.newLoanApplicationWithoutDocuments(), "client", TestClientFactory.newStandardMarriedClient()),
-                ".pdf")));
 
         var actualContent = printService.print(TestLoanApplicationFactory.newLoanApplicationWithoutDocuments(),
                 Document.Type.FORM,

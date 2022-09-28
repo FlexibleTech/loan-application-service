@@ -2,6 +2,7 @@ package io.github.flexibletech.offering.domain;
 
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.domain.client.Client;
+import io.github.flexibletech.offering.domain.client.ClientId;
 import io.github.flexibletech.offering.domain.factory.TestClientFactory;
 import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory;
 import io.github.flexibletech.offering.domain.factory.TestPreApprovedOfferFactory;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
+@SuppressWarnings("ConstantConditions")
 public class LoanApplicationTest {
 
     @Test
@@ -22,7 +24,9 @@ public class LoanApplicationTest {
         var loanApplication = LoanApplication.newLoanApplication(
                 TestClientFactory.newStandardMarriedClient(),
                 null,
-                TestLoanApplicationFactory.newConditionsWithoutInsurance());
+                TestValues.CONDITIONS_AMOUNT.getValue(),
+                TestValues.CONDITIONS_PERIOD,
+                false);
 
         //Assert LoanApplication
         Assertions.assertNotNull(loanApplication);
@@ -45,7 +49,9 @@ public class LoanApplicationTest {
         var loanApplication = LoanApplication.newLoanApplication(
                 TestClientFactory.newStandardMarriedClient(),
                 TestPreApprovedOfferFactory.newPreApprovedOffer(),
-                TestLoanApplicationFactory.newConditionsWithoutInsurance());
+                TestValues.CONDITIONS_AMOUNT.getValue(),
+                TestValues.CONDITIONS_PERIOD,
+                false);
 
         Assertions.assertEquals(loanApplication.getLoanProgram(), LoanApplication.LoanProgram.PREAPPROVED);
     }
@@ -55,7 +61,9 @@ public class LoanApplicationTest {
         var loanApplication = LoanApplication.newLoanApplication(
                 TestClientFactory.newPayrollUnmarriedClient(),
                 TestPreApprovedOfferFactory.newPreApprovedOffer(),
-                TestLoanApplicationFactory.newConditionsWithoutInsurance());
+                TestValues.CONDITIONS_AMOUNT.getValue(),
+                TestValues.CONDITIONS_PERIOD,
+                false);
 
         Assertions.assertEquals(loanApplication.getLoanProgram(), LoanApplication.LoanProgram.PAYROLL_CLIENT);
     }
@@ -65,7 +73,9 @@ public class LoanApplicationTest {
         var loanApplication = LoanApplication.newLoanApplication(
                 TestClientFactory.newPremiumClient(),
                 TestPreApprovedOfferFactory.newPreApprovedOffer(),
-                TestLoanApplicationFactory.newConditionsWithoutInsurance());
+                TestValues.CONDITIONS_AMOUNT.getValue(),
+                TestValues.CONDITIONS_PERIOD,
+                false);
 
         Assertions.assertEquals(loanApplication.getLoanProgram(), LoanApplication.LoanProgram.SPECIAL);
     }
@@ -75,26 +85,27 @@ public class LoanApplicationTest {
         Assertions.assertThrows(IllegalArgumentException.class,
                 () -> LoanApplication.newLoanApplication(TestClientFactory.newUnmarriedClientWithSpouseIncome(),
                         null,
-                        TestLoanApplicationFactory.newConditionsWithoutInsurance()),
+                        TestValues.CONDITIONS_AMOUNT.getValue(),
+                        TestValues.CONDITIONS_PERIOD,
+                        false),
                 () -> String.format("Unable to specify spouse income for unmarried client %s", TestValues.CLIENT_ID));
     }
 
     @Test
-    @SuppressWarnings("ConstantConditions")
     public void shouldBuildNewClient() {
         var client = Client.newBuilder()
-                .withId(TestValues.CLIENT_ID)
+                .withId(new ClientId(TestValues.CLIENT_ID))
                 .withPersonNameDetails(TestValues.NAME, TestValues.MIDDLE_NAME, TestValues.SUR_NAME)
                 .withPassport(TestValues.PASSPORT_SERIES, TestValues.PASSPORT_NUMBER, TestValues.PASSPORT_ISSUE_DATE,
                         TestValues.PASSPORT_DEPARTMENT, TestValues.PASSPORT_DEPARTMENT_CODE)
-                .withMaritalStatus(Client.MaritalStatus.MARRIED.name())
+                .withMaritalStatus(Client.MaritalStatus.MARRIED)
                 .withWorkplace(TestValues.ORGANIZATION_TITLE, TestValues.ORGANIZATION_INN, TestValues.ORGANIZATION_FULL_ADDRESS)
                 .withFullRegistrationAddress(TestValues.CLIENT_FULL_REGISTRATION_ADDRESS)
                 .withPhoneNumber(TestValues.CLIENT_PHONE_NUMBER)
                 .withEmail(TestValues.CLIENT_EMAIL)
-                .withIncome(TestValues.CLIENT_INCOME.getValue())
-                .withSpouseIncome(TestValues.CLIENT_SPOUSE_INCOME.getValue())
-                .withCategory(Client.Category.STANDARD.name())
+                .withIncome(TestValues.CLIENT_INCOME)
+                .withSpouseIncome(TestValues.CLIENT_SPOUSE_INCOME)
+                .withCategory(Client.Category.STANDARD)
                 .withBirthDate(TestValues.CLIENT_BIRTH_DATE)
                 .build();
 

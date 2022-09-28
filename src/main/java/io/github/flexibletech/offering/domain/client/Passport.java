@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Getter
 @EqualsAndHashCode
@@ -19,4 +20,15 @@ public class Passport implements ValueObject {
     private LocalDate issueDate;
     private String department;
     private String departmentCode;
+
+    Passport update(String series, String number,
+                    LocalDate issueDate, String department,
+                    String departmentCode) {
+        return new Passport(
+                Optional.ofNullable(series).orElse(this.series),
+                Optional.ofNullable(number).orElse(this.number),
+                Optional.ofNullable(issueDate).orElse(this.issueDate),
+                Optional.ofNullable(department).orElse(this.department),
+                Optional.ofNullable(departmentCode).orElse(this.departmentCode));
+    }
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.flexibletech.offering.application.loanapplication.LoanApplicationNotFoundException;
 import io.github.flexibletech.offering.application.loanapplication.LoanApplicationService;
 import io.github.flexibletech.offering.application.TestApplicationObjectsFactory;
-import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.ChoseConditionsRequest;
 import io.github.flexibletech.offering.application.loanapplication.dto.StartNewLoanApplicationRequest;
 import io.github.flexibletech.offering.ResourceUtil;
 import io.github.flexibletech.offering.TestValues;
@@ -80,7 +80,7 @@ public class LoanApplicationControllerApiTest {
     @Test
     public void shouldChoseConditionsForLoanApplication() throws Exception {
         Mockito.when(loanApplicationService.choseConditionsForLoanApplication(Mockito.eq(TestValues.LOAN_APPLICATION_ID),
-                        ArgumentMatchers.any(ConditionsDto.class)))
+                        ArgumentMatchers.any(ChoseConditionsRequest.class)))
                 .thenReturn(TestApplicationObjectsFactory.newConditionsDto());
 
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post(

@@ -19,9 +19,11 @@ public class TestValues {
     public static final String CLIENT_PHONE_NUMBER = "79851325677";
     public static final String CLIENT_EMAIL = "test@mail.ru";
     public static final Amount CLIENT_INCOME = Amount.fromValue(BigDecimal.valueOf(100_000));
+    public static final Amount CLIENT_NEW_INCOME = Amount.fromValue(BigDecimal.valueOf(150_000));
     public static final Amount CLIENT_SPOUSE_INCOME = Amount.fromValue(BigDecimal.valueOf(70_000));
     //PersonNameDetails values
     public static final String NAME = "Тест";
+    public static final String NEW_NAME = "Новый Тест";
     public static final String MIDDLE_NAME = "Тестович";
     public static final String SUR_NAME = "Тестов";
     //Passport values
@@ -33,6 +35,7 @@ public class TestValues {
     //Organization values
     public static final String ORGANIZATION_TITLE = "ООО \"В Контакте\"";
     public static final String ORGANIZATION_INN = "7842349892";
+    public static final String ORGANIZATION_NEW_INN = "2844316974";
     public static final String ORGANIZATION_FULL_ADDRESS = "191024, ГОРОД САНКТ-ПЕТЕРБУРГ, УЛИЦА ХЕРСОНСКАЯ, ДОМ 12-14, ЛИТЕР А, ПОМЕЩЕНИЕ 1Н";
 
     //PreApprovedOffer values
@@ -78,5 +81,5 @@ public class TestValues {
 
     //Web errors
     public static final String LOAN_APPLICATION_NOT_FOUND_ERROR_MESSAGE = "Loan application with id LOANAPP22082500001 is not found";
-    public static final String EMPTY_CLIENT_NAME_MESSAGE = "field error: client.name - Client name can't be null or empty, actual value: [null]";
+    public static final String EMPTY_CLIENT_NAME_MESSAGE = "field error: period - Conditions period can't be null, actual value: [null]";
 }

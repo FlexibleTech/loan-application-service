@@ -2,6 +2,7 @@ package io.github.flexibletech.offering.domain.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import io.github.flexibletech.offering.domain.AggregateRoot;
 import io.github.flexibletech.offering.domain.Amount;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,9 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.AttributeOverride;
@@ -26,9 +24,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Table;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -39,7 +35,7 @@ import java.util.Objects;
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class Client extends AbstractAggregateRoot<Client> {
+public class Client extends AggregateRoot {
     @EmbeddedId
     private ClientId id;
     @Type(type = "jsonb")
@@ -68,10 +64,6 @@ public class Client extends AbstractAggregateRoot<Client> {
     @Enumerated(EnumType.STRING)
     private Category category;
     private LocalDate birthDate;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     @JsonIgnore
     public boolean isPayroll() {
@@ -88,33 +80,28 @@ public class Client extends AbstractAggregateRoot<Client> {
         return (this.maritalStatus == MaritalStatus.UNMARRIED && Objects.nonNull(this.spouseIncome));
     }
 
-    public ClientDetails createClientDetails() {
-        return new ClientDetails(
-                this.personNameDetails,
-                this.passport,
-                this.maritalStatus,
-                this.workPlace,
-                this.fullRegistrationAddress,
-                this.phoneNumber,
-                this.email,
-                this.income,
-                this.spouseIncome,
-                this.category,
-                this.birthDate);
-    }
-
     public void update(ClientDetails clientDetails) {
-        this.personNameDetails = clientDetails.getPersonNameDetails();
-        this.passport = clientDetails.getPassport();
-        this.maritalStatus = clientDetails.getMaritalStatus();
-        this.workPlace = clientDetails.getWorkPlace();
-        this.fullRegistrationAddress = clientDetails.getFullRegistrationAddress();
-        this.phoneNumber = clientDetails.getPhoneNumber();
-        this.email = clientDetails.getEmail();
-        this.income = clientDetails.getIncome();
-        this.spouseIncome = clientDetails.getSpouseIncome();
-        this.category = clientDetails.getCategory();
-        this.birthDate = clientDetails.getBirthDate();
+        this.passport = this.passport.update(clientDetails.getPassportSeries(),
+                clientDetails.getPassportNumber(),
+                clientDetails.getPassportIssueDate(),
+                clientDetails.getPassportDepartment(),
+                clientDetails.getPassportDepartmentCode());
+        this.workPlace = this.workPlace.update(clientDetails.getWorkPlaceTitle(),
+                clientDetails.getWorkPlaceInn(),
+                clientDetails.getWorkPlaceFullAddress());
+        this.personNameDetails = this.personNameDetails.update(clientDetails.getName(),
+                clientDetails.getMiddleName(),
+                clientDetails.getSurName());
+
+        if (clientDetails.isMaritalStatusCodeNotNull()) this.maritalStatus = clientDetails.getMaritalStatus();
+        if (clientDetails.isFullRegistrationAddressNotNull())
+            this.fullRegistrationAddress = clientDetails.getFullRegistrationAddress();
+        if (clientDetails.isPhoneNumberNotNull()) this.phoneNumber = clientDetails.getPhoneNumber();
+        if (clientDetails.isEmailNotNull()) this.email = clientDetails.getEmail();
+        if (clientDetails.isIncomeNotNull()) this.income = clientDetails.getIncome();
+        if (clientDetails.isSpouseIncomeNotNull()) this.spouseIncome = clientDetails.getSpouseIncome();
+        if (clientDetails.isCategoryNotNull()) this.category = clientDetails.getCategory();
+        if (clientDetails.isBirthDateNotNull()) this.birthDate = clientDetails.getBirthDate();
     }
 
     public static Builder newBuilder() {
@@ -155,8 +142,8 @@ public class Client extends AbstractAggregateRoot<Client> {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public class Builder {
 
-        public Builder withId(String id) {
-            Client.this.id = new ClientId(id);
+        public Builder withId(ClientId clientId) {
+            Client.this.id = clientId;
             return this;
         }
 
@@ -181,13 +168,13 @@ public class Client extends AbstractAggregateRoot<Client> {
             return this;
         }
 
-        public Builder withMaritalStatus(String value) {
-            Client.this.maritalStatus = MaritalStatus.fromValue(value);
+        public Builder withMaritalStatus(MaritalStatus maritalStatus) {
+            Client.this.maritalStatus = maritalStatus;
             return this;
         }
 
-        public Builder withCategory(String value) {
-            Client.this.category = Category.fromValue(value);
+        public Builder withCategory(Category category) {
+            Client.this.category = category;
             return this;
         }
 
@@ -201,8 +188,8 @@ public class Client extends AbstractAggregateRoot<Client> {
             return this;
         }
 
-        public Builder withIncome(BigDecimal income) {
-            Client.this.income = Amount.fromValue(income);
+        public Builder withIncome(Amount income) {
+            Client.this.income = income;
             return this;
         }
 
@@ -211,8 +198,8 @@ public class Client extends AbstractAggregateRoot<Client> {
             return this;
         }
 
-        public Builder withSpouseIncome(BigDecimal spouseIncome) {
-            Client.this.spouseIncome = Amount.fromValue(spouseIncome);
+        public Builder withSpouseIncome(Amount spouseIncome) {
+            Client.this.spouseIncome = spouseIncome;
             return this;
         }
 

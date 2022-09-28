@@ -12,21 +12,17 @@ import io.github.flexibletech.camunda.tools.task.user.UserTask;
 import io.github.flexibletech.offering.application.DomainObjectMapper;
 import io.github.flexibletech.offering.application.EventPublisher;
 import io.github.flexibletech.offering.application.client.ClientNotFoundException;
-import io.github.flexibletech.offering.application.loanapplication.dto.ClientDto;
-import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.ChoseConditionsRequest;
 import io.github.flexibletech.offering.application.loanapplication.dto.LoanApplicationDto;
-import io.github.flexibletech.offering.application.loanapplication.dto.RiskDecisionDto;
 import io.github.flexibletech.offering.application.loanapplication.dto.StartNewLoanApplicationRequest;
 import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCanceled;
 import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCompleted;
 import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCreated;
 import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationDeclined;
 import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationOfferCalculated;
-import io.github.flexibletech.offering.domain.Amount;
 import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.client.ClientId;
 import io.github.flexibletech.offering.domain.client.ClientRepository;
-import io.github.flexibletech.offering.domain.loanapplication.Conditions;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationId;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationRepository;
@@ -80,15 +76,13 @@ public class LoanApplicationService {
             businessKeyValue = "getId()")
     public LoanApplicationDto startNewLoanApplication(StartNewLoanApplicationRequest request) {
         log.info("Starting loan application...");
+        var clientId = new ClientId(request.getClientId());
 
-        var client = fromClientDto(request.getClient());
-        var conditions = fromConditionsDto(request.getConditions());
+        var preApprovedOffer = preApprovedOfferRepository.findForClient(clientId);
+        var client = clientOfId(clientId);
 
-        var preApprovedOffer = preApprovedOfferRepository.findForClient(client.getId());
-
-        var loanApplication = LoanApplication.newLoanApplication(client, preApprovedOffer, conditions);
-        loanApplication.raiseLoanApplicationCreatedDomainEvent(client);
-
+        var loanApplication = LoanApplication.newLoanApplication(client, preApprovedOffer,
+                request.getAmount(), request.getPeriod(), request.getInsurance());
         var savedLoanApplication = loanApplicationRepository.save(loanApplication);
 
         var loanApplicationCreatedEvent = domainObjectMapper.map(savedLoanApplication, LoanApplicationCreated.class);
@@ -97,34 +91,6 @@ public class LoanApplicationService {
         log.info("Loan application {} has been started", savedLoanApplication.getId());
 
         return domainObjectMapper.map(savedLoanApplication, LoanApplicationDto.class);
-    }
-
-    private Client fromClientDto(ClientDto clientDto) {
-        var passport = clientDto.getPassport();
-        var workPlace = clientDto.getWorkPlace();
-
-        return Client.newBuilder()
-                .withId(clientDto.getId())
-                .withPersonNameDetails(clientDto.getName(), clientDto.getMiddleName(), clientDto.getSurName())
-                .withPassport(passport.getSeries(), passport.getNumber(), passport.getIssueDate(),
-                        passport.getDepartment(), passport.getDepartmentCode())
-                .withMaritalStatus(clientDto.getMaritalStatus())
-                .withWorkplace(workPlace.getTitle(), workPlace.getInn(), workPlace.getFullAddress())
-                .withFullRegistrationAddress(clientDto.getFullRegistrationAddress())
-                .withPhoneNumber(clientDto.getPhoneNumber())
-                .withEmail(clientDto.getEmail())
-                .withIncome(clientDto.getIncome())
-                .withSpouseIncome(clientDto.getSpouseIncome())
-                .withCategory(clientDto.getCategory())
-                .withBirthDate(clientDto.getBirthDate())
-                .build();
-    }
-
-    private Conditions fromConditionsDto(ConditionsDto conditionsDto) {
-        return new Conditions(
-                Amount.fromValue(conditionsDto.getAmount()),
-                conditionsDto.getPeriod(),
-                conditionsDto.getInsurance());
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -141,18 +107,10 @@ public class LoanApplicationService {
     @Transactional
     @ReceiveTask(definitionKey = ProcessConstants.RISK_DECISION_RECEIVED,
             variables = @ProcessVariable(name = ProcessConstants.STATUS, value = "getStatus()"))
-    public LoanApplicationDto acceptRiskDecisionToLoanApplication(@ProcessKeyValue String loanApplicationId, RiskDecisionDto request) {
+    public LoanApplicationDto acceptRiskDecisionToLoanApplication(@ProcessKeyValue String loanApplicationId, RiskDecision riskDecision) {
         log.info("Adding risk decision to loan application {}...", loanApplicationId);
 
         var loanApplication = loanApplicationOfId(loanApplicationId);
-
-        var riskDecision = RiskDecision.newRiskDecision(
-                request.getId(),
-                request.getStatus(),
-                request.getSalary(),
-                request.getLastSalaryDate(),
-                request.getMaxAmount(),
-                request.getMaxPeriod());
         loanApplication.acceptRiskDecision(riskDecision);
 
         loanApplicationRepository.save(loanApplication);
@@ -185,7 +143,7 @@ public class LoanApplicationService {
     @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
     @UserTask(definitionKey = ProcessConstants.CHOSE_CONDITIONS_TASK,
             variables = @ProcessVariable(name = ProcessConstants.INSURANCE, value = "getInsurance()"))
-    public ConditionsDto choseConditionsForLoanApplication(@ProcessKeyValue String loanApplicationId, ConditionsDto conditions) {
+    public ChoseConditionsRequest choseConditionsForLoanApplication(@ProcessKeyValue String loanApplicationId, ChoseConditionsRequest conditions) {
         log.info("Choosing conditions for loan application {}...", loanApplicationId);
 
         var loanApplication = loanApplicationOfId(loanApplicationId);
@@ -198,7 +156,7 @@ public class LoanApplicationService {
 
         log.info("Conditions has been chosen for loan application {}", loanApplicationId);
 
-        return domainObjectMapper.map(loanApplication.getConditions(), ConditionsDto.class);
+        return domainObjectMapper.map(loanApplication.getConditions(), ChoseConditionsRequest.class);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)

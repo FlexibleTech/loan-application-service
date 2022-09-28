@@ -12,6 +12,7 @@ import io.github.flexibletech.offering.domain.client.ClientId;
 import io.github.flexibletech.offering.domain.client.ClientRepository;
 import io.github.flexibletech.offering.domain.factory.TestClientFactory;
 import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory;
+import io.github.flexibletech.offering.domain.factory.TestRiskDecisionFactory;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationId;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationRepository;
@@ -33,13 +34,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.util.Optional;
 import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("ConstantConditions")
-public class LoanApplicationServiceTest extends AbstractApplicationServiceTest {
+public class LoanApplicationServiceTest {
     @Spy
     private DomainObjectMapper domainObjectMapper = new DomainObjectMapperImpl(newModelMapper());
     @Mock
@@ -75,6 +77,8 @@ public class LoanApplicationServiceTest extends AbstractApplicationServiceTest {
                 .thenReturn(TestLoanApplicationFactory.newLoanApplication());
         Mockito.doNothing().when(eventPublisher).publish(eventCaptor.capture());
         Mockito.when(preApprovedOfferRepository.findForClient(ArgumentMatchers.any(ClientId.class))).thenReturn(null);
+        Mockito.when(clientRepository.findById(ArgumentMatchers.any(ClientId.class)))
+                .thenReturn(Optional.of(TestClientFactory.newStandardMarriedClient()));
 
         var loanApplicationDto = loanApplicationService.startNewLoanApplication(
                 TestApplicationObjectsFactory.newStartNewLoanApplicationRequest());
@@ -89,13 +93,9 @@ public class LoanApplicationServiceTest extends AbstractApplicationServiceTest {
         Assertions.assertEquals(loanApplicationCreatedEvent.getLoanApplicationId(), TestValues.LOAN_APPLICATION_ID);
         Assertions.assertEquals(loanApplicationCreatedEvent.getLoanProgram(), LoanApplication.LoanProgram.COMMON.name());
         Assertions.assertEquals(loanApplicationCreatedEvent.getClientId(), TestValues.CLIENT_ID);
-
-        //Assert conditions
-        var conditions = loanApplicationCreatedEvent.getConditions();
-        Assertions.assertNotNull(conditions);
-        Assertions.assertEquals(conditions.getAmount(), TestValues.CONDITIONS_AMOUNT.getValue());
-        Assertions.assertEquals(conditions.getPeriod(), TestValues.CONDITIONS_PERIOD);
-        Assertions.assertFalse(conditions.getInsurance());
+        Assertions.assertEquals(loanApplicationCreatedEvent.getAmount(), TestValues.CONDITIONS_AMOUNT.getValue());
+        Assertions.assertEquals(loanApplicationCreatedEvent.getPeriod(), TestValues.CONDITIONS_PERIOD);
+        Assertions.assertFalse(loanApplicationCreatedEvent.getInsurance());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class LoanApplicationServiceTest extends AbstractApplicationServiceTest {
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
 
         var loanApplication = loanApplicationService.acceptRiskDecisionToLoanApplication(TestValues.LOAN_APPLICATION_ID,
-                TestApplicationObjectsFactory.newRiskDecisionDto());
+                TestRiskDecisionFactory.newApprovedRiskDecision());
 
         Assertions.assertEquals(loanApplication.getStatus(), LoanApplication.Status.APPROVED.name());
     }
@@ -284,6 +284,13 @@ public class LoanApplicationServiceTest extends AbstractApplicationServiceTest {
                 .filter(documentDto -> documentDto.getType().equals(documentType.name()))
                 .findAny()
                 .orElse(null);
+    }
+
+    private ModelMapper newModelMapper() {
+        var mapper = new ModelMapper();
+        mapper.getConfiguration().setAmbiguityIgnored(true);
+
+        return mapper;
     }
 
 }

@@ -3,7 +3,6 @@ package io.github.flexibletech.offering.domain.factory;
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.domain.loanapplication.Conditions;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
-import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationCreated;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationId;
 import io.github.flexibletech.offering.domain.loanapplication.Offer;
 import io.github.flexibletech.offering.domain.loanapplication.document.Document;
@@ -110,7 +109,4 @@ public class TestLoanApplicationFactory {
         return Offer.newOfferWithInsurance(newConditionsWithInsurance());
     }
 
-    public static LoanApplicationCreated newLoanApplicationCreatedDomainEvent() {
-        return new LoanApplicationCreated(TestClientFactory.newStandardMarriedClient());
-    }
 }

@@ -34,10 +34,19 @@ spring:
         jwt:
           jwk-set-uri: http://keycloak:8080/auth/realms/test/protocol/openid-connect/certs
           issuer-uri: http://keycloak:8080/auth/realms/test
+  sleuth:
+    function:
+      enabled: false
   cloud:
+    function:
+      routing:
+        enabled: true
+      routing-expression: "headers['type'] == 'ClientCreated' ? 'clientCreatedEventSubscriber'
+      : headers['type'] == 'ClientUpdated' ? 'clientUpdatedEventSubscriber'
+      : 'forgetSubscriber'"
     stream:
       function:
-        definition: riskResponseListener;issuanceResponseListener;
+        definition: riskResponseListener;issuanceResponseListener;clientCreatedEventSubscriber;clientUpdatedEventSubscriber;functionRouter;forgetSubscriber;
       rabbit:
         binder:
           nodes: localhost:5672
@@ -46,6 +55,9 @@ spring:
           brokers: localhost:9092
           autoCreateTopics: true
       bindings:
+        functionRouter-in-0:
+          binder: kafka
+          destination: client.events
         riskResponseListener-in-0:
           binder: rabbit
           destination: risk.response

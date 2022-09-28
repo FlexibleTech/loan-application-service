@@ -118,4 +118,8 @@ public class Conditions implements ValueObject {
         return this.amount.multiply(INSURANCE_PREMIUM_COEFFICIENT);
     }
 
+    public static Conditions newConditions(BigDecimal amount, int period, boolean insurance) {
+        return new Conditions(Amount.fromValue(amount), period, insurance);
+    }
+
 }

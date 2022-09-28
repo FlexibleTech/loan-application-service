@@ -7,6 +7,8 @@ import io.github.flexibletech.offering.application.TestApplicationObjectsFactory
 import io.github.flexibletech.offering.application.loanapplication.dto.LoanApplicationDto;
 import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.client.ClientId;
+import io.github.flexibletech.offering.domain.client.ClientRepository;
+import io.github.flexibletech.offering.domain.factory.TestClientFactory;
 import io.github.flexibletech.offering.domain.factory.TestPreApprovedOfferFactory;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplicationId;
@@ -35,11 +37,16 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Optional;
+
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class LoanApplicationE2ETest extends AbstractIntegrationTest {
     @MockBean
     private PreApprovedOfferRepository preApprovedOfferRepository;
+
+    @MockBean
+    private ClientRepository clientRepository;
 
     @MockBean
     private PrintService printService;
@@ -72,6 +79,8 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
                 .thenReturn(ResourceUtil.getByteArray("classpath:files/test.pdf"));
         Mockito.when(documentStorage.place(ArgumentMatchers.anyString(), ArgumentMatchers.any()))
                 .thenAnswer(invocation -> invocation.getArgument(0));
+        Mockito.when(clientRepository.findById(ArgumentMatchers.any(ClientId.class)))
+                .thenReturn(Optional.of(TestClientFactory.newStandardMarriedClient()));
 
         //Start loan application process
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/loan-applications")
