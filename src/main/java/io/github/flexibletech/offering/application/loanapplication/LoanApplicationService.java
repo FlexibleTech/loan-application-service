@@ -113,7 +113,6 @@ public class LoanApplicationService {
         var loanApplication = loanApplicationOfId(loanApplicationId);
         loanApplication.acceptRiskDecision(riskDecision);
 
-        loanApplicationRepository.save(loanApplication);
         if (loanApplication.isDeclined())
             eventPublisher.publish(new LoanApplicationDeclined(loanApplicationId));
 
@@ -133,8 +132,6 @@ public class LoanApplicationService {
 
         var incomeConfirmationType = loanApplication.defineIncomeConfirmationType(preApprovedOffer, client);
 
-        loanApplicationRepository.save(loanApplication);
-
         log.info("Income confirmation type has been defined for loan application {}", loanApplicationId);
         return incomeConfirmationType.name();
     }
@@ -151,8 +148,6 @@ public class LoanApplicationService {
                 conditions.getAmount(),
                 conditions.getPeriod(),
                 conditions.getInsurance());
-
-        loanApplicationRepository.save(loanApplication);
 
         log.info("Conditions has been chosen for loan application {}", loanApplicationId);
 
@@ -199,8 +194,6 @@ public class LoanApplicationService {
 
         loanApplication.addDocument(documentId, documentType);
 
-        loanApplicationRepository.save(loanApplication);
-
         log.info("Document with type {} has been printed for loan application {}", documentType, loanApplicationId);
     }
 
@@ -211,8 +204,6 @@ public class LoanApplicationService {
 
         var loanApplication = loanApplicationOfId(loanApplicationId);
         loanApplication.waitForDocumentPackageSignature();
-
-        loanApplicationRepository.save(loanApplication);
 
         log.info("loan application {} has been transferred to pending signature", loanApplicationId);
     }
@@ -225,8 +216,6 @@ public class LoanApplicationService {
 
         var loanApplication = loanApplicationOfId(loanApplicationId);
         loanApplication.signDocumentPackage();
-
-        loanApplicationRepository.save(loanApplication);
 
         log.info("Document package of loan application {} has been signed", loanApplicationId);
     }
@@ -251,7 +240,6 @@ public class LoanApplicationService {
         var loanApplication = loanApplicationOfId(loanApplicationId);
         loanApplication.complete(issuanceId);
 
-        loanApplicationRepository.save(loanApplication);
         eventPublisher.publish(new LoanApplicationCompleted(loanApplicationId, issuanceId));
 
         log.info("Loan application {} has been completed", loanApplicationId);
@@ -265,7 +253,6 @@ public class LoanApplicationService {
         var loanApplication = loanApplicationOfId(loanApplicationId);
         loanApplication.cancel();
 
-        loanApplicationRepository.save(loanApplication);
         eventPublisher.publish(new LoanApplicationCanceled(loanApplicationId));
 
         log.info("Loan application {} has been canceled", loanApplicationId);

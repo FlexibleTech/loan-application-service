@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
 public abstract class AbstractClientEvent {
     @NotEmpty(message = "ClientId can't be null or empty")
     protected String clientId;
@@ -51,23 +52,6 @@ public abstract class AbstractClientEvent {
     @Past(message = "Invalid client birth date")
     @NotNull(message = "Client birthDate can't be null")
     protected LocalDate birthDate;
-
-    public AbstractClientEvent(String clientId, String name, String middleName, String surName, List<@Valid Document> documents, String maritalStatus, List<@Valid Address> addresses, Organization workPlace, String phoneNumber, String email, BigDecimal income, BigDecimal spouseIncome, String category, LocalDate birthDate) {
-        this.clientId = clientId;
-        this.name = name;
-        this.middleName = middleName;
-        this.surName = surName;
-        this.documents = documents;
-        this.maritalStatus = maritalStatus;
-        this.addresses = addresses;
-        this.workPlace = workPlace;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.income = income;
-        this.spouseIncome = spouseIncome;
-        this.category = category;
-        this.birthDate = birthDate;
-    }
 
     @Data
     @AllArgsConstructor

@@ -100,8 +100,6 @@ public class LoanApplicationServiceTest {
 
     @Test
     public void shouldAcceptRiskDecisionToLoanApplication() {
-        Mockito.when(loanApplicationRepository.save(ArgumentMatchers.any(LoanApplication.class)))
-                .thenReturn(TestLoanApplicationFactory.newLoanApplication());
         Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
 
@@ -179,8 +177,6 @@ public class LoanApplicationServiceTest {
 
     @Test
     public void shouldPrintFormForLoanApplication() {
-        Mockito.when(loanApplicationRepository.save(ArgumentMatchers.any(LoanApplication.class)))
-                .thenReturn(TestLoanApplicationFactory.newLoanApplication());
         Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
         Mockito.when(printService.print(ArgumentMatchers.any(LoanApplication.class),
@@ -212,8 +208,6 @@ public class LoanApplicationServiceTest {
 
     @Test
     public void shouldCancelLoanApplication() {
-        Mockito.when(loanApplicationRepository.save(ArgumentMatchers.any(LoanApplication.class)))
-                .thenReturn(TestLoanApplicationFactory.newLoanApplication());
         Mockito.doNothing().when(eventPublisher).publish(eventCaptor.capture());
         Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplicationWithOffer()));
@@ -226,8 +220,6 @@ public class LoanApplicationServiceTest {
 
     @Test
     public void shouldCompleteLoanApplication() {
-        Mockito.when(loanApplicationRepository.save(ArgumentMatchers.any(LoanApplication.class)))
-                .thenReturn(TestLoanApplicationFactory.newLoanApplication());
         Mockito.when(loanApplicationRepository.findById(ArgumentMatchers.any(LoanApplicationId.class)))
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
         Mockito.doNothing().when(eventPublisher).publish(eventCaptor.capture());

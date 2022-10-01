@@ -1,16 +1,16 @@
 package io.github.flexibletech.offering.infrastructure.events.client;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientUpdatedEvent extends AbstractClientEvent {
 
     public ClientUpdatedEvent(String clientId, String name, String middleName, String surName, List<Document> documents,
