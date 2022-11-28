@@ -23,7 +23,7 @@ public class PreApprovedOfferRepositoryIT extends AbstractIntegrationTest {
     @Test
     public void shouldFindPreApprovedOfferForClient() throws IOException {
         WireMock.stubFor(
-                WireMock.get("/api/pre-approved-offers?client_id=20056671")
+                WireMock.get("/pre-approved-offers?client_id=20056671")
                         .willReturn(WireMock.aResponse().withBody(
                                         ResourceUtil.getString("classpath:json/getPreApprovedOfferResponse.json"))
                                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)));
@@ -36,4 +36,5 @@ public class PreApprovedOfferRepositoryIT extends AbstractIntegrationTest {
         Assertions.assertEquals(preApprovedOffer.getMinAmount(), TestValues.PRE_APPROVED_OFFER_MIN_AMOUNT);
         Assertions.assertEquals(preApprovedOffer.getId().toString(), TestValues.PRE_APPROVED_OFFER_ID);
     }
+
 }

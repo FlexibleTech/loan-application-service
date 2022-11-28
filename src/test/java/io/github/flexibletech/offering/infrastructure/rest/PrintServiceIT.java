@@ -23,7 +23,7 @@ public class PrintServiceIT extends AbstractIntegrationTest {
     public void shouldPrintDocument() throws IOException {
         var expectedContent = ResourceUtil.getByteArray("classpath:files/test.pdf");
         WireMock.stubFor(
-                WireMock.post("/api/documents")
+                WireMock.post("/documents")
                         .withRequestBody(
                                 WireMock.equalToJson(ResourceUtil.getString("classpath:json/printDocumentRequest.json"))
                         )

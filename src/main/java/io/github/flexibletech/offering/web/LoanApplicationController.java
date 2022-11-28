@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@Tag(name = "LoanApplicationController", description = "Реализует REST API для управления жизненным циклом заявки на кредит")
-@RequestMapping("/api/v1/loan-applications")
+@Tag(name = "LoanApplication API", description = "Реализует REST API для управления жизненным циклом заявки на кредит")
+@RequestMapping("/v1/loan-applications")
 public class LoanApplicationController {
     private final LoanApplicationService loanApplicationService;
 

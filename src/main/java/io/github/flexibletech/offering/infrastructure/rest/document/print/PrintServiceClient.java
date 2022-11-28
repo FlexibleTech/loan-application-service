@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(value = "print-service", url = "${service.print.url}")
 public interface PrintServiceClient {
 
-    @PostMapping("/api/documents")
+    @PostMapping("/documents")
     byte[] print(@RequestBody PrintDocumentRequest request);
 
 }

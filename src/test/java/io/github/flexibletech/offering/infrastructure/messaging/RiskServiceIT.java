@@ -7,6 +7,7 @@ import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory
 import io.github.flexibletech.offering.domain.loanapplication.risk.RiskService;
 import io.github.flexibletech.offering.infrastructure.messaging.risk.request.RiskRequest;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.binder.test.OutputDestination;

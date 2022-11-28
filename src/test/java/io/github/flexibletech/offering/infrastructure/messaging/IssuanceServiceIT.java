@@ -5,7 +5,10 @@ import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory;
 import io.github.flexibletech.offering.domain.loanapplication.issuance.IssuanceService;
 import io.github.flexibletech.offering.infrastructure.messaging.issuance.request.StartIssuanceRequest;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
@@ -37,4 +40,5 @@ public class IssuanceServiceIT extends AbstractIntegrationTest {
         Assertions.assertEquals(startIssuanceRequest.getPeriod(), TestValues.CONDITIONS_PERIOD);
         Assertions.assertEquals(startIssuanceRequest.getClientId(), TestValues.CLIENT_ID);
     }
+
 }

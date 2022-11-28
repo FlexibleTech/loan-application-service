@@ -18,4 +18,5 @@ public class ClientUpdatedEventSubscriber extends AbstractClientEventSubscriber 
         var clientDetails = createClientDetailsFrom(clientUpdatedEvent);
         clientService.updateClient(clientUpdatedEvent.getClientId(), clientDetails);
     }
+
 }

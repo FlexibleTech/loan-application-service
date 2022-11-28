@@ -47,5 +47,4 @@ public class IssuanceResponseListenerIT extends AbstractIntegrationTest {
                     Assertions.assertEquals(issuanceId, TestValues.ISSUANCE_ID);
                 });
     }
-
 }

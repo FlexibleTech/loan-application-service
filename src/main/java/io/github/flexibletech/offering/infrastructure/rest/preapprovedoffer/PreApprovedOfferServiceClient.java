@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "preapprovedoffer-service", url = "${service.preapprovedoffer.url}")
 public interface PreApprovedOfferServiceClient {
 
-    @GetMapping(value = "/api/pre-approved-offers")
+    @GetMapping(value = "/pre-approved-offers")
     PreApprovedOfferResponse getByClientId(@RequestParam("client_id") String clientId);
 
 }

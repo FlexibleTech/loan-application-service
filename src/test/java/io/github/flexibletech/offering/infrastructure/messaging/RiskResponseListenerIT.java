@@ -34,7 +34,6 @@ public class RiskResponseListenerIT extends AbstractIntegrationTest {
     private ArgumentCaptor<RiskDecision> riskDecisionArgumentCaptor;
 
     @Test
-    @SuppressWarnings("ConstantConditions")
     public void shouldReceiveRiskResponse() {
         Mockito.when(loanApplicationService.acceptRiskDecisionToLoanApplication(
                         Mockito.eq(TestValues.LOAN_APPLICATION_ID), riskDecisionArgumentCaptor.capture()))

@@ -35,5 +35,4 @@ public class ClientServiceTest {
         var client = argumentCaptor.getValue();
         Assertions.assertNotNull(client);
     }
-
 }

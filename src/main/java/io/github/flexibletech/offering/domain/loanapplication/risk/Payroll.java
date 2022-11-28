@@ -47,4 +47,5 @@ public class Payroll implements ValueObject {
         var difference = Period.between(this.lastSalaryDate, LocalDate.now());
         return difference.getMonths() < ALLOWABLE_PAYROLL_DIFFERENCE;
     }
+
 }

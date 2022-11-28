@@ -1,6 +1,7 @@
-package io.github.flexibletech.offering.infrastructure.events.client;
+package io.github.flexibletech.offering.infrastructure.events;
 
 import io.github.flexibletech.offering.TestValues;
+import io.github.flexibletech.offering.infrastructure.events.client.ClientCreatedEvent;
 
 import java.util.List;
 
@@ -50,4 +51,5 @@ public class TestClientEventsFactory {
                 TestValues.PASSPORT_DEPARTMENT,
                 TestValues.PASSPORT_DEPARTMENT_CODE);
     }
+
 }

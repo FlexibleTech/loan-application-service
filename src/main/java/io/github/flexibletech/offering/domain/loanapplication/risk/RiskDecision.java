@@ -90,4 +90,5 @@ public class RiskDecision implements Entity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

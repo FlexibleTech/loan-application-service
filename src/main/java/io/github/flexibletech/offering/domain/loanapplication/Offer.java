@@ -55,4 +55,5 @@ public class Offer implements ValueObject {
                 conditions.calculateSingleInsurancePayment(),
                 conditions.calculateInsurancePremium());
     }
+
 }

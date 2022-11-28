@@ -51,4 +51,5 @@ public class TestRiskDecisionFactory {
                 TestValues.CONDITIONS_RESTRICTIONS_MAX_AMOUNT,
                 TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
     }
+
 }

@@ -227,4 +227,5 @@ public class Client extends AggregateRoot {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

@@ -63,4 +63,5 @@ public class ClientDetails implements ValueObject {
     boolean isBirthDateNotNull() {
         return Objects.nonNull(this.birthDate);
     }
+
 }

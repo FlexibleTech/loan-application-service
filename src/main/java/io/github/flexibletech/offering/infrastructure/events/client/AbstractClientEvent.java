@@ -105,4 +105,5 @@ public abstract class AbstractClientEvent {
         @NotNull(message = "Organization address can't be null")
         private ClientCreatedEvent.Address address;
     }
+
 }

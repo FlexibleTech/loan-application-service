@@ -284,5 +284,4 @@ public class LoanApplicationServiceTest {
 
         return mapper;
     }
-
 }

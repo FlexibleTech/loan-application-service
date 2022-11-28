@@ -27,20 +27,24 @@ public class WebConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests(expressionInterceptUrlRegistry
+        return http.authorizeRequests(expressionInterceptUrlRegistry
                         -> expressionInterceptUrlRegistry.anyRequest().authenticated())
                 .oauth2ResourceServer(resourceServerConfigurer ->
                         resourceServerConfigurer.jwt(jwtConfigurer ->
-                                jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter)));
-
-        return http.build();
+                                jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter)
+                        )
+                )
+                .build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers("/actuator/**",
                 "/v3/api-docs/**",
+                "/springwolf/**",
+                "/camunda/**",
                 "/swagger-resources/**",
                 "/swagger-ui/**");
     }
+
 }

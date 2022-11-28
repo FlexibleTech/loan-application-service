@@ -31,4 +31,5 @@ public class Passport implements ValueObject {
                 Optional.ofNullable(department).orElse(this.department),
                 Optional.ofNullable(departmentCode).orElse(this.departmentCode));
     }
+
 }

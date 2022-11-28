@@ -26,5 +26,4 @@ public class RiskResponseListener implements Consumer<RiskResponse> {
                         riskResponse.getMaxConditionsPeriod()));
     }
 
-
 }

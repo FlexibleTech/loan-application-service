@@ -17,8 +17,8 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Schema(description = "Кредитная заявка")
 public class LoanApplicationDto extends RepresentationModel<LoanApplicationDto> {
-    @Schema(description = "Идентификатор кредитной заявки", implementation = LoanApplicationDto.class,
-            example = "LOANAPP2022000001", accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "Идентификатор кредитной заявки", example = "LOANAPP2022000001",
+            accessMode = Schema.AccessMode.READ_ONLY)
     private String id;
     @Schema(description = "Статус кредитной заявки", example = "NEW", accessMode = Schema.AccessMode.READ_ONLY,
             allowableValues = {"NEW", "PENDING_ISSUANCE", "PENDING_DOCUMENT_PACKAGE_SIGNATURE", "APPROVED", "DECLINED", "CANCELED", "COMPLETED"})

@@ -7,6 +7,8 @@ import io.github.flexibletech.offering.domain.factory.TestClientFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 public class ClientTest {
 
     @Test
@@ -89,5 +91,4 @@ public class ClientTest {
         Assertions.assertEquals(workPlace.getInn(), TestValues.ORGANIZATION_NEW_INN);
         Assertions.assertEquals(workPlace.getFullAddress(), TestValues.ORGANIZATION_FULL_ADDRESS);
     }
-
 }

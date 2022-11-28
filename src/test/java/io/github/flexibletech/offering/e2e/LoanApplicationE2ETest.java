@@ -83,7 +83,7 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
                 .thenReturn(Optional.of(TestClientFactory.newStandardMarriedClient()));
 
         //Start loan application process
-        var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/loan-applications")
+        var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post("/v1/loan-applications")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newStartNewLoanApplicationRequest()))
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
@@ -101,7 +101,7 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
 
         //Chose conditions
         mockMvc.perform(MockMvcRequestBuilders.post(
-                                "/api/v1/loan-applications/{id}/conditions", loanApplicationDto.getId())
+                                "/v1/loan-applications/{id}/conditions", loanApplicationDto.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newConditionsDto()))
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
@@ -113,7 +113,7 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
 
         //Sign documents
         mockMvc.perform(MockMvcRequestBuilders.post(
-                                "/api/v1/loan-applications/{id}/documents/sign", loanApplicationDto.getId())
+                                "/v1/loan-applications/{id}/documents/sign", loanApplicationDto.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andReturn()

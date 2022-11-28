@@ -1,9 +1,10 @@
-package io.github.flexibletech.offering.infrastructure.events.client;
+package io.github.flexibletech.offering.infrastructure.events;
 
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.application.client.ClientService;
 import io.github.flexibletech.offering.domain.client.Client;
 import io.github.flexibletech.offering.domain.client.ClientDetails;
+import io.github.flexibletech.offering.infrastructure.events.client.ClientCreatedEventSubscriber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,4 +53,5 @@ public class ClientCreatedEventSubscriberTest {
         Assertions.assertEquals(clientDetails.getWorkPlaceInn(), TestValues.ORGANIZATION_INN);
         Assertions.assertEquals(clientDetails.getWorkPlaceFullAddress(), TestValues.ORGANIZATION_FULL_ADDRESS);
     }
+
 }

@@ -22,4 +22,5 @@ public class ClientCreatedEvent extends AbstractClientEvent {
                 addresses, workPlace, phoneNumber, email, income,
                 spouseIncome, category, birthDate);
     }
+
 }

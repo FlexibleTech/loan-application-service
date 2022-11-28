@@ -21,4 +21,5 @@ public class ResourceUtil {
     public static byte[] getByteArray(String path) throws IOException {
         return getString(path).getBytes(StandardCharsets.UTF_8);
     }
+
 }

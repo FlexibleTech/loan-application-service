@@ -24,4 +24,5 @@ public class PersonNameDetails implements ValueObject {
                 Optional.ofNullable(middleName).orElse(this.middleName),
                 Optional.ofNullable(surName).orElse(this.surName));
     }
+
 }

@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class EventPublisherImpl implements EventPublisher {
     private static final String EVENT_DESTINATION = "eventDestination";
-    private static final String EVENT_VERSION = "VERSION";
-    private static final String EVENT_TYPE_HEADER = "TYPE";
 
     private final StreamBridge streamBridge;
 
@@ -23,8 +21,8 @@ public class EventPublisherImpl implements EventPublisher {
         streamBridge.send(
                 EVENT_DESTINATION,
                 MessageBuilder.withPayload(event)
-                        .setHeader(EVENT_TYPE_HEADER, event.getClass().getSimpleName())
-                        .setHeader(EVENT_VERSION, IntegrationEvent.VERSION)
+                        .setHeader(EventHeaders.EVENT_TYPE_HEADER, event.getClass().getSimpleName())
+                        .setHeader(EventHeaders.EVENT_VERSION, IntegrationEvent.VERSION)
                         .build());
     }
 

@@ -45,6 +45,7 @@ spring:
       : headers['type'] == 'ClientUpdated' ? 'clientUpdatedEventSubscriber'
       : 'forgetSubscriber'"
     stream:
+      default-binder: kafka
       function:
         definition: riskResponseListener;issuanceResponseListener;clientCreatedEventSubscriber;clientUpdatedEventSubscriber;functionRouter;forgetSubscriber;
       rabbit:

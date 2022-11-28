@@ -1,4 +1,4 @@
-package io.github.flexibletech.offering.infrastructure.events.client;
+package io.github.flexibletech.offering.infrastructure.events;
 
 import io.github.flexibletech.offering.AbstractIntegrationTest;
 import io.github.flexibletech.offering.application.client.ClientService;
@@ -48,6 +48,5 @@ public class ClientCreatedEventSubscriberIT extends AbstractIntegrationTest {
                     Assertions.assertNotNull(clientDetails);
                 });
     }
-
 
 }

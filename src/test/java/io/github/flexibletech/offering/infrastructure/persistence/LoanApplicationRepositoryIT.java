@@ -22,4 +22,5 @@ public class LoanApplicationRepositoryIT extends AbstractPersistenceTest {
 
         Assertions.assertNotNull(loanApplication);
     }
+
 }

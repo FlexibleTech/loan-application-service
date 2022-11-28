@@ -24,4 +24,5 @@ public class Organization implements ValueObject {
                 Optional.ofNullable(inn).orElse(this.inn),
                 Optional.ofNullable(fullAddress).orElse(this.fullAddress));
     }
+
 }

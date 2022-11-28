@@ -20,4 +20,5 @@ public class ClientUpdatedEvent extends AbstractClientEvent {
         super(clientId, name, middleName, surName, documents, maritalStatus, addresses,
                 workPlace, phoneNumber, email, income, spouseIncome, category, birthDate);
     }
+
 }

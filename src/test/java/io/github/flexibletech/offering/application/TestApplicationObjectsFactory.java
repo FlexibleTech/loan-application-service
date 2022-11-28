@@ -78,7 +78,4 @@ public class TestApplicationObjectsFactory {
                 false);
     }
 
-    public static LoanApplicationCompleted newLoanApplicationCompleted() {
-        return new LoanApplicationCompleted(TestValues.LOAN_APPLICATION_ID, TestValues.ISSUANCE_ID);
-    }
 }

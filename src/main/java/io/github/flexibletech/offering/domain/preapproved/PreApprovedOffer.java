@@ -19,7 +19,8 @@ public class PreApprovedOffer implements Entity {
     private Amount maxAmount;
     private String clientId;
 
-    public static PreApprovedOffer newPreApprovedOffer(String id, BigDecimal minAmount, BigDecimal maxAmount, String clientId) {
+    public static PreApprovedOffer newPreApprovedOffer(String id, BigDecimal minAmount,
+                                                       BigDecimal maxAmount, String clientId) {
         return new PreApprovedOffer(
                 new PreApprovedOfferId(id),
                 Amount.fromValue(minAmount),
@@ -40,4 +41,5 @@ public class PreApprovedOffer implements Entity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
