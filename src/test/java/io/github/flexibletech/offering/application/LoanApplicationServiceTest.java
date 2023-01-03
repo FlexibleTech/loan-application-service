@@ -145,12 +145,10 @@ public class LoanApplicationServiceTest {
                 .thenReturn(Optional.of(TestLoanApplicationFactory.newLoanApplication()));
 
         var conditions = loanApplicationService.choseConditionsForLoanApplication(
-                TestValues.LOAN_APPLICATION_ID, TestApplicationObjectsFactory.newConditionsDto());
+                TestValues.LOAN_APPLICATION_ID, TestApplicationObjectsFactory.newChoseConditionsRequest());
 
         Assertions.assertNotNull(conditions);
         Assertions.assertFalse(conditions.getInsurance());
-        Assertions.assertEquals(conditions.getAmount(), TestValues.CONDITIONS_AMOUNT.getValue());
-        Assertions.assertEquals(conditions.getPeriod(), TestValues.CONDITIONS_PERIOD);
     }
 
     @Test

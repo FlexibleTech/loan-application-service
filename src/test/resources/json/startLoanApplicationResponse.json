@@ -4,6 +4,7 @@
   "offer": null,
   "conditionsRestrictions": null,
   "documentPackage": null,
+  "insurance": false,
   "_links": {
     "self": {
       "href": "http://localhost/v1/loan-applications/LOANAPP22082500001"

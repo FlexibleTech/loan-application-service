@@ -140,7 +140,7 @@ public class LoanApplicationService {
     @PreAuthorize("hasRole('ROLE_CLIENT') or hasRole('ROLE_ADMIN')")
     @UserTask(definitionKey = ProcessConstants.CHOSE_CONDITIONS_TASK,
             variables = @ProcessVariable(name = ProcessConstants.INSURANCE, value = "getInsurance()"))
-    public ChoseConditionsRequest choseConditionsForLoanApplication(@ProcessKeyValue String loanApplicationId, ChoseConditionsRequest conditions) {
+    public LoanApplicationDto choseConditionsForLoanApplication(@ProcessKeyValue String loanApplicationId, ChoseConditionsRequest conditions) {
         log.info("Choosing conditions for loan application {}...", loanApplicationId);
 
         var loanApplication = loanApplicationOfId(loanApplicationId);
@@ -151,7 +151,7 @@ public class LoanApplicationService {
 
         log.info("Conditions has been chosen for loan application {}", loanApplicationId);
 
-        return domainObjectMapper.map(loanApplication.getConditions(), ChoseConditionsRequest.class);
+        return domainObjectMapper.map(loanApplication, LoanApplicationDto.class);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)

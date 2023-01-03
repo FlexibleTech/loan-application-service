@@ -103,7 +103,7 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.post(
                                 "/v1/loan-applications/{id}/conditions", loanApplicationDto.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newConditionsDto()))
+                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newChoseConditionsRequest()))
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andReturn()
                 .getResponse()

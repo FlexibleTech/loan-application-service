@@ -28,7 +28,8 @@ public class WebConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeRequests(expressionInterceptUrlRegistry
-                        -> expressionInterceptUrlRegistry.anyRequest().authenticated())
+                        -> expressionInterceptUrlRegistry.anyRequest().authenticated()
+                )
                 .oauth2ResourceServer(resourceServerConfigurer ->
                         resourceServerConfigurer.jwt(jwtConfigurer ->
                                 jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter)

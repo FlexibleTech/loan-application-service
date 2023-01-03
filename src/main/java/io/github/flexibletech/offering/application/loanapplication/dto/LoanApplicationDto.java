@@ -31,4 +31,6 @@ public class LoanApplicationDto extends RepresentationModel<LoanApplicationDto> 
     private ConditionsRestrictionsDto conditionsRestrictions;
     @Schema(description = "Пакет документов", accessMode = Schema.AccessMode.READ_ONLY)
     private Set<DocumentDto> documentPackage;
+    @Schema(description = "Страховка кредита", accessMode = Schema.AccessMode.READ_ONLY)
+    private Boolean insurance;
 }

@@ -1,9 +1,5 @@
 package io.github.flexibletech.offering.infrastructure.config;
 
-import com.asyncapi.v2.model.info.Info;
-import com.asyncapi.v2.model.server.Server;
-import io.github.stavshamir.springwolf.asyncapi.types.KafkaProducerData;
-import io.github.stavshamir.springwolf.configuration.AsyncApiDocket;
 import io.github.stavshamir.springwolf.configuration.EnableAsyncApi;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics;
@@ -25,7 +21,6 @@ import java.util.function.Consumer;
 
 @Configuration
 @EnableCaching
-@EnableAsyncApi
 @EnableTransactionManagement
 @EnableJpaAuditing(auditorAwareRef = "auditProvider")
 @EnableFeignClients("io.github.flexibletech.offering.infrastructure.rest")
@@ -48,8 +43,7 @@ public class ApplicationConfig {
 
     @Bean
     public Consumer<String> forgetSubscriber() {
-        return s -> {
-        };
+        return s -> {};
     }
 
     @Bean

@@ -7,7 +7,6 @@ import io.github.flexibletech.offering.application.loanapplication.dto.DocumentD
 import io.github.flexibletech.offering.application.loanapplication.dto.LoanApplicationDto;
 import io.github.flexibletech.offering.application.loanapplication.dto.OfferDto;
 import io.github.flexibletech.offering.application.loanapplication.dto.StartNewLoanApplicationRequest;
-import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCompleted;
 import io.github.flexibletech.offering.domain.loanapplication.LoanApplication;
 import io.github.flexibletech.offering.domain.loanapplication.document.Document;
 
@@ -32,7 +31,8 @@ public class TestApplicationObjectsFactory {
                 LoanApplication.Status.NEW.name(),
                 null,
                 null,
-                null);
+                null,
+                false);
     }
 
     public static LoanApplicationDto newLoanApplicationDtoWithOffer() {
@@ -43,7 +43,8 @@ public class TestApplicationObjectsFactory {
                 newConditionsRestrictionsDto(),
                 Set.of(new DocumentDto(TestValues.FORM_DOCUMENT_ID, Document.Type.FORM.name()),
                         new DocumentDto(TestValues.CONDITIONS_DOCUMENT_ID, Document.Type.CONDITIONS.name())
-                ));
+                ),
+                false);
     }
 
     private static ConditionsRestrictionsDto newConditionsRestrictionsDto() {
@@ -71,7 +72,7 @@ public class TestApplicationObjectsFactory {
                 TestValues.OFFER_INSURANCE_PREMIUM.getValue());
     }
 
-    public static ChoseConditionsRequest newConditionsDto() {
+    public static ChoseConditionsRequest newChoseConditionsRequest() {
         return new ChoseConditionsRequest(
                 TestValues.CONDITIONS_AMOUNT.getValue(),
                 TestValues.CONDITIONS_PERIOD,

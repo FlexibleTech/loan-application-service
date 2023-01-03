@@ -81,12 +81,12 @@ public class LoanApplicationControllerApiTest {
     public void shouldChoseConditionsForLoanApplication() throws Exception {
         Mockito.when(loanApplicationService.choseConditionsForLoanApplication(Mockito.eq(TestValues.LOAN_APPLICATION_ID),
                         ArgumentMatchers.any(ChoseConditionsRequest.class)))
-                .thenReturn(TestApplicationObjectsFactory.newConditionsDto());
+                .thenReturn(TestApplicationObjectsFactory.newLoanApplicationDtoWithOffer());
 
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post(
                                 "/v1/loan-applications/{id}/conditions", TestValues.LOAN_APPLICATION_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newConditionsDto()))
+                        .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newChoseConditionsRequest()))
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andReturn()
