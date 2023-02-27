@@ -82,7 +82,28 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
         Mockito.when(clientRepository.findById(ArgumentMatchers.any(ClientId.class)))
                 .thenReturn(Optional.of(TestClientFactory.newStandardMarriedClient()));
 
-        //Start loan application process
+        var loanApplicationDto = startLoanApplicationProcess();
+
+        sendRiskDecisionResponse(loanApplicationDto.getId());
+        Thread.sleep(1000);
+
+        choseConditions(loanApplicationDto.getId());
+        Thread.sleep(1000);
+
+        signDocuments(loanApplicationDto.getId());
+        Thread.sleep(100);
+
+        sendIssuanceResponse(loanApplicationDto.getId());
+        Thread.sleep(1000);
+
+        var loanApplication = loanApplicationRepository.findById(LoanApplicationId.fromValue(loanApplicationDto.getId()))
+                .orElse(null);
+        Assertions.assertNotNull(loanApplication);
+        Assertions.assertTrue(loanApplication.isCompleted());
+    }
+
+    //Process steps
+    private LoanApplicationDto startLoanApplicationProcess() throws Exception {
         var actualResponse = mockMvc.perform(MockMvcRequestBuilders.post("/v1/loan-applications")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newStartNewLoanApplicationRequest()))
@@ -91,47 +112,38 @@ public class LoanApplicationE2ETest extends AbstractIntegrationTest {
                 .getResponse()
                 .getContentAsString();
 
-        var loanApplicationDto = objectMapper.readValue(actualResponse, LoanApplicationDto.class);
+        return objectMapper.readValue(actualResponse, LoanApplicationDto.class);
+    }
 
-        //Send risk decision response
-        inputDestination.send(MessageBuilder.withPayload(newRiskResponse(loanApplicationDto.getId())).build(),
+    private void sendRiskDecisionResponse(String loanApplicationId) {
+        inputDestination.send(MessageBuilder.withPayload(newRiskResponse(loanApplicationId)).build(),
                 riskDestination);
+    }
 
-        Thread.sleep(1000);
-
-        //Chose conditions
+    private void choseConditions(String loanApplicationId) throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post(
-                                "/v1/loan-applications/{id}/conditions", loanApplicationDto.getId())
+                                "/v1/loan-applications/{id}/conditions", loanApplicationId)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(TestApplicationObjectsFactory.newChoseConditionsRequest()))
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
+    }
 
-        Thread.sleep(1000);
-
-        //Sign documents
+    private void signDocuments(String loanApplicationId) throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post(
-                                "/v1/loan-applications/{id}/documents/sign", loanApplicationDto.getId())
+                                "/v1/loan-applications/{id}/documents/sign", loanApplicationId)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
+    }
 
-        Thread.sleep(100);
-
-        //Send issuance response
-        inputDestination.send(MessageBuilder.withPayload(newIssuanceResponse(loanApplicationDto.getId())).build(),
+    private void sendIssuanceResponse(String loanApplicationId) {
+        inputDestination.send(MessageBuilder.withPayload(newIssuanceResponse(loanApplicationId)).build(),
                 issuanceDestination);
-
-        Thread.sleep(1000);
-
-        var loanApplication = loanApplicationRepository.findById(LoanApplicationId.fromValue(loanApplicationDto.getId()))
-                .orElse(null);
-        Assertions.assertNotNull(loanApplication);
-        Assertions.assertTrue(loanApplication.isCompleted());
     }
 
     @SuppressWarnings("ConstantConditions")

@@ -7,8 +7,6 @@ import io.github.flexibletech.offering.domain.factory.TestClientFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
 public class ClientTest {
 
     @Test
@@ -29,6 +27,10 @@ public class ClientTest {
                 .withBirthDate(TestValues.CLIENT_BIRTH_DATE)
                 .build();
 
+        assertNewClient(client);
+    }
+
+    private void assertNewClient(Client client) {
         Assertions.assertNotNull(client);
         Assertions.assertEquals(client.getCategory(), Client.Category.STANDARD);
         Assertions.assertEquals(client.getId().toString(), TestValues.CLIENT_ID);
@@ -67,7 +69,10 @@ public class ClientTest {
 
         client.update(TestClientFactory.newClientDetailsForUpdate());
 
-        Assertions.assertNotNull(client);
+        assertUpdatedClient(client);
+    }
+
+    private void assertUpdatedClient(Client client) {
         Assertions.assertEquals(client.getId().toString(), TestValues.CLIENT_ID);
         Assertions.assertEquals(client.getCategory(), Client.Category.PREMIUM);
         Assertions.assertEquals(client.getMaritalStatus(), Client.MaritalStatus.UNMARRIED);
@@ -91,4 +96,5 @@ public class ClientTest {
         Assertions.assertEquals(workPlace.getInn(), TestValues.ORGANIZATION_NEW_INN);
         Assertions.assertEquals(workPlace.getFullAddress(), TestValues.ORGANIZATION_FULL_ADDRESS);
     }
+
 }

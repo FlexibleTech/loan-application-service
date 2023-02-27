@@ -7,7 +7,6 @@ import io.github.flexibletech.offering.domain.factory.TestLoanApplicationFactory
 import io.github.flexibletech.offering.domain.loanapplication.risk.RiskService;
 import io.github.flexibletech.offering.infrastructure.messaging.risk.request.RiskRequest;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
@@ -24,7 +23,6 @@ public class RiskServiceIT extends AbstractIntegrationTest {
     private OutputDestination outputDestination;
 
     @Test
-    @SuppressWarnings("ConstantConditions")
     public void shouldSendRiskRequestToQueue() throws IOException {
         var loanApplication = TestLoanApplicationFactory.newLoanApplication();
 
@@ -33,6 +31,11 @@ public class RiskServiceIT extends AbstractIntegrationTest {
         var message = outputDestination.receive(3000);
         var riskRequest = objectMapper.readValue(message.getPayload(), RiskRequest.class);
 
+        assertRiskRequest(riskRequest);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private void assertRiskRequest(RiskRequest riskRequest) {
         Assertions.assertNotNull(riskRequest);
         Assertions.assertEquals(riskRequest.getApplicationId(), TestValues.LOAN_APPLICATION_ID);
         Assertions.assertEquals(riskRequest.getAmount(), TestValues.CONDITIONS_AMOUNT.getValue());

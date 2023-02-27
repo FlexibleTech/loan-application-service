@@ -2,7 +2,9 @@ package io.github.flexibletech.offering.application;
 
 import io.github.flexibletech.offering.TestValues;
 import io.github.flexibletech.offering.application.loanapplication.LoanApplicationService;
+import io.github.flexibletech.offering.application.loanapplication.dto.ConditionsRestrictionsDto;
 import io.github.flexibletech.offering.application.loanapplication.dto.DocumentDto;
+import io.github.flexibletech.offering.application.loanapplication.dto.OfferDto;
 import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCanceled;
 import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCompleted;
 import io.github.flexibletech.offering.application.loanapplication.dto.events.LoanApplicationCreated;
@@ -88,8 +90,10 @@ public class LoanApplicationServiceTest {
         Assertions.assertEquals(loanApplicationDto.getId(), TestValues.LOAN_APPLICATION_ID);
         Assertions.assertEquals(loanApplicationDto.getStatus(), LoanApplication.Status.NEW.name());
 
-        //Assert application event
-        var loanApplicationCreatedEvent = (LoanApplicationCreated) eventCaptor.getValue();
+        assertLoanApplicationCreatedEvent((LoanApplicationCreated) eventCaptor.getValue());
+    }
+
+    private void assertLoanApplicationCreatedEvent(LoanApplicationCreated loanApplicationCreatedEvent) {
         Assertions.assertEquals(loanApplicationCreatedEvent.getLoanApplicationId(), TestValues.LOAN_APPLICATION_ID);
         Assertions.assertEquals(loanApplicationCreatedEvent.getLoanProgram(), LoanApplication.LoanProgram.COMMON.name());
         Assertions.assertEquals(loanApplicationCreatedEvent.getClientId(), TestValues.CLIENT_ID);
@@ -239,7 +243,20 @@ public class LoanApplicationServiceTest {
         Assertions.assertEquals(loanApplicationDto.getId(), TestValues.LOAN_APPLICATION_ID);
         Assertions.assertEquals(loanApplicationDto.getStatus(), LoanApplication.Status.APPROVED.name());
 
-        var offer = loanApplicationDto.getOffer();
+        assertOffer(loanApplicationDto.getOffer());
+        assertConditionsRestrictions(loanApplicationDto.getConditionsRestrictions());
+
+        var documentPackage = loanApplicationDto.getDocumentPackage();
+        Assertions.assertEquals(documentPackage.size(), 2);
+
+        var formDocument = findDocumentByType(documentPackage, Document.Type.FORM);
+        assertFormDocument(formDocument);
+
+        var conditionsDocument = findDocumentByType(documentPackage, Document.Type.CONDITIONS);
+        assertConditionsDocument(conditionsDocument);
+    }
+
+    private void assertOffer(OfferDto offer) {
         Assertions.assertNotNull(offer);
         Assertions.assertEquals(offer.getPeriod(), TestValues.CONDITIONS_PERIOD);
         Assertions.assertEquals(offer.getInsurancePremium(), TestValues.OFFER_INSURANCE_PREMIUM.getValue());
@@ -248,21 +265,21 @@ public class LoanApplicationServiceTest {
         Assertions.assertEquals(offer.getAverageMonthlyPayment(), TestValues.OFFER_AVERAGE_MONTHLY_PAYMENT.getValue());
         Assertions.assertEquals(offer.getFirstPaymentDate(), TestValues.OFFER_FIRST_PAYMENT_DATE);
         Assertions.assertEquals(offer.getLastPaymentDate(), TestValues.OFFER_LAST_PAYMENT_DATE);
+    }
 
-        var conditionsRestrictions = loanApplicationDto.getConditionsRestrictions();
+    private void assertConditionsRestrictions(ConditionsRestrictionsDto conditionsRestrictions) {
         Assertions.assertNotNull(conditionsRestrictions);
         Assertions.assertEquals(conditionsRestrictions.getMaxAmount(), TestValues.CONDITIONS_RESTRICTIONS_MAX_AMOUNT.getValue());
         Assertions.assertEquals(conditionsRestrictions.getMaxPeriod(), TestValues.CONDITIONS_RESTRICTIONS_MAX_PERIOD);
+    }
 
-        var documentPackage = loanApplicationDto.getDocumentPackage();
-        Assertions.assertEquals(documentPackage.size(), 2);
-
-        var formDocument = findDocumentByType(documentPackage, Document.Type.FORM);
+    private void assertFormDocument(DocumentDto formDocument) {
         Assertions.assertNotNull(formDocument);
         Assertions.assertEquals(formDocument.getId(), TestValues.FORM_DOCUMENT_ID);
         Assertions.assertEquals(formDocument.getType(), Document.Type.FORM.name());
+    }
 
-        var conditionsDocument = findDocumentByType(documentPackage, Document.Type.CONDITIONS);
+    private void assertConditionsDocument(DocumentDto conditionsDocument) {
         Assertions.assertNotNull(conditionsDocument);
         Assertions.assertEquals(conditionsDocument.getId(), TestValues.CONDITIONS_DOCUMENT_ID);
         Assertions.assertEquals(conditionsDocument.getType(), Document.Type.CONDITIONS.name());
